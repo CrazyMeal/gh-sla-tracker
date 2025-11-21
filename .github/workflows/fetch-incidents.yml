@@ -47,3 +47,15 @@ jobs:
 
           git commit -m "chore: update incident data (${INCIDENT_COUNT} incidents)"
           git push
+
+    outputs:
+      changed: ${{ steps.git-check.outputs.changed }}
+
+  trigger-deploy:
+    needs: fetch-data
+    if: needs.fetch-data.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
