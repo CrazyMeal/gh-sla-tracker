@@ -1,11 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-import { getRecentQuarters, getQuarterLabel, formatDate } from '../lib/date-utils';
-import { calculateQuarterlySLA, GITHUB_SLA_COMPONENTS, getSLAStatusColor, getOldestIncidentDate } from '../lib/sla-calculator';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import {
+	getRecentQuarters,
+	getQuarterLabel,
+	formatDate,
+} from "../lib/date-utils";
+import {
+	calculateQuarterlySLA,
+	GITHUB_SLA_COMPONENTS,
+	getSLAStatusColor,
+	getOldestIncidentDate,
+} from "../lib/sla-calculator";
 
 // Fetch all incidents from content collection
-const allIncidents = await getCollection('incidents');
+const allIncidents = await getCollection("incidents");
 
 // Get oldest incident date to detect unknown quarters
 const oldestIncidentDate = getOldestIncidentDate(allIncidents);
@@ -14,46 +23,62 @@ const oldestIncidentDate = getOldestIncidentDate(allIncidents);
 const recentQuarters = getRecentQuarters(8);
 
 // Calculate SLA for each quarter
-const quarterlyData = recentQuarters.map(quarter => {
-  const slaResults = calculateQuarterlySLA(
-    allIncidents,
-    quarter.year,
-    quarter.quarter,
-    [...GITHUB_SLA_COMPONENTS],
-    oldestIncidentDate
-  );
+const quarterlyData = recentQuarters.map((quarter) => {
+	const slaResults = calculateQuarterlySLA(
+		allIncidents,
+		quarter.year,
+		quarter.quarter,
+		[...GITHUB_SLA_COMPONENTS],
+		oldestIncidentDate,
+	);
 
-  // Calculate overall average
-  const avgUptime = slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) / slaResults.length;
-  const totalIncidents = slaResults.reduce((sum, r) => sum + r.incidentCount, 0);
-  const hasViolation = slaResults.some(r => r.slaViolation);
-  const hasInsufficientData = slaResults.some(r => r.hasInsufficientData);
+	// Calculate overall average
+	const avgUptime =
+		slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) /
+		slaResults.length;
+	const totalIncidents = slaResults.reduce(
+		(sum, r) => sum + r.incidentCount,
+		0,
+	);
+	const hasViolation = slaResults.some((r) => r.slaViolation);
+	const hasInsufficientData = slaResults.some((r) => r.hasInsufficientData);
 
-  return {
-    quarter,
-    slaResults,
-    avgUptime,
-    totalIncidents,
-    hasViolation,
-    hasInsufficientData,
-  };
+	return {
+		quarter,
+		slaResults,
+		avgUptime,
+		totalIncidents,
+		hasViolation,
+		hasInsufficientData,
+	};
 });
 
 // Get statistics
 const totalIncidents = allIncidents.length;
-const resolvedIncidents = allIncidents.filter(i => i.data.status === 'resolved').length;
-const activeIncidents = allIncidents.filter(i => i.data.status !== 'resolved').length;
+const resolvedIncidents = allIncidents.filter(
+	(i) => i.data.status === "resolved",
+).length;
+const activeIncidents = allIncidents.filter(
+	(i) => i.data.status !== "resolved",
+).length;
 
 // Get most recent incidents
 const recentIncidents = [...allIncidents]
-  .sort((a, b) => new Date(b.data.created_at).getTime() - new Date(a.data.created_at).getTime())
-  .slice(0, 5);
+	.sort(
+		(a, b) =>
+			new Date(b.data.created_at).getTime() -
+			new Date(a.data.created_at).getTime(),
+	)
+	.slice(0, 5);
 
 // Count incidents by impact
-const impactCounts = allIncidents.reduce((acc, incident) => {
-  acc[incident.data.impact] = (acc[incident.data.impact] || 0) + 1;
-  return acc;
-}, {} as Record<string, number>);
+const impactCounts = allIncidents.reduce(
+	(acc, incident) => {
+		acc[incident.data.impact] = (acc[incident.data.impact] || 0) + 1;
+		return acc;
+	},
+	{} as Record<string, number>,
+);
 ---
 
 <Layout title="GitHub SLA Tracker - Dashboard">
@@ -61,16 +86,25 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 		<section class="intro">
 			<h2>SLA Compliance Dashboard</h2>
 			<p>
-				Track GitHub's 99.9% uptime commitment across all service features by calendar quarter.
-				Data sourced from the <a href="https://www.githubstatus.com" target="_blank" rel="noopener">GitHub Status API</a>.
+				Track GitHub's 99.9% uptime commitment across all service
+				features by calendar quarter. Data sourced from the <a
+					href="https://www.githubstatus.com"
+					target="_blank"
+					rel="noopener">GitHub Status API</a
+				>.
 			</p>
-			{oldestIncidentDate && (
-				<div class="tracking-info">
-					<strong>Tracking since:</strong> {formatDate(oldestIncidentDate)}
-					<span class="separator">•</span>
-					<span>Quarters before this date show "Unknown" status</span>
-				</div>
-			)}
+			{
+				oldestIncidentDate && (
+					<div class="tracking-info">
+						<strong>Tracking since:</strong>{" "}
+						{formatDate(oldestIncidentDate)}
+						<span class="separator">•</span>
+						<span>
+							Quarters before this date show "Unknown" status
+						</span>
+					</div>
+				)
+			}
 		</section>
 
 		<section class="stats-grid grid">
@@ -83,7 +117,9 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 			<div class="card stat-card">
 				<h3>Active Incidents</h3>
 				<div class="stat-value">{activeIncidents}</div>
-				<div class="stat-label">{activeIncidents === 0 ? 'All clear' : 'Currently active'}</div>
+				<div class="stat-label">
+					{activeIncidents === 0 ? "All clear" : "Currently active"}
+				</div>
 			</div>
 
 			<div class="card stat-card">
@@ -102,105 +138,170 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 		<section class="quarters">
 			<h2>Quarterly SLA Overview</h2>
 			<p class="section-subtitle">
-				GitHub commits to 99.9% uptime per calendar quarter. Click a quarter for detailed breakdown.
+				GitHub commits to 99.9% uptime per calendar quarter. Click a
+				quarter for detailed breakdown.
 			</p>
 
 			<div class="quarters-grid">
-				{quarterlyData.map(({ quarter, avgUptime, totalIncidents, hasViolation, hasInsufficientData }) => {
-					const statusColor = getSLAStatusColor(avgUptime, hasInsufficientData);
-					const statusClass = `status-${statusColor}`;
+				{
+					quarterlyData.map(
+						({
+							quarter,
+							avgUptime,
+							totalIncidents,
+							hasViolation,
+							hasInsufficientData,
+						}) => {
+							const statusColor = getSLAStatusColor(
+								avgUptime,
+								hasInsufficientData,
+							);
+							const statusClass = `status-${statusColor}`;
 
-					return (
-						<a href={`/${quarter.label}`} class={`quarter-card card ${statusClass}`}>
-							<div class="quarter-header">
-								<h3>{quarter.label}</h3>
-								{hasInsufficientData ? (
-									<span class="badge badge-secondary">Unknown</span>
-								) : hasViolation ? (
-									<span class="badge badge-danger">SLA Violation</span>
-								) : null}
-							</div>
-							<div class="quarter-uptime">
-								{hasInsufficientData ? (
-									<div>
-										<div class="uptime-value unknown">N/A</div>
-										<div class="uptime-label">Insufficient Data</div>
+							return (
+								<a
+									href={`${import.meta.env.BASE_URL}/${quarter.label}`}
+									class={`quarter-card card ${statusClass}`}
+								>
+									<div class="quarter-header">
+										<h3>{quarter.label}</h3>
+										{hasInsufficientData ? (
+											<span class="badge badge-secondary">
+												Unknown
+											</span>
+										) : hasViolation ? (
+											<span class="badge badge-danger">
+												SLA Violation
+											</span>
+										) : null}
 									</div>
-								) : (
-									<div>
-										<div class="uptime-value">{avgUptime.toFixed(3)}%</div>
-										<div class="uptime-label">Average Uptime</div>
+									<div class="quarter-uptime">
+										{hasInsufficientData ? (
+											<div>
+												<div class="uptime-value unknown">
+													N/A
+												</div>
+												<div class="uptime-label">
+													Insufficient Data
+												</div>
+											</div>
+										) : (
+											<div>
+												<div class="uptime-value">
+													{avgUptime.toFixed(3)}%
+												</div>
+												<div class="uptime-label">
+													Average Uptime
+												</div>
+											</div>
+										)}
 									</div>
-								)}
-							</div>
-							<div class="quarter-stats">
-								<div>
-									<strong>{totalIncidents}</strong> incidents
-								</div>
-								<div>
-									<span class={`status-indicator status-${statusColor}`}></span>
-									{hasInsufficientData
-										? 'Unknown'
-										: avgUptime >= 99.9
-											? 'Pass'
-											: `Violation (${avgUptime >= 99.0 ? '10%' : '25%'} credit)`}
-								</div>
-							</div>
-						</a>
-					);
-				})}
+									<div class="quarter-stats">
+										<div>
+											<strong>{totalIncidents}</strong>{" "}
+											incidents
+										</div>
+										<div>
+											<span
+												class={`status-indicator status-${statusColor}`}
+											/>
+											{hasInsufficientData
+												? "Unknown"
+												: avgUptime >= 99.9
+													? "Pass"
+													: `Violation (${avgUptime >= 99.0 ? "10%" : "25%"} credit)`}
+										</div>
+									</div>
+								</a>
+							);
+						},
+					)
+				}
 			</div>
 		</section>
 
 		<section class="recent-incidents">
 			<h2>Recent Incidents</h2>
 			<div class="incidents-list">
-				{recentIncidents.map(incident => {
-					const impactClass = incident.data.impact === 'critical' ? 'badge-danger' :
-					                   incident.data.impact === 'major' ? 'badge-warning' :
-					                   incident.data.impact === 'minor' ? 'badge-info' :
-					                   'badge-secondary';
+				{
+					recentIncidents.map((incident) => {
+						const impactClass =
+							incident.data.impact === "critical"
+								? "badge-danger"
+								: incident.data.impact === "major"
+									? "badge-warning"
+									: incident.data.impact === "minor"
+										? "badge-info"
+										: "badge-secondary";
 
-					const statusClass = incident.data.status === 'resolved' ? 'badge-success' :
-					                   incident.data.status === 'monitoring' ? 'badge-info' :
-					                   'badge-warning';
+						const statusClass =
+							incident.data.status === "resolved"
+								? "badge-success"
+								: incident.data.status === "monitoring"
+									? "badge-info"
+									: "badge-warning";
 
-					const date = new Date(incident.data.created_at);
-					const formattedDate = date.toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric',
-						hour: '2-digit',
-						minute: '2-digit'
-					});
+						const date = new Date(incident.data.created_at);
+						const formattedDate = date.toLocaleDateString("en-US", {
+							year: "numeric",
+							month: "short",
+							day: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+						});
 
-					return (
-						<div class="card incident-item">
-							<div class="incident-header">
-								<h4>{incident.data.name}</h4>
-								<div class="incident-badges">
-									<span class={`badge ${impactClass}`}>{incident.data.impact}</span>
-									<span class={`badge ${statusClass}`}>{incident.data.status}</span>
+						return (
+							<div class="card incident-item">
+								<div class="incident-header">
+									<h4>{incident.data.name}</h4>
+									<div class="incident-badges">
+										<span class={`badge ${impactClass}`}>
+											{incident.data.impact}
+										</span>
+										<span class={`badge ${statusClass}`}>
+											{incident.data.status}
+										</span>
+									</div>
 								</div>
-							</div>
-							<div class="incident-meta">
-								<time datetime={incident.data.created_at}>{formattedDate}</time>
-								<span class="separator">•</span>
-								<span>{incident.data.components?.length || 0} component{incident.data.components?.length !== 1 ? 's' : ''} affected</span>
-							</div>
-							{incident.data.components && incident.data.components.length > 0 && (
-								<div class="incident-components">
-									{incident.data.components.slice(0, 5).map(comp => (
-										<span class="component-tag">{comp.name}</span>
-									))}
-									{incident.data.components.length > 5 && (
-										<span class="component-tag">+{incident.data.components.length - 5} more</span>
+								<div class="incident-meta">
+									<time datetime={incident.data.created_at}>
+										{formattedDate}
+									</time>
+									<span class="separator">•</span>
+									<span>
+										{incident.data.components?.length || 0}{" "}
+										component
+										{incident.data.components?.length !== 1
+											? "s"
+											: ""}{" "}
+										affected
+									</span>
+								</div>
+								{incident.data.components &&
+									incident.data.components.length > 0 && (
+										<div class="incident-components">
+											{incident.data.components
+												.slice(0, 5)
+												.map((comp) => (
+													<span class="component-tag">
+														{comp.name}
+													</span>
+												))}
+											{incident.data.components.length >
+												5 && (
+												<span class="component-tag">
+													+
+													{incident.data.components
+														.length - 5}{" "}
+													more
+												</span>
+											)}
+										</div>
 									)}
-								</div>
-							)}
-						</div>
-					);
-				})}
+							</div>
+						);
+					})
+				}
 			</div>
 		</section>
 	</div>
@@ -282,13 +383,15 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 		display: block;
 		text-decoration: none;
 		color: inherit;
-		transition: transform 0.2s, border-color 0.2s;
+		transition:
+			transform 0.2s,
+			border-color 0.2s;
 		position: relative;
 		overflow: hidden;
 	}
 
 	.quarter-card::before {
-		content: '';
+		content: "";
 		position: absolute;
 		top: 0;
 		left: 0;

@@ -1,6 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 import {
   parseQuarterLabel,
   getQuarterInfo,
@@ -8,8 +8,8 @@ import {
   formatDateTime,
   formatDuration,
   getDurationMinutes,
-  getQuarterTotalMinutes
-} from '../lib/date-utils';
+  getQuarterTotalMinutes,
+} from "../lib/date-utils";
 import {
   calculateQuarterlySLA,
   GITHUB_SLA_COMPONENTS,
@@ -17,8 +17,8 @@ import {
   getSLAStatusLabel,
   filterIncidentsByDateRange,
   getIncidentsWithDurations,
-  getOldestIncidentDate
-} from '../lib/sla-calculator';
+  getOldestIncidentDate,
+} from "../lib/sla-calculator";
 
 // Get all static paths for quarters
 export async function getStaticPaths() {
@@ -26,10 +26,10 @@ export async function getStaticPaths() {
   const years = [currentYear - 1, currentYear, currentYear + 1]; // Last year, current, next
   const quarters: (1 | 2 | 3 | 4)[] = [1, 2, 3, 4];
 
-  return years.flatMap(year =>
-    quarters.map(q => ({
+  return years.flatMap((year) =>
+    quarters.map((q) => ({
       params: { quarter: `${year}-Q${q}` },
-    }))
+    })),
   );
 }
 
@@ -38,14 +38,14 @@ const { quarter: quarterLabel } = Astro.params;
 const parsed = parseQuarterLabel(quarterLabel);
 
 if (!parsed) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 const { year, quarter } = parsed;
 const quarterInfo = getQuarterInfo(year, quarter);
 
 // Fetch all incidents
-const allIncidents = await getCollection('incidents');
+const allIncidents = await getCollection("incidents");
 
 // Get oldest incident date
 const oldestIncidentDate = getOldestIncidentDate(allIncidents);
@@ -54,11 +54,12 @@ const oldestIncidentDate = getOldestIncidentDate(allIncidents);
 const quarterIncidents = filterIncidentsByDateRange(
   allIncidents,
   quarterInfo.startDate,
-  quarterInfo.endDate
+  quarterInfo.endDate,
 );
 
 // Check if this quarter has insufficient data
-const hasInsufficientData = oldestIncidentDate !== null && quarterInfo.startDate < oldestIncidentDate;
+const hasInsufficientData =
+  oldestIncidentDate !== null && quarterInfo.startDate < oldestIncidentDate;
 
 // Calculate SLA for each component
 const slaResults = calculateQuarterlySLA(
@@ -66,21 +67,27 @@ const slaResults = calculateQuarterlySLA(
   year,
   quarter,
   [...GITHUB_SLA_COMPONENTS],
-  oldestIncidentDate
+  oldestIncidentDate,
 );
 
 // Calculate overall metrics
-const avgUptime = slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) / slaResults.length;
-const totalDowntime = slaResults.reduce((sum, r) => sum + r.totalDowntimeMinutes, 0);
+const avgUptime =
+  slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) /
+  slaResults.length;
+const totalDowntime = slaResults.reduce(
+  (sum, r) => sum + r.totalDowntimeMinutes,
+  0,
+);
 const totalIncidents = quarterIncidents.length;
-const hasViolation = slaResults.some(r => r.slaViolation);
+const hasViolation = slaResults.some((r) => r.slaViolation);
 const worstComponent = slaResults.reduce((worst, curr) =>
-  curr.uptimePercentage < worst.uptimePercentage ? curr : worst
+  curr.uptimePercentage < worst.uptimePercentage ? curr : worst,
 );
 
 // Get incidents with durations
-const incidentsWithDurations = getIncidentsWithDurations(quarterIncidents)
-  .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+const incidentsWithDurations = getIncidentsWithDurations(quarterIncidents).sort(
+  (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+);
 
 // Calculate quarter total minutes
 const totalMinutes = getQuarterTotalMinutes(year, quarter);
@@ -92,7 +99,7 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
 >
   <div class="container">
     <nav class="breadcrumb">
-      <a href="/">Dashboard</a>
+      <a href={import.meta.env.BASE_URL}>Dashboard</a>
       <span class="separator">›</span>
       <span>{quarterLabel}</span>
     </nav>
@@ -101,41 +108,54 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
       <div class="header-content">
         <h2>{quarterLabel}</h2>
         <p class="quarter-period">
-          {formatDate(quarterInfo.startDate)} - {formatDate(quarterInfo.endDate)}
+          {formatDate(quarterInfo.startDate)} - {
+            formatDate(quarterInfo.endDate)
+          }
         </p>
       </div>
       <div class="header-status">
-        {hasInsufficientData ? (
-          <span class="badge badge-secondary">Unknown</span>
-        ) : hasViolation ? (
-          <span class="badge badge-danger">SLA Violation</span>
-        ) : (
-          <span class="badge badge-success">SLA Pass</span>
-        )}
+        {
+          hasInsufficientData ? (
+            <span class="badge badge-secondary">Unknown</span>
+          ) : hasViolation ? (
+            <span class="badge badge-danger">SLA Violation</span>
+          ) : (
+            <span class="badge badge-success">SLA Pass</span>
+          )
+        }
       </div>
     </section>
 
-    {hasInsufficientData && oldestIncidentDate && (
-      <div class="insufficient-data-notice card">
-        <h3>⚠️ Insufficient Data</h3>
-        <p>
-          Incident tracking began on <strong>{formatDate(oldestIncidentDate)}</strong>.
-          This quarter started before data collection, so SLA compliance cannot be accurately calculated.
-        </p>
-        <p>
-          The data shown below represents only the incidents we have recorded since tracking began.
-          It does not reflect the complete picture for this quarter.
-        </p>
-      </div>
-    )}
+    {
+      hasInsufficientData && oldestIncidentDate && (
+        <div class="insufficient-data-notice card">
+          <h3>⚠️ Insufficient Data</h3>
+          <p>
+            Incident tracking began on{" "}
+            <strong>{formatDate(oldestIncidentDate)}</strong>. This quarter
+            started before data collection, so SLA compliance cannot be
+            accurately calculated.
+          </p>
+          <p>
+            The data shown below represents only the incidents we have recorded
+            since tracking began. It does not reflect the complete picture for
+            this quarter.
+          </p>
+        </div>
+      )
+    }
 
     <section class="summary-cards grid">
       <div class="card">
         <h3>Average Uptime</h3>
-        <div class={`stat-value uptime-${getSLAStatusColor(avgUptime, hasInsufficientData)}`}>
-          {hasInsufficientData ? 'N/A' : `${avgUptime.toFixed(3)}%`}
+        <div
+          class={`stat-value uptime-${getSLAStatusColor(avgUptime, hasInsufficientData)}`}
+        >
+          {hasInsufficientData ? "N/A" : `${avgUptime.toFixed(3)}%`}
         </div>
-        <div class="stat-label">{getSLAStatusLabel(avgUptime, hasInsufficientData)}</div>
+        <div class="stat-label">
+          {getSLAStatusLabel(avgUptime, hasInsufficientData)}
+        </div>
       </div>
 
       <div class="card">
@@ -153,14 +173,17 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
       <div class="card">
         <h3>Worst Component</h3>
         <div class="stat-value text-sm">{worstComponent.componentName}</div>
-        <div class="stat-label">{worstComponent.uptimePercentage.toFixed(3)}% uptime</div>
+        <div class="stat-label">
+          {worstComponent.uptimePercentage.toFixed(3)}% uptime
+        </div>
       </div>
     </section>
 
     <section class="component-sla">
       <h2>Component SLA Breakdown</h2>
       <p class="section-subtitle">
-        Per-component uptime for the {totalMinutes.toLocaleString()} minutes in this quarter
+        Per-component uptime for the {totalMinutes.toLocaleString()} minutes in this
+        quarter
       </p>
 
       <div class="table-wrapper">
@@ -176,35 +199,43 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
             </tr>
           </thead>
           <tbody>
-            {slaResults.map(result => {
-              const statusColor = getSLAStatusColor(result.uptimePercentage);
-              const badgeClass = result.slaViolation ? 'badge-danger' : 'badge-success';
+            {
+              slaResults.map((result) => {
+                const statusColor = getSLAStatusColor(result.uptimePercentage);
+                const badgeClass = result.slaViolation
+                  ? "badge-danger"
+                  : "badge-success";
 
-              return (
-                <tr>
-                  <td><strong>{result.componentName}</strong></td>
-                  <td>
-                    <span class={`uptime-value uptime-${statusColor}`}>
-                      {result.uptimePercentage.toFixed(4)}%
-                    </span>
-                  </td>
-                  <td>{formatDuration(result.totalDowntimeMinutes)}</td>
-                  <td>{result.incidentCount}</td>
-                  <td>
-                    <span class={`badge ${badgeClass}`}>
-                      {result.slaViolation ? 'Violation' : 'Pass'}
-                    </span>
-                  </td>
-                  <td>
-                    {result.serviceCredit > 0 ? (
-                      <span class="service-credit">{result.serviceCredit}%</span>
-                    ) : (
-                      <span class="text-secondary">None</span>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
+                return (
+                  <tr>
+                    <td>
+                      <strong>{result.componentName}</strong>
+                    </td>
+                    <td>
+                      <span class={`uptime-value uptime-${statusColor}`}>
+                        {result.uptimePercentage.toFixed(4)}%
+                      </span>
+                    </td>
+                    <td>{formatDuration(result.totalDowntimeMinutes)}</td>
+                    <td>{result.incidentCount}</td>
+                    <td>
+                      <span class={`badge ${badgeClass}`}>
+                        {result.slaViolation ? "Violation" : "Pass"}
+                      </span>
+                    </td>
+                    <td>
+                      {result.serviceCredit > 0 ? (
+                        <span class="service-credit">
+                          {result.serviceCredit}%
+                        </span>
+                      ) : (
+                        <span class="text-secondary">None</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            }
           </tbody>
         </table>
       </div>
@@ -213,88 +244,110 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     <section class="incidents-section">
       <h2>Incidents in {quarterLabel}</h2>
       <p class="section-subtitle">
-        {totalIncidents} incident{totalIncidents !== 1 ? 's' : ''} occurred during this quarter
+        {totalIncidents} incident{totalIncidents !== 1 ? "s" : ""} occurred during
+        this quarter
       </p>
 
-      {incidentsWithDurations.length === 0 ? (
-        <div class="card empty-state">
-          <p>No incidents recorded for this quarter.</p>
-        </div>
-      ) : (
-        <div class="incidents-list">
-          {incidentsWithDurations.map(incident => {
-            const impactClass = incident.data.impact === 'critical' ? 'badge-danger' :
-                               incident.data.impact === 'major' ? 'badge-warning' :
-                               incident.data.impact === 'minor' ? 'badge-info' :
-                               'badge-secondary';
+      {
+        incidentsWithDurations.length === 0 ? (
+          <div class="card empty-state">
+            <p>No incidents recorded for this quarter.</p>
+          </div>
+        ) : (
+          <div class="incidents-list">
+            {incidentsWithDurations.map((incident) => {
+              const impactClass =
+                incident.data.impact === "critical"
+                  ? "badge-danger"
+                  : incident.data.impact === "major"
+                    ? "badge-warning"
+                    : incident.data.impact === "minor"
+                      ? "badge-info"
+                      : "badge-secondary";
 
-            const statusClass = incident.data.status === 'resolved' ? 'badge-success' :
-                               incident.data.status === 'monitoring' ? 'badge-info' :
-                               'badge-warning';
+              const statusClass =
+                incident.data.status === "resolved"
+                  ? "badge-success"
+                  : incident.data.status === "monitoring"
+                    ? "badge-info"
+                    : "badge-warning";
 
-            return (
-              <div class="card incident-card">
-                <div class="incident-header">
-                  <h4>{incident.data.name}</h4>
-                  <div class="incident-badges">
-                    <span class={`badge ${impactClass}`}>{incident.data.impact}</span>
-                    <span class={`badge ${statusClass}`}>{incident.data.status}</span>
+              return (
+                <div class="card incident-card">
+                  <div class="incident-header">
+                    <h4>{incident.data.name}</h4>
+                    <div class="incident-badges">
+                      <span class={`badge ${impactClass}`}>
+                        {incident.data.impact}
+                      </span>
+                      <span class={`badge ${statusClass}`}>
+                        {incident.data.status}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div class="incident-meta">
-                  <div class="meta-item">
-                    <span class="meta-label">Created:</span>
-                    <time datetime={incident.data.created_at}>{formatDateTime(incident.data.created_at)}</time>
-                  </div>
-                  {incident.data.resolved_at && (
+                  <div class="incident-meta">
                     <div class="meta-item">
-                      <span class="meta-label">Resolved:</span>
-                      <time datetime={incident.data.resolved_at}>{formatDateTime(incident.data.resolved_at)}</time>
+                      <span class="meta-label">Created:</span>
+                      <time datetime={incident.data.created_at}>
+                        {formatDateTime(incident.data.created_at)}
+                      </time>
                     </div>
-                  )}
-                  <div class="meta-item">
-                    <span class="meta-label">Duration:</span>
-                    <span>{formatDuration(incident.durationMinutes)}</span>
+                    {incident.data.resolved_at && (
+                      <div class="meta-item">
+                        <span class="meta-label">Resolved:</span>
+                        <time datetime={incident.data.resolved_at}>
+                          {formatDateTime(incident.data.resolved_at)}
+                        </time>
+                      </div>
+                    )}
+                    <div class="meta-item">
+                      <span class="meta-label">Duration:</span>
+                      <span>{formatDuration(incident.durationMinutes)}</span>
+                    </div>
+                    <div class="meta-item">
+                      <span class="meta-label">Weighted Downtime:</span>
+                      <span>{formatDuration(incident.weightedDowntime)}</span>
+                    </div>
                   </div>
-                  <div class="meta-item">
-                    <span class="meta-label">Weighted Downtime:</span>
-                    <span>{formatDuration(incident.weightedDowntime)}</span>
-                  </div>
-                </div>
 
-                {incident.data.components && incident.data.components.length > 0 && (
-                  <div class="incident-components">
-                    <span class="meta-label">Affected Components:</span>
-                    {incident.data.components.map(comp => (
-                      <span class="component-tag">{comp.name}</span>
-                    ))}
-                  </div>
-                )}
+                  {incident.data.components &&
+                    incident.data.components.length > 0 && (
+                      <div class="incident-components">
+                        <span class="meta-label">Affected Components:</span>
+                        {incident.data.components.map((comp) => (
+                          <span class="component-tag">{comp.name}</span>
+                        ))}
+                      </div>
+                    )}
 
-                {incident.data.incident_updates.length > 0 && (
-                  <details class="incident-updates">
-                    <summary>
-                      {incident.data.incident_updates.length} update{incident.data.incident_updates.length !== 1 ? 's' : ''}
-                    </summary>
-                    <div class="updates-list">
-                      {incident.data.incident_updates.map(update => (
-                        <div class="update-item">
-                          <div class="update-header">
-                            <span class="update-status">{update.status}</span>
-                            <time datetime={update.created_at}>{formatDateTime(update.created_at)}</time>
+                  {incident.data.incident_updates.length > 0 && (
+                    <details class="incident-updates">
+                      <summary>
+                        {incident.data.incident_updates.length} update
+                        {incident.data.incident_updates.length !== 1 ? "s" : ""}
+                      </summary>
+                      <div class="updates-list">
+                        {incident.data.incident_updates.map((update) => (
+                          <div class="update-item">
+                            <div class="update-header">
+                              <span class="update-status">{update.status}</span>
+                              <time datetime={update.created_at}>
+                                {formatDateTime(update.created_at)}
+                              </time>
+                            </div>
+                            <p class="update-body">{update.body}</p>
                           </div>
-                          <p class="update-body">{update.body}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </details>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+                        ))}
+                      </div>
+                    </details>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )
+      }
     </section>
   </div>
 </Layout>
