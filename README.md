@@ -1,46 +1,67 @@
-# Astro Starter Kit: Basics
+# GitHub SLA Tracker
 
-```sh
-npm create astro@latest -- --template basics
+A dashboard to track GitHub's 99.9% uptime commitment across all service features by calendar quarter.
+
+🔗 **Live Site**: [https://crazymeal.github.io/gh-sla-tracker/](https://crazymeal.github.io/gh-sla-tracker/)
+
+## 🎯 Goal
+
+GitHub commits to a monthly uptime of 99.9% for its services. This project tracks incidents and calculates the actual uptime percentage per quarter, helping to visualize SLA compliance and potential service credits.
+
+## ⚙️ How it Works
+
+1.  **Data Fetching**: A scheduled GitHub Action runs every 6 hours to fetch the latest 50 incidents from the [GitHub Status API](https://www.githubstatus.com/api).
+2.  **Cumulative History**: The script `scripts/fetch-github-data.js` merges these new incidents with our existing archive (`src/data/incidents-archive.json`), ensuring we keep a long-term history even though the API only provides a limited window.
+3.  **SLA Calculation**: The Astro site processes this data to calculate uptime percentages, weighted by incident impact and duration.
+4.  **Deployment**: The site is automatically built and deployed to GitHub Pages whenever new incident data is committed.
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Node.js v18+
+- npm
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Fetching Data
 
-## 🚀 Project Structure
+To fetch the latest incidents and update the local archive:
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```bash
+npm run fetch-data
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Running Locally
 
-## 🧞 Commands
+Start the Astro development server:
 
-All commands are run from the root of the project, from a terminal:
+```bash
+npm run dev
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+The site will be available at `http://localhost:4321/gh-sla-tracker/`.
 
-## 👀 Want to learn more?
+### Building for Production
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```bash
+npm run build
+```
+
+## 📂 Project Structure
+
+- `src/data/incidents-archive.json`: The source of truth for incident history.
+- `scripts/fetch-github-data.js`: The logic for fetching, merging, and de-duplicating incidents.
+- `src/pages/`: Astro pages for the dashboard and quarter views.
+- `.github/workflows/`:
+    - `fetch-incidents.yml`: Scheduled job to update data.
+    - `deploy.yml`: Reusable workflow to deploy to GitHub Pages.
+
+## 📄 License
+
+MIT
