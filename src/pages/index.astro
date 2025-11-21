@@ -5,6 +5,7 @@ import {
 	getRecentQuarters,
 	getQuarterLabel,
 	formatDate,
+	formatDateTime,
 } from "../lib/date-utils";
 import {
 	calculateQuarterlySLA,
@@ -298,6 +299,38 @@ const impactCounts = allIncidents.reduce(
 											)}
 										</div>
 									)}
+								{incident.data.incident_updates.length > 0 && (
+									<details class="incident-updates">
+										<summary>
+											{incident.data.incident_updates.length}{" "}update{incident.data.incident_updates.length !== 1 ? "s" : ""}
+										</summary>
+										<div class="updates-list">
+											{incident.data.incident_updates.map(
+												(update) => (
+													<div class="update-item">
+														<div class="update-header">
+															<span class="update-status">
+																{update.status}
+															</span>
+															<time
+																datetime={
+																	update.created_at
+																}
+															>
+																{formatDateTime(
+																	update.created_at,
+																)}
+															</time>
+														</div>
+														<p class="update-body">
+															{update.body}
+														</p>
+													</div>
+												),
+											)}
+										</div>
+									</details>
+								)}
 							</div>
 						);
 					})
@@ -569,5 +602,58 @@ const impactCounts = allIncidents.reduce(
 		border-radius: 4px;
 		font-size: 0.75rem;
 		color: var(--color-text-secondary);
+	}
+
+	.incident-updates {
+		margin-top: 1rem;
+		border-top: 1px solid var(--color-border);
+		padding-top: 1rem;
+	}
+
+	.incident-updates summary {
+		cursor: pointer;
+		font-weight: 600;
+		color: var(--color-link);
+		user-select: none;
+	}
+
+	.incident-updates summary:hover {
+		color: var(--color-link-hover);
+	}
+
+	.updates-list {
+		margin-top: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.update-item {
+		padding: 1rem;
+		background-color: var(--color-bg-tertiary);
+		border-radius: 4px;
+	}
+
+	.update-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.5rem;
+	}
+
+	.update-status {
+		font-weight: 600;
+		text-transform: capitalize;
+		color: var(--color-link);
+	}
+
+	.update-header time {
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+	}
+
+	.update-body {
+		margin: 0;
+		line-height: 1.6;
 	}
 </style>
