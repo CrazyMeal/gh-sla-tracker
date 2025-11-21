@@ -324,8 +324,7 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
                   {incident.data.incident_updates.length > 0 && (
                     <details class="incident-updates">
                       <summary>
-                        {incident.data.incident_updates.length} update
-                        {incident.data.incident_updates.length !== 1 ? "s" : ""}
+                        {incident.data.incident_updates.length} update{incident.data.incident_updates.length !== 1 ? "s" : ""}
                       </summary>
                       <div class="updates-list">
                         {incident.data.incident_updates.map((update) => (
