@@ -1,11 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
-import { getRecentQuarters, getQuarterLabel } from '../lib/date-utils';
-import { calculateQuarterlySLA, GITHUB_SLA_COMPONENTS, getSLAStatusColor } from '../lib/sla-calculator';
+import { getRecentQuarters, getQuarterLabel, formatDate } from '../lib/date-utils';
+import { calculateQuarterlySLA, GITHUB_SLA_COMPONENTS, getSLAStatusColor, getOldestIncidentDate } from '../lib/sla-calculator';
 
 // Fetch all incidents from content collection
 const allIncidents = await getCollection('incidents');
+
+// Get oldest incident date to detect unknown quarters
+const oldestIncidentDate = getOldestIncidentDate(allIncidents);
 
 // Get recent quarters (last 8 quarters = 2 years)
 const recentQuarters = getRecentQuarters(8);
@@ -16,13 +19,15 @@ const quarterlyData = recentQuarters.map(quarter => {
     allIncidents,
     quarter.year,
     quarter.quarter,
-    [...GITHUB_SLA_COMPONENTS]
+    [...GITHUB_SLA_COMPONENTS],
+    oldestIncidentDate
   );
 
   // Calculate overall average
   const avgUptime = slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) / slaResults.length;
   const totalIncidents = slaResults.reduce((sum, r) => sum + r.incidentCount, 0);
   const hasViolation = slaResults.some(r => r.slaViolation);
+  const hasInsufficientData = slaResults.some(r => r.hasInsufficientData);
 
   return {
     quarter,
@@ -30,6 +35,7 @@ const quarterlyData = recentQuarters.map(quarter => {
     avgUptime,
     totalIncidents,
     hasViolation,
+    hasInsufficientData,
   };
 });
 
@@ -58,6 +64,13 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 				Track GitHub's 99.9% uptime commitment across all service features by calendar quarter.
 				Data sourced from the <a href="https://www.githubstatus.com" target="_blank" rel="noopener">GitHub Status API</a>.
 			</p>
+			{oldestIncidentDate && (
+				<div class="tracking-info">
+					<strong>Tracking since:</strong> {formatDate(oldestIncidentDate)}
+					<span class="separator">•</span>
+					<span>Quarters before this date show "Unknown" status</span>
+				</div>
+			)}
 		</section>
 
 		<section class="stats-grid grid">
@@ -93,19 +106,32 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 			</p>
 
 			<div class="quarters-grid">
-				{quarterlyData.map(({ quarter, avgUptime, totalIncidents, hasViolation }) => {
-					const statusColor = getSLAStatusColor(avgUptime);
+				{quarterlyData.map(({ quarter, avgUptime, totalIncidents, hasViolation, hasInsufficientData }) => {
+					const statusColor = getSLAStatusColor(avgUptime, hasInsufficientData);
 					const statusClass = `status-${statusColor}`;
 
 					return (
 						<a href={`/${quarter.label}`} class={`quarter-card card ${statusClass}`}>
 							<div class="quarter-header">
 								<h3>{quarter.label}</h3>
-								{hasViolation && <span class="badge badge-danger">SLA Violation</span>}
+								{hasInsufficientData ? (
+									<span class="badge badge-secondary">Unknown</span>
+								) : hasViolation ? (
+									<span class="badge badge-danger">SLA Violation</span>
+								) : null}
 							</div>
 							<div class="quarter-uptime">
-								<div class="uptime-value">{avgUptime.toFixed(3)}%</div>
-								<div class="uptime-label">Average Uptime</div>
+								{hasInsufficientData ? (
+									<div>
+										<div class="uptime-value unknown">N/A</div>
+										<div class="uptime-label">Insufficient Data</div>
+									</div>
+								) : (
+									<div>
+										<div class="uptime-value">{avgUptime.toFixed(3)}%</div>
+										<div class="uptime-label">Average Uptime</div>
+									</div>
+								)}
 							</div>
 							<div class="quarter-stats">
 								<div>
@@ -113,7 +139,11 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 								</div>
 								<div>
 									<span class={`status-indicator status-${statusColor}`}></span>
-									{avgUptime >= 99.9 ? 'Pass' : `Violation (${avgUptime >= 99.0 ? '10%' : '25%'} credit)`}
+									{hasInsufficientData
+										? 'Unknown'
+										: avgUptime >= 99.9
+											? 'Pass'
+											: `Violation (${avgUptime >= 99.0 ? '10%' : '25%'} credit)`}
 								</div>
 							</div>
 						</a>
@@ -191,6 +221,19 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 		font-size: 1.1rem;
 	}
 
+	.tracking-info {
+		margin-top: 1rem;
+		padding: 0.75rem 1rem;
+		background-color: var(--color-bg-tertiary);
+		border-radius: 6px;
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+	}
+
+	.tracking-info strong {
+		color: var(--color-text);
+	}
+
 	.section-subtitle {
 		color: var(--color-text-secondary);
 		margin-bottom: 1.5rem;
@@ -263,6 +306,10 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 		background-color: var(--color-danger);
 	}
 
+	.quarter-card.status-gray::before {
+		background-color: var(--color-text-secondary);
+	}
+
 	.quarter-card:hover {
 		transform: translateY(-2px);
 		border-color: var(--color-text-secondary);
@@ -302,6 +349,15 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 		color: var(--color-danger);
 	}
 
+	.status-gray .uptime-value {
+		color: var(--color-text-secondary);
+	}
+
+	.uptime-value.unknown {
+		color: var(--color-text-secondary);
+		font-size: 1.5rem;
+	}
+
 	.uptime-label {
 		font-size: 0.875rem;
 		color: var(--color-text-secondary);
@@ -334,6 +390,10 @@ const impactCounts = allIncidents.reduce((acc, incident) => {
 
 	.status-indicator.status-red {
 		background-color: var(--color-danger);
+	}
+
+	.status-indicator.status-gray {
+		background-color: var(--color-text-secondary);
 	}
 
 	.recent-incidents {

@@ -16,6 +16,7 @@ export interface SLAResult {
   incidentCount: number;
   slaViolation: boolean;
   serviceCredit: 0 | 10 | 25; // Percentage
+  hasInsufficientData: boolean; // True if quarter is before oldest incident
   period: {
     start: string;
     end: string;
@@ -58,6 +59,22 @@ export function calculateIncidentDowntime(incident: IncidentEntry): number {
 }
 
 /**
+ * Get the oldest incident date from the collection
+ * This tells us when incident tracking began
+ */
+export function getOldestIncidentDate(incidents: IncidentEntry[]): Date | null {
+  if (incidents.length === 0) return null;
+
+  const oldestIncident = incidents.reduce((oldest, current) => {
+    const currentDate = new Date(current.data.created_at);
+    const oldestDate = new Date(oldest.data.created_at);
+    return currentDate < oldestDate ? current : oldest;
+  });
+
+  return new Date(oldestIncident.data.created_at);
+}
+
+/**
  * Filter incidents by date range
  */
 export function filterIncidentsByDateRange(
@@ -90,8 +107,12 @@ export function calculateComponentSLA(
   incidents: IncidentEntry[],
   componentName: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  oldestIncidentDate: Date | null = null
 ): SLAResult {
+  // Check if we have insufficient data (quarter starts before our oldest incident)
+  const hasInsufficientData = oldestIncidentDate !== null && startDate < oldestIncidentDate;
+
   // Filter incidents affecting this component within date range
   const relevantIncidents = incidents.filter(incident => {
     const createdAt = new Date(incident.data.created_at);
@@ -131,6 +152,7 @@ export function calculateComponentSLA(
     incidentCount: relevantIncidents.length,
     slaViolation,
     serviceCredit,
+    hasInsufficientData,
     period: {
       start: startDate.toISOString(),
       end: endDate.toISOString(),
@@ -145,13 +167,14 @@ export function calculateQuarterlySLA(
   incidents: IncidentEntry[],
   year: number,
   quarter: Quarter,
-  componentNames: string[]
+  componentNames: string[],
+  oldestIncidentDate: Date | null = null
 ): SLAResult[] {
   const startDate = getQuarterStart(year, quarter);
   const endDate = getQuarterEnd(year, quarter);
 
   return componentNames.map(componentName =>
-    calculateComponentSLA(incidents, componentName, startDate, endDate)
+    calculateComponentSLA(incidents, componentName, startDate, endDate, oldestIncidentDate)
   );
 }
 
@@ -162,10 +185,11 @@ export function calculateOverallSLA(
   incidents: IncidentEntry[],
   startDate: Date,
   endDate: Date,
-  componentNames: string[]
+  componentNames: string[],
+  oldestIncidentDate: Date | null = null
 ): SLAResult {
   const componentSLAs = componentNames.map(name =>
-    calculateComponentSLA(incidents, name, startDate, endDate)
+    calculateComponentSLA(incidents, name, startDate, endDate, oldestIncidentDate)
   );
 
   // Calculate average uptime
@@ -179,6 +203,9 @@ export function calculateOverallSLA(
   const slaViolation = avgUptime < 99.9;
   const serviceCredit: 0 | 10 | 25 = avgUptime < 99.0 ? 25 : avgUptime < 99.9 ? 10 : 0;
 
+  // Check if we have insufficient data
+  const hasInsufficientData = componentSLAs.some(sla => sla.hasInsufficientData);
+
   return {
     componentName: 'All Components',
     uptimePercentage: parseFloat(avgUptime.toFixed(4)),
@@ -186,6 +213,7 @@ export function calculateOverallSLA(
     incidentCount: totalIncidents,
     slaViolation,
     serviceCredit,
+    hasInsufficientData,
     period: {
       start: startDate.toISOString(),
       end: endDate.toISOString(),
@@ -214,7 +242,8 @@ export function getIncidentsWithDurations(incidents: IncidentEntry[]): IncidentW
 /**
  * Get SLA status label
  */
-export function getSLAStatusLabel(uptimePercentage: number): string {
+export function getSLAStatusLabel(uptimePercentage: number, hasInsufficientData: boolean = false): string {
+  if (hasInsufficientData) return 'Unknown';
   if (uptimePercentage >= 99.9) return 'Pass';
   if (uptimePercentage >= 99.0) return 'Violation (10% credit)';
   return 'Violation (25% credit)';
@@ -223,7 +252,8 @@ export function getSLAStatusLabel(uptimePercentage: number): string {
 /**
  * Get SLA status color
  */
-export function getSLAStatusColor(uptimePercentage: number): string {
+export function getSLAStatusColor(uptimePercentage: number, hasInsufficientData: boolean = false): string {
+  if (hasInsufficientData) return 'gray';
   if (uptimePercentage >= 99.9) return 'green';
   if (uptimePercentage >= 99.0) return 'orange';
   return 'red';
