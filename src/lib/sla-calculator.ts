@@ -1,0 +1,247 @@
+/**
+ * SLA Calculator
+ * Calculates uptime percentages and SLA compliance based on GitHub incident data
+ */
+
+import type { CollectionEntry } from 'astro:content';
+import { getDurationMinutes, getTotalMinutes, getQuarterStart, getQuarterEnd, type Quarter } from './date-utils';
+
+// Type for incident entries from content collections
+type IncidentEntry = CollectionEntry<'incidents'>;
+
+export interface SLAResult {
+  componentName: string;
+  uptimePercentage: number;
+  totalDowntimeMinutes: number;
+  incidentCount: number;
+  slaViolation: boolean;
+  serviceCredit: 0 | 10 | 25; // Percentage
+  period: {
+    start: string;
+    end: string;
+  };
+}
+
+export interface IncidentWithDuration extends IncidentEntry {
+  durationMinutes: number;
+  weightedDowntime: number;
+}
+
+/**
+ * Get impact multiplier for weighting downtime
+ * GitHub SLA defines downtime as >5% error rate, but impact levels help us estimate severity
+ */
+export function getImpactMultiplier(impact: string): number {
+  const multipliers: Record<string, number> = {
+    'none': 0,
+    'minor': 0.25,     // Partial degradation
+    'major': 0.75,     // Significant issues
+    'critical': 1.0,   // Complete outage
+  };
+
+  return multipliers[impact] || 0.5;
+}
+
+/**
+ * Calculate downtime for a single incident
+ */
+export function calculateIncidentDowntime(incident: IncidentEntry): number {
+  const startTime = new Date(incident.data.started_at || incident.data.created_at);
+  const endTime = incident.data.resolved_at
+    ? new Date(incident.data.resolved_at)
+    : new Date(); // Ongoing incident uses current time
+
+  const durationMinutes = getDurationMinutes(startTime, endTime);
+  const impactMultiplier = getImpactMultiplier(incident.data.impact);
+
+  return durationMinutes * impactMultiplier;
+}
+
+/**
+ * Filter incidents by date range
+ */
+export function filterIncidentsByDateRange(
+  incidents: IncidentEntry[],
+  startDate: Date,
+  endDate: Date
+): IncidentEntry[] {
+  return incidents.filter(incident => {
+    const createdAt = new Date(incident.data.created_at);
+    return createdAt >= startDate && createdAt <= endDate;
+  });
+}
+
+/**
+ * Filter incidents by component
+ */
+export function filterIncidentsByComponent(
+  incidents: IncidentEntry[],
+  componentName: string
+): IncidentEntry[] {
+  return incidents.filter(incident =>
+    incident.data.components && incident.data.components.some(c => c.name === componentName)
+  );
+}
+
+/**
+ * Calculate SLA for a specific component in a date range
+ */
+export function calculateComponentSLA(
+  incidents: IncidentEntry[],
+  componentName: string,
+  startDate: Date,
+  endDate: Date
+): SLAResult {
+  // Filter incidents affecting this component within date range
+  const relevantIncidents = incidents.filter(incident => {
+    const createdAt = new Date(incident.data.created_at);
+    const affectsComponent = incident.data.components && incident.data.components.some(c => c.name === componentName);
+    return affectsComponent && createdAt >= startDate && createdAt <= endDate;
+  });
+
+  // Calculate total downtime
+  let totalDowntimeMinutes = 0;
+
+  for (const incident of relevantIncidents) {
+    totalDowntimeMinutes += calculateIncidentDowntime(incident);
+  }
+
+  // Calculate total period in minutes
+  const totalMinutes = getTotalMinutes(startDate, endDate);
+
+  // Calculate uptime percentage
+  const uptimePercentage = ((totalMinutes - totalDowntimeMinutes) / totalMinutes) * 100;
+
+  // Determine SLA violation and service credit
+  let slaViolation = false;
+  let serviceCredit: 0 | 10 | 25 = 0;
+
+  if (uptimePercentage < 99.0) {
+    slaViolation = true;
+    serviceCredit = 25;
+  } else if (uptimePercentage < 99.9) {
+    slaViolation = true;
+    serviceCredit = 10;
+  }
+
+  return {
+    componentName,
+    uptimePercentage: parseFloat(uptimePercentage.toFixed(4)),
+    totalDowntimeMinutes: Math.round(totalDowntimeMinutes),
+    incidentCount: relevantIncidents.length,
+    slaViolation,
+    serviceCredit,
+    period: {
+      start: startDate.toISOString(),
+      end: endDate.toISOString(),
+    },
+  };
+}
+
+/**
+ * Calculate SLA for all components in a quarter
+ */
+export function calculateQuarterlySLA(
+  incidents: IncidentEntry[],
+  year: number,
+  quarter: Quarter,
+  componentNames: string[]
+): SLAResult[] {
+  const startDate = getQuarterStart(year, quarter);
+  const endDate = getQuarterEnd(year, quarter);
+
+  return componentNames.map(componentName =>
+    calculateComponentSLA(incidents, componentName, startDate, endDate)
+  );
+}
+
+/**
+ * Calculate overall SLA across all components
+ */
+export function calculateOverallSLA(
+  incidents: IncidentEntry[],
+  startDate: Date,
+  endDate: Date,
+  componentNames: string[]
+): SLAResult {
+  const componentSLAs = componentNames.map(name =>
+    calculateComponentSLA(incidents, name, startDate, endDate)
+  );
+
+  // Calculate average uptime
+  const avgUptime = componentSLAs.reduce((sum, sla) => sum + sla.uptimePercentage, 0) / componentSLAs.length;
+
+  // Sum total downtime and incidents
+  const totalDowntime = componentSLAs.reduce((sum, sla) => sum + sla.totalDowntimeMinutes, 0);
+  const totalIncidents = componentSLAs.reduce((sum, sla) => sum + sla.incidentCount, 0);
+
+  // Determine overall SLA violation
+  const slaViolation = avgUptime < 99.9;
+  const serviceCredit: 0 | 10 | 25 = avgUptime < 99.0 ? 25 : avgUptime < 99.9 ? 10 : 0;
+
+  return {
+    componentName: 'All Components',
+    uptimePercentage: parseFloat(avgUptime.toFixed(4)),
+    totalDowntimeMinutes: Math.round(totalDowntime),
+    incidentCount: totalIncidents,
+    slaViolation,
+    serviceCredit,
+    period: {
+      start: startDate.toISOString(),
+      end: endDate.toISOString(),
+    },
+  };
+}
+
+/**
+ * Get incidents with calculated durations
+ */
+export function getIncidentsWithDurations(incidents: IncidentEntry[]): IncidentWithDuration[] {
+  return incidents.map(incident => {
+    const startTime = new Date(incident.data.started_at || incident.data.created_at);
+    const endTime = incident.data.resolved_at ? new Date(incident.data.resolved_at) : new Date();
+    const durationMinutes = getDurationMinutes(startTime, endTime);
+    const weightedDowntime = calculateIncidentDowntime(incident);
+
+    return {
+      ...incident,
+      durationMinutes,
+      weightedDowntime,
+    };
+  });
+}
+
+/**
+ * Get SLA status label
+ */
+export function getSLAStatusLabel(uptimePercentage: number): string {
+  if (uptimePercentage >= 99.9) return 'Pass';
+  if (uptimePercentage >= 99.0) return 'Violation (10% credit)';
+  return 'Violation (25% credit)';
+}
+
+/**
+ * Get SLA status color
+ */
+export function getSLAStatusColor(uptimePercentage: number): string {
+  if (uptimePercentage >= 99.9) return 'green';
+  if (uptimePercentage >= 99.0) return 'orange';
+  return 'red';
+}
+
+/**
+ * GitHub SLA components
+ * Based on the official SLA document
+ */
+export const GITHUB_SLA_COMPONENTS = [
+  'Git Operations',
+  'API Requests',
+  'Issues',
+  'Pull Requests',
+  'Webhooks',
+  'Pages',
+  'Actions',
+  'Packages',
+] as const;
+
+export type GitHubSLAComponent = typeof GITHUB_SLA_COMPONENTS[number];
