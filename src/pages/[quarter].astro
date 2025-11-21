@@ -79,6 +79,13 @@ const totalDowntime = slaResults.reduce(
   0,
 );
 const totalIncidents = quarterIncidents.length;
+const trackedIncidents = quarterIncidents.filter(
+  (incident) =>
+    incident.data.components &&
+    incident.data.components.some((c) =>
+      GITHUB_SLA_COMPONENTS.includes(c.name as any),
+    ),
+).length;
 const hasViolation = slaResults.some((r) => r.slaViolation);
 const worstComponent = slaResults.reduce((worst, curr) =>
   curr.uptimePercentage < worst.uptimePercentage ? curr : worst,
@@ -167,7 +174,9 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
       <div class="card">
         <h3>Total Incidents</h3>
         <div class="stat-value">{totalIncidents}</div>
-        <div class="stat-label">In this quarter</div>
+        <div class="stat-label">
+          In this quarter ({trackedIncidents} tracked)
+        </div>
       </div>
 
       <div class="card">
@@ -324,7 +333,8 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
                   {incident.data.incident_updates.length > 0 && (
                     <details class="incident-updates">
                       <summary>
-                        {incident.data.incident_updates.length} update{incident.data.incident_updates.length !== 1 ? "s" : ""}
+                        {incident.data.incident_updates.length} update
+                        {incident.data.incident_updates.length !== 1 ? "s" : ""}
                       </summary>
                       <div class="updates-list">
                         {incident.data.incident_updates.map((update) => (
