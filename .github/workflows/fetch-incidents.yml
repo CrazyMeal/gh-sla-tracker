@@ -2,8 +2,8 @@ name: Fetch GitHub Incidents
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
-    - cron: '0 0 * * *'
+    # Run every 6 hours to ensure we don't miss incidents (API limit is 50)
+    - cron: '0 */6 * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:

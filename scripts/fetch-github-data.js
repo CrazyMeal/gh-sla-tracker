@@ -96,6 +96,10 @@ async function fetchFreshData() {
     fetchGitHubAPI('components.json')
   ]);
 
+  if (incidentsData.incidents && incidentsData.incidents.length === 0) {
+    console.warn('⚠️  Warning: API returned 0 incidents. This might be correct, or an API issue.');
+  }
+
   return {
     incidents: incidentsData.incidents || [],
     components: componentsData.components || [],
@@ -107,20 +111,35 @@ async function fetchFreshData() {
  * Merge new incidents with existing archive
  * Avoids duplicates and sorts by date
  */
+/**
+ * Merge new incidents with existing archive
+ * Avoids duplicates and sorts by date
+ */
 function mergeIncidents(newIncidents, existingArchive = []) {
   // Combine arrays
   const combined = [...newIncidents, ...existingArchive];
+  let addedCount = 0;
+  let updatedCount = 0;
 
   // Remove duplicates by ID
   const uniqueMap = new Map();
-  combined.forEach(incident => {
+
+  // First, populate map with existing archive to establish baseline
+  existingArchive.forEach(incident => {
+    uniqueMap.set(incident.id, incident);
+  });
+
+  // Process new incidents
+  newIncidents.forEach(incident => {
     if (!uniqueMap.has(incident.id)) {
       uniqueMap.set(incident.id, incident);
+      addedCount++;
     } else {
-      // Keep the most recently updated version
+      // Check if it's actually an update
       const existing = uniqueMap.get(incident.id);
       if (new Date(incident.updated_at) > new Date(existing.updated_at)) {
         uniqueMap.set(incident.id, incident);
+        updatedCount++;
       }
     }
   });
@@ -129,7 +148,7 @@ function mergeIncidents(newIncidents, existingArchive = []) {
   const merged = Array.from(uniqueMap.values());
   merged.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-  return merged;
+  return { merged, addedCount, updatedCount };
 }
 
 /**
@@ -146,8 +165,9 @@ function loadExistingArchive() {
     console.log(`Loaded existing archive: ${archive.length} incidents`);
     return archive;
   } catch (error) {
-    console.warn('Failed to load existing archive:', error.message);
-    return [];
+    console.error('Failed to load existing archive:', error.message);
+    // If the file exists but is corrupted, we should probably fail rather than overwrite with empty
+    throw new Error('Critical: Failed to parse existing archive. Aborting to prevent data loss.');
   }
 }
 
@@ -231,9 +251,14 @@ async function main() {
     const existingArchive = loadExistingArchive();
 
     // Merge incidents
-    const mergedIncidents = mergeIncidents(data.incidents, existingArchive);
+    const { merged: mergedIncidents, addedCount, updatedCount } = mergeIncidents(data.incidents, existingArchive);
 
-    console.log(`\n📦 Merged ${data.incidents.length} new incidents with ${existingArchive.length} existing = ${mergedIncidents.length} total unique incidents\n`);
+    console.log(`\n📦 Merge Summary:`);
+    console.log(`   - Existing Archive: ${existingArchive.length}`);
+    console.log(`   - Fetched Incidents: ${data.incidents.length}`);
+    console.log(`   - New Incidents Added: ${addedCount}`);
+    console.log(`   - Incidents Updated: ${updatedCount}`);
+    console.log(`   - Total Unique Incidents: ${mergedIncidents.length}\n`);
 
     // Save to files
     saveData(mergedIncidents, data.components);
