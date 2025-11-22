@@ -1,14 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
-import {
-	getRecentQuarters,
-	formatDateTime,
-} from "../lib/date-utils";
+import { getRecentQuarters, formatDateTime } from "../lib/date-utils";
 import {
 	calculateQuarterData,
 	getSLAStatusColor,
 	GITHUB_SLA_COMPONENTS,
+	getIncidentEndTime,
 } from "../lib/sla-calculator";
 
 // Fetch all incidents from content collection
@@ -19,7 +17,7 @@ const recentQuarters = getRecentQuarters(8);
 
 // Calculate SLA for each quarter using centralized function
 const quarterlyData = recentQuarters.map((quarter) =>
-	calculateQuarterData(allIncidents, quarter.year, quarter.quarter)
+	calculateQuarterData(allIncidents, quarter.year, quarter.quarter),
 );
 
 // Get statistics
@@ -27,9 +25,22 @@ const totalIncidents = allIncidents.length;
 const resolvedIncidents = allIncidents.filter(
 	(i) => i.data.status === "resolved",
 ).length;
-const activeIncidents = allIncidents.filter(
-	(i) => i.data.status !== "resolved",
-).length;
+const activeIncidents = allIncidents.filter((i) => {
+	// Exclude explicitly resolved incidents
+	if (i.data.status === "resolved") return false;
+
+	// Exclude maintenance
+	if (i.data.impact === "maintenance") return false;
+
+	// Check for "zombie" incidents (effective end time is in the past)
+	// If getIncidentEndTime returns a past date (from an update), it's resolved
+	const endTime = getIncidentEndTime(i);
+	const now = new Date();
+	// Use a small buffer (1 hour) to consider very recent resolutions as still "active" for visibility
+	// or just strict comparison. Let's use strict comparison for "active" count.
+	// If endTime is significantly in the past (e.g. > 1 hour ago), it's not active.
+	return endTime.getTime() > now.getTime() - 1000 * 60 * 60;
+}).length;
 
 // Get most recent incidents
 const recentIncidents = [...allIncidents]
