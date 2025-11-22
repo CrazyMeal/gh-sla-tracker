@@ -38,6 +38,7 @@ export function getImpactMultiplier(impact: string): number {
     'minor': 0.25,     // Partial degradation
     'major': 0.75,     // Significant issues
     'critical': 1.0,   // Complete outage
+    'maintenance': 0,  // Scheduled maintenance (no SLA impact)
   };
 
   return multipliers[impact] || 0.5;

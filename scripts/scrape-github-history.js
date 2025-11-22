@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 // Configuration
 const CONFIG = {
   BASE_URL: 'https://www.githubstatus.com',
-  RATE_LIMIT_MS: 2500, // 2.5 seconds between incident detail fetches
+  RATE_LIMIT_MS: 1500, // 2.5 seconds between incident detail fetches
   TIMEOUT_MS: 30000,
   USER_AGENT: 'Mozilla/5.0 (GitHub SLA Tracker - Educational/Personal Project)',
   DEFAULT_PAGE: 1, // Start with first page (most recent 3 months)

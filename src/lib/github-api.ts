@@ -23,7 +23,7 @@ export interface GitHubStatusIncident {
   id: string;
   name: string;
   status: 'investigating' | 'identified' | 'monitoring' | 'resolved' | 'postmortem';
-  impact: 'none' | 'minor' | 'major' | 'critical';
+  impact: 'none' | 'minor' | 'major' | 'critical' | 'maintenance';
   created_at: string;
   updated_at: string;
   monitoring_at?: string | null;
@@ -69,7 +69,7 @@ export interface GitHubStatusSummary {
     updated_at: string;
   };
   status: {
-    indicator: 'none' | 'minor' | 'major' | 'critical';
+    indicator: 'none' | 'minor' | 'major' | 'critical' | 'maintenance';
     description: string;
   };
   components: GitHubStatusComponent[];
@@ -132,7 +132,7 @@ export async function getUnresolvedIncidents(): Promise<{ incidents: GitHubStatu
  */
 export async function getStatus(): Promise<{
   status: {
-    indicator: 'none' | 'minor' | 'major' | 'critical';
+    indicator: 'none' | 'minor' | 'major' | 'critical' | 'maintenance';
     description: string;
   };
 }> {
@@ -171,6 +171,7 @@ export function getImpactLabel(impact: GitHubStatusIncident['impact']): string {
     'minor': 'Minor',
     'major': 'Major',
     'critical': 'Critical',
+    'maintenance': 'Maintenance',
   };
 
   return labels[impact] || impact;

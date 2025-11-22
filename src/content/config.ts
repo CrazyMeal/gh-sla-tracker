@@ -32,7 +32,7 @@ const incidents = defineCollection({
     id: z.string(),
     name: z.string(),
     status: z.enum(['investigating', 'identified', 'monitoring', 'resolved', 'postmortem']),
-    impact: z.enum(['none', 'minor', 'major', 'critical']),
+    impact: z.enum(['none', 'minor', 'major', 'critical', 'maintenance']),
     created_at: z.string(),
     updated_at: z.string(),
     monitoring_at: z.string().nullable().optional(),
