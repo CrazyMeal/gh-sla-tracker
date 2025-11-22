@@ -184,7 +184,13 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
                   : "badge-success";
 
                 return (
-                  <tr>
+                  <tr
+                    class="component-row"
+                    data-component={result.componentName}
+                    data-incident-count={result.incidentCount}
+                    role="button"
+                    tabindex="0"
+                  >
                     <td>
                       <strong>{result.componentName}</strong>
                     </td>
@@ -225,6 +231,25 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
         this quarter
       </p>
 
+      <div
+        id="component-filter-banner"
+        class="filter-banner"
+        style="display: none;"
+      >
+        <div class="filter-content">
+          <span class="filter-icon">🔍</span>
+          <span class="filter-text"
+            >Showing <strong id="filter-count">0</strong> incident(s) for: <strong
+              id="filter-component"></strong></span
+          >
+          <button
+            id="clear-filter"
+            class="filter-clear"
+            aria-label="Clear filter">✕</button
+          >
+        </div>
+      </div>
+
       {
         incidentsWithDurations.length === 0 ? (
           <div class="card empty-state">
@@ -253,10 +278,20 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
               const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`;
 
               return (
-                <div class="card incident-card">
+                <div
+                  class="card incident-card"
+                  data-components={
+                    incident.data.components?.map((c) => c.name).join("|") || ""
+                  }
+                >
                   <div class="incident-header">
                     <h4>
-                      <a href={incidentUrl} target="_blank" rel="noopener noreferrer" class="incident-title-link">
+                      <a
+                        href={incidentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="incident-title-link"
+                      >
                         {incident.data.name}
                       </a>
                     </h4>
@@ -621,4 +656,231 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     margin: 0;
     line-height: 1.6;
   }
+
+  /* Component row interactivity for filtering */
+  .component-row {
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
+  }
+
+  .component-row:hover {
+    background-color: var(--color-bg-tertiary);
+  }
+
+  .component-row:focus {
+    outline: 2px solid var(--color-link);
+    outline-offset: -2px;
+  }
+
+  .component-row.selected {
+    background-color: rgba(79, 140, 201, 0.1);
+    border-left: 4px solid var(--color-link);
+  }
+
+  .component-row.selected td:first-child {
+    padding-left: calc(1rem - 4px);
+  }
+
+  /* Filter banner */
+  .filter-banner {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.5rem;
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-link);
+    border-radius: 6px;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .filter-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .filter-icon {
+    font-size: 1.25rem;
+  }
+
+  .filter-text {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--color-text);
+  }
+
+  .filter-text strong {
+    color: var(--color-link);
+  }
+
+  .filter-clear {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .filter-clear:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--color-text);
+  }
+
+  .filter-clear:focus {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+
+  /* Smooth filtering transitions */
+  .incident-card {
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.3s ease-out;
+  }
+
+  .incident-card[style*="display: none"] {
+    opacity: 0;
+    transform: scale(0.98);
+  }
 </style>
+
+<script is:inline>
+  class ComponentFilter {
+    constructor() {
+      this.activeComponent = null;
+      this.componentRows = document.querySelectorAll(".component-row");
+      this.incidentCards = document.querySelectorAll(".incident-card");
+      this.filterBanner = document.getElementById("component-filter-banner");
+      this.filterCountElement = document.getElementById("filter-count");
+      this.filterComponentElement = document.getElementById("filter-component");
+      this.clearButton = document.getElementById("clear-filter");
+
+      this.init();
+    }
+
+    init() {
+      // Add click handlers to component rows
+      this.componentRows.forEach((row) => {
+        row.addEventListener("click", () => this.toggleFilter(row));
+        row.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.toggleFilter(row);
+          }
+        });
+      });
+
+      // Add click handler to clear button
+      this.clearButton?.addEventListener("click", () => this.clearFilter());
+    }
+
+    toggleFilter(row) {
+      const componentName = row.dataset.component;
+
+      if (this.activeComponent === componentName) {
+        // Clicking same component - clear filter
+        this.clearFilter();
+      } else {
+        // Apply new filter
+        this.applyFilter(componentName, row);
+      }
+    }
+
+    applyFilter(componentName, row) {
+      this.activeComponent = componentName;
+
+      // Update row selection state
+      this.componentRows.forEach((r) => r.classList.remove("selected"));
+      row.classList.add("selected");
+
+      // Filter incidents using fuzzy matching
+      let visibleCount = 0;
+      this.incidentCards.forEach((card) => {
+        const components = card.dataset.components;
+        const matches = this.componentMatches(components, componentName);
+
+        if (matches) {
+          card.style.display = "";
+          visibleCount++;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      // Update filter banner
+      this.filterCountElement.textContent = visibleCount;
+      this.filterComponentElement.textContent = componentName;
+      this.filterBanner.style.display = "block";
+
+      // Scroll to incidents section smoothly
+      this.filterBanner.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+
+    componentMatches(componentsString, targetComponent) {
+      if (!componentsString) return false;
+
+      const components = componentsString.split("|");
+      return components.some((component) => {
+        // Normalize and use word boundary matching (mirrors backend logic)
+        const normalized = component.trim().replace(/^and\s+/i, "");
+        const pattern = new RegExp(
+          `\\b${this.escapeRegex(targetComponent)}\\b`,
+          "i",
+        );
+        return pattern.test(normalized);
+      });
+    }
+
+    escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    clearFilter() {
+      this.activeComponent = null;
+
+      // Clear row selection
+      this.componentRows.forEach((r) => r.classList.remove("selected"));
+
+      // Show all incidents
+      this.incidentCards.forEach((card) => {
+        card.style.display = "";
+      });
+
+      // Hide filter banner
+      this.filterBanner.style.display = "none";
+    }
+  }
+
+  // Initialize on page load (handles both initial load and View Transitions)
+  document.addEventListener("astro:page-load", () => {
+    // Check if we're on the quarter page before initializing
+    if (document.querySelector(".component-row")) {
+      new ComponentFilter();
+    }
+  });
+</script>
