@@ -249,10 +249,17 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
                     ? "badge-info"
                     : "badge-warning";
 
+              // Build GitHub Status incident URL (correct format)
+              const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`;
+
               return (
                 <div class="card incident-card">
                   <div class="incident-header">
-                    <h4>{incident.data.name}</h4>
+                    <h4>
+                      <a href={incidentUrl} target="_blank" rel="noopener noreferrer" class="incident-title-link">
+                        {incident.data.name}
+                      </a>
+                    </h4>
                     <div class="incident-badges">
                       <span class={`badge ${impactClass}`}>
                         {incident.data.impact}
@@ -487,6 +494,17 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
 
   .incident-card:hover {
     border-color: var(--color-text-secondary);
+  }
+
+  .incident-title-link {
+    color: var(--color-link);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .incident-title-link:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
   }
 
   .incident-header {

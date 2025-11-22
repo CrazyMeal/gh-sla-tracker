@@ -2,12 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { getRecentQuarters, formatDateTime } from "../lib/date-utils";
-import {
-	calculateQuarterData,
-	getSLAStatusColor,
-	GITHUB_SLA_COMPONENTS,
-	getIncidentEndTime,
-} from "../lib/sla-calculator";
+import { calculateQuarterData, getSLAStatusColor } from "../lib/sla-calculator";
 
 // Fetch all incidents from content collection
 const allIncidents = await getCollection("incidents");
@@ -25,22 +20,6 @@ const totalIncidents = allIncidents.length;
 const resolvedIncidents = allIncidents.filter(
 	(i) => i.data.status === "resolved",
 ).length;
-const activeIncidents = allIncidents.filter((i) => {
-	// Exclude explicitly resolved incidents
-	if (i.data.status === "resolved") return false;
-
-	// Exclude maintenance
-	if (i.data.impact === "maintenance") return false;
-
-	// Check for "zombie" incidents (effective end time is in the past)
-	// If getIncidentEndTime returns a past date (from an update), it's resolved
-	const endTime = getIncidentEndTime(i);
-	const now = new Date();
-	// Use a small buffer (1 hour) to consider very recent resolutions as still "active" for visibility
-	// or just strict comparison. Let's use strict comparison for "active" count.
-	// If endTime is significantly in the past (e.g. > 1 hour ago), it's not active.
-	return endTime.getTime() > now.getTime() - 1000 * 60 * 60;
-}).length;
 
 // Get most recent incidents
 const recentIncidents = [...allIncidents]
@@ -83,33 +62,14 @@ const impactCounts = allIncidents.reduce(
 			</div>
 
 			<div class="card stat-card">
-				<h3>Active Incidents</h3>
-				<div class="stat-value">{activeIncidents}</div>
-				<div class="stat-label">
-					{activeIncidents === 0 ? "All clear" : "Currently active"}
-				</div>
-			</div>
-
-			<div class="card stat-card">
 				<h3>Major Impacts</h3>
 				<div class="stat-value">{impactCounts.major || 0}</div>
 				<div class="stat-label">Out of {totalIncidents} total</div>
-			</div>
-
-			<div class="card stat-card">
-				<h3>Tracked Components</h3>
-				<div class="stat-value">{GITHUB_SLA_COMPONENTS.length}</div>
-				<div class="stat-label">Service features</div>
 			</div>
 		</section>
 
 		<section class="quarters">
 			<h2>Quarterly SLA Overview</h2>
-			<p class="section-subtitle">
-				GitHub commits to 99.9% uptime per calendar quarter. Click a
-				quarter for detailed breakdown.
-			</p>
-
 			<div class="quarters-grid">
 				{
 					quarterlyData.map(
@@ -218,10 +178,17 @@ const impactCounts = allIncidents.reduce(
 							minute: "2-digit",
 						});
 
+						// Build GitHub Status incident URL (correct format)
+						const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`;
+
 						return (
 							<div class="card incident-item">
 								<div class="incident-header">
-									<h4>{incident.data.name}</h4>
+									<h4>
+										<a href={incidentUrl} target="_blank" rel="noopener noreferrer" class="incident-title-link">
+											{incident.data.name}
+										</a>
+									</h4>
 									<div class="incident-badges">
 										<span class={`badge ${impactClass}`}>
 											{incident.data.impact}
@@ -519,6 +486,17 @@ const impactCounts = allIncidents.reduce(
 
 	.incident-item:hover {
 		border-color: var(--color-text-secondary);
+	}
+
+	.incident-title-link {
+		color: var(--color-link);
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+
+	.incident-title-link:hover {
+		color: var(--color-link-hover);
+		text-decoration: underline;
 	}
 
 	.incident-header {
