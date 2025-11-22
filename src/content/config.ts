@@ -7,14 +7,14 @@ const incidentUpdateSchema = z.object({
   status: z.string(),
   body: z.string(),
   created_at: z.string(),
-  updated_at: z.string(),
-  display_at: z.string(),
+  updated_at: z.string().optional(),
+  display_at: z.string().nullable().optional(),
   affected_components: z.array(z.object({
     code: z.string(),
     name: z.string(),
     old_status: z.string(),
     new_status: z.string(),
-  })).nullable(),
+  })).nullable().optional(),
 });
 
 // Schema for component status in incidents
@@ -39,8 +39,8 @@ const incidents = defineCollection({
     resolved_at: z.string().nullable(),
     impact_override: z.string().nullable().optional(),
     shortlink: z.string(),
-    started_at: z.string(),
-    page_id: z.string(),
+    started_at: z.string().nullable().optional(),
+    page_id: z.string().optional(),
     incident_updates: z.array(incidentUpdateSchema),
     components: z.array(componentStatusSchema),
     postmortem_body: z.string().nullable().optional(),

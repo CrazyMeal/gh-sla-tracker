@@ -59,6 +59,43 @@ export function calculateIncidentDowntime(incident: IncidentEntry): number {
 }
 
 /**
+ * Calculate downtime for a single incident within a specific period
+ * Clamps the downtime to the period boundaries
+ */
+export function calculateIncidentDowntimeInPeriod(
+  incident: IncidentEntry,
+  periodStart: Date,
+  periodEnd: Date
+): number {
+  const incidentStart = new Date(incident.data.started_at || incident.data.created_at);
+
+  let incidentEnd: Date;
+  if (incident.data.resolved_at) {
+    incidentEnd = new Date(incident.data.resolved_at);
+  } else if (incident.data.status === 'resolved') {
+    // Fallback for resolved incidents with missing resolved_at
+    // Use updated_at as it usually corresponds to the resolution time
+    incidentEnd = new Date(incident.data.updated_at);
+  } else {
+    incidentEnd = new Date(); // Ongoing incident uses current time
+  }
+
+  // If incident is completely outside the period, return 0
+  if (incidentEnd < periodStart || incidentStart > periodEnd) {
+    return 0;
+  }
+
+  // Clamp start and end to the period
+  const clampedStart = incidentStart < periodStart ? periodStart : incidentStart;
+  const clampedEnd = incidentEnd > periodEnd ? periodEnd : incidentEnd;
+
+  const durationMinutes = getDurationMinutes(clampedStart, clampedEnd);
+  const impactMultiplier = getImpactMultiplier(incident.data.impact);
+
+  return durationMinutes * impactMultiplier;
+}
+
+/**
  * Get the oldest incident date from the collection
  * This tells us when incident tracking began
  */
@@ -113,25 +150,80 @@ export function calculateComponentSLA(
   // Check if we have insufficient data (quarter starts before our oldest incident)
   const hasInsufficientData = oldestIncidentDate !== null && startDate < oldestIncidentDate;
 
-  // Filter incidents affecting this component within date range
+  // Filter incidents affecting this component that OVERLAP with the date range
+  // (Start before end of period AND End after start of period)
   const relevantIncidents = incidents.filter(incident => {
-    const createdAt = new Date(incident.data.created_at);
+    const incidentStart = new Date(incident.data.started_at || incident.data.created_at);
+    const incidentEnd = incident.data.resolved_at
+      ? new Date(incident.data.resolved_at)
+      : new Date(); // Ongoing incident uses current time
+
     const affectsComponent = incident.data.components && incident.data.components.some(c => c.name === componentName);
-    return affectsComponent && createdAt >= startDate && createdAt <= endDate;
+
+    return affectsComponent && incidentStart < endDate && incidentEnd > startDate;
   });
 
-  // Calculate total downtime
-  let totalDowntimeMinutes = 0;
+  // Calculate total weighted downtime using interval merging
+  // This handles overlapping incidents by taking the MAX impact during any given overlap
 
-  for (const incident of relevantIncidents) {
-    totalDowntimeMinutes += calculateIncidentDowntime(incident);
+  // 1. Collect all relevant time points (start and end of period, and incident start/ends within period)
+  const timePoints = new Set<number>();
+  timePoints.add(startDate.getTime());
+  timePoints.add(endDate.getTime());
+
+  relevantIncidents.forEach(inc => {
+    const start = new Date(inc.data.started_at || inc.data.created_at).getTime();
+    const end = inc.data.resolved_at ? new Date(inc.data.resolved_at).getTime() : new Date().getTime();
+
+    // Clamp to period
+    const clampedStart = Math.max(start, startDate.getTime());
+    const clampedEnd = Math.min(end, endDate.getTime());
+
+    if (clampedStart < clampedEnd) {
+      timePoints.add(clampedStart);
+      timePoints.add(clampedEnd);
+    }
+  });
+
+  const sortedPoints = Array.from(timePoints).sort((a, b) => a - b);
+
+  let totalWeightedDowntimeMinutes = 0;
+
+  // 2. Iterate through intervals
+  for (let i = 0; i < sortedPoints.length - 1; i++) {
+    const p1 = sortedPoints[i];
+    const p2 = sortedPoints[i + 1];
+
+    // Skip if points are identical
+    if (p1 === p2) continue;
+
+    const midPoint = (p1 + p2) / 2;
+
+    // Find max impact for this interval
+    let maxImpact = 0;
+
+    for (const inc of relevantIncidents) {
+      const start = new Date(inc.data.started_at || inc.data.created_at).getTime();
+      const end = inc.data.resolved_at ? new Date(inc.data.resolved_at).getTime() : new Date().getTime();
+
+      // Check if incident covers this interval (using midpoint to be safe)
+      if (start <= midPoint && end >= midPoint) {
+        const impact = getImpactMultiplier(inc.data.impact);
+        if (impact > maxImpact) maxImpact = impact;
+      }
+    }
+
+    const durationMinutes = (p2 - p1) / (1000 * 60);
+    totalWeightedDowntimeMinutes += durationMinutes * maxImpact;
   }
 
   // Calculate total period in minutes
   const totalMinutes = getTotalMinutes(startDate, endDate);
 
   // Calculate uptime percentage
-  const uptimePercentage = ((totalMinutes - totalDowntimeMinutes) / totalMinutes) * 100;
+  // Ensure we don't get negative uptime if something goes wrong with floating point math
+  const effectiveDowntime = Math.min(totalWeightedDowntimeMinutes, totalMinutes);
+  const uptimePercentage = ((totalMinutes - effectiveDowntime) / totalMinutes) * 100;
 
   // Determine SLA violation and service credit
   let slaViolation = false;
@@ -148,7 +240,7 @@ export function calculateComponentSLA(
   return {
     componentName,
     uptimePercentage: parseFloat(uptimePercentage.toFixed(4)),
-    totalDowntimeMinutes: Math.round(totalDowntimeMinutes),
+    totalDowntimeMinutes: Math.round(totalWeightedDowntimeMinutes),
     incidentCount: relevantIncidents.length,
     slaViolation,
     serviceCredit,
