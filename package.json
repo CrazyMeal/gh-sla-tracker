@@ -10,10 +10,17 @@
     "build": "npm run fetch-data && astro build",
     "build:cached": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "astro": "^5.16.0",
     "playwright": "^1.56.1"
+  },
+  "devDependencies": {
+    "@vitest/ui": "^4.0.13",
+    "vitest": "^4.0.13"
   }
 }

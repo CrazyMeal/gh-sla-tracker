@@ -41,7 +41,9 @@ export function getImpactMultiplier(impact: string): number {
     'maintenance': 0,  // Scheduled maintenance (no SLA impact)
   };
 
-  return multipliers[impact] || 0.5;
+  // Use nullish coalescing to handle 0 values correctly
+  // (0 is falsy, so || would incorrectly return 0.5)
+  return multipliers[impact] ?? 0.5;
 }
 
 /**
@@ -270,7 +272,11 @@ export function calculateComponentSLA(
   // Calculate uptime percentage
   // Ensure we don't get negative uptime if something goes wrong with floating point math
   const effectiveDowntime = Math.min(totalWeightedDowntimeMinutes, totalMinutes);
-  const uptimePercentage = ((totalMinutes - effectiveDowntime) / totalMinutes) * 100;
+  const rawUptimePercentage = ((totalMinutes - effectiveDowntime) / totalMinutes) * 100;
+
+  // Round to 4 decimal places for consistent comparison
+  // This ensures SLA violation checks use the same precision as returned values
+  const uptimePercentage = parseFloat(rawUptimePercentage.toFixed(4));
 
   // Determine SLA violation and service credit
   let slaViolation = false;
@@ -286,7 +292,7 @@ export function calculateComponentSLA(
 
   return {
     componentName,
-    uptimePercentage: parseFloat(uptimePercentage.toFixed(4)),
+    uptimePercentage,
     totalDowntimeMinutes: Math.round(totalWeightedDowntimeMinutes),
     incidentCount: relevantIncidents.length,
     slaViolation,

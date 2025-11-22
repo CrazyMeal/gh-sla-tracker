@@ -268,7 +268,7 @@ async function main() {
 
   // Parse page range (e.g., --pages 1-20 or --page 5)
   let startPage = 1;
-  let endPage = 2;
+  let endPage = 5;
 
   if (args.includes('--pages')) {
     const rangeStr = args[args.indexOf('--pages') + 1];
