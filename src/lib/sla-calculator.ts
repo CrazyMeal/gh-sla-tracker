@@ -47,13 +47,41 @@ export function getImpactMultiplier(impact: string): number {
 }
 
 /**
+ * Get the end time for an incident
+ * Handles various cases where resolved_at might be missing
+ */
+export function getIncidentEndTime(incident: IncidentEntry): Date {
+  // 1. Explicit resolved_at
+  if (incident.data.resolved_at) {
+    return new Date(incident.data.resolved_at);
+  }
+
+  // 2. Check updates for "resolved" status
+  // This handles cases where the top-level status wasn't updated but a resolved update exists
+  if (incident.data.incident_updates) {
+    const resolvedUpdate = incident.data.incident_updates.find(u => u.status === 'resolved');
+    if (resolvedUpdate) {
+      return new Date(resolvedUpdate.created_at);
+    }
+  }
+
+  // 3. Fallback: if status is resolved but no date, use updated_at
+  if (incident.data.status === 'resolved') {
+    return new Date(incident.data.updated_at);
+  }
+
+  // 4. Ongoing incident
+  // Note: We might want to add a check for stale incidents here in the future
+  // (e.g. if updated_at is > 7 days ago, assume resolved)
+  return new Date();
+}
+
+/**
  * Calculate downtime for a single incident
  */
 export function calculateIncidentDowntime(incident: IncidentEntry): number {
   const startTime = new Date(incident.data.started_at || incident.data.created_at);
-  const endTime = incident.data.resolved_at
-    ? new Date(incident.data.resolved_at)
-    : new Date(); // Ongoing incident uses current time
+  const endTime = getIncidentEndTime(incident);
 
   const durationMinutes = getDurationMinutes(startTime, endTime);
   const impactMultiplier = getImpactMultiplier(incident.data.impact);
@@ -71,17 +99,7 @@ export function calculateIncidentDowntimeInPeriod(
   periodEnd: Date
 ): number {
   const incidentStart = new Date(incident.data.started_at || incident.data.created_at);
-
-  let incidentEnd: Date;
-  if (incident.data.resolved_at) {
-    incidentEnd = new Date(incident.data.resolved_at);
-  } else if (incident.data.status === 'resolved') {
-    // Fallback for resolved incidents with missing resolved_at
-    // Use updated_at as it usually corresponds to the resolution time
-    incidentEnd = new Date(incident.data.updated_at);
-  } else {
-    incidentEnd = new Date(); // Ongoing incident uses current time
-  }
+  const incidentEnd = getIncidentEndTime(incident);
 
   // If incident is completely outside the period, return 0
   if (incidentEnd < periodStart || incidentStart > periodEnd) {
@@ -186,9 +204,7 @@ export function calculateComponentSLA(
   // (Start before end of period AND End after start of period)
   const relevantIncidents = incidents.filter(incident => {
     const incidentStart = new Date(incident.data.started_at || incident.data.created_at);
-    const incidentEnd = incident.data.resolved_at
-      ? new Date(incident.data.resolved_at)
-      : new Date(); // Ongoing incident uses current time
+    const incidentEnd = getIncidentEndTime(incident);
 
     const affectsComponent = incident.data.components && incident.data.components.some(c => c.name === componentName);
 
@@ -205,7 +221,7 @@ export function calculateComponentSLA(
 
   relevantIncidents.forEach(inc => {
     const start = new Date(inc.data.started_at || inc.data.created_at).getTime();
-    const end = inc.data.resolved_at ? new Date(inc.data.resolved_at).getTime() : new Date().getTime();
+    const end = getIncidentEndTime(inc).getTime();
 
     // Clamp to period
     const clampedStart = Math.max(start, startDate.getTime());
@@ -236,7 +252,7 @@ export function calculateComponentSLA(
 
     for (const inc of relevantIncidents) {
       const start = new Date(inc.data.started_at || inc.data.created_at).getTime();
-      const end = inc.data.resolved_at ? new Date(inc.data.resolved_at).getTime() : new Date().getTime();
+      const end = getIncidentEndTime(inc).getTime();
 
       // Check if incident covers this interval (using midpoint to be safe)
       if (start <= midPoint && end >= midPoint) {
@@ -353,7 +369,7 @@ export function calculateOverallSLA(
 export function getIncidentsWithDurations(incidents: IncidentEntry[]): IncidentWithDuration[] {
   return incidents.map(incident => {
     const startTime = new Date(incident.data.started_at || incident.data.created_at);
-    const endTime = incident.data.resolved_at ? new Date(incident.data.resolved_at) : new Date();
+    const endTime = getIncidentEndTime(incident);
     const durationMinutes = getDurationMinutes(startTime, endTime);
     const weightedDowntime = calculateIncidentDowntime(incident);
 
