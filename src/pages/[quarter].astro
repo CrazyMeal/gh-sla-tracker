@@ -11,11 +11,9 @@ import {
   getQuarterTotalMinutes,
 } from "../lib/date-utils";
 import {
-  calculateQuarterlySLA,
-  GITHUB_SLA_COMPONENTS,
+  calculateQuarterData,
   getSLAStatusColor,
   getSLAStatusLabel,
-  filterIncidentsByDateRange,
   getIncidentsWithDurations,
 } from "../lib/sla-calculator";
 
@@ -46,46 +44,23 @@ const quarterInfo = getQuarterInfo(year, quarter);
 // Fetch all incidents
 const allIncidents = await getCollection("incidents");
 
-// Filter incidents for this quarter
-const quarterIncidents = filterIncidentsByDateRange(
-  allIncidents,
-  quarterInfo.startDate,
-  quarterInfo.endDate,
-);
+// Calculate all quarter data using centralized function
+const quarterData = calculateQuarterData(allIncidents, year, quarter);
 
-// Calculate SLA for each component
-const slaResults = calculateQuarterlySLA(
-  allIncidents,
-  year,
-  quarter,
-  [...GITHUB_SLA_COMPONENTS],
-);
+// Destructure for easier access in template
+const {
+  slaResults,
+  avgUptime,
+  totalDowntime,
+  totalIncidents,
+  trackedIncidents,
+  hasViolation,
+  hasInsufficientData,
+  worstComponent,
+  quarterIncidents,
+} = quarterData;
 
-// Check if this quarter has insufficient data (from SLA results)
-const hasInsufficientData = slaResults.some((r) => r.hasInsufficientData);
-
-// Calculate overall metrics
-const avgUptime =
-  slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) /
-  slaResults.length;
-const totalDowntime = slaResults.reduce(
-  (sum, r) => sum + r.totalDowntimeMinutes,
-  0,
-);
-const totalIncidents = quarterIncidents.length;
-const trackedIncidents = quarterIncidents.filter(
-  (incident) =>
-    incident.data.components &&
-    incident.data.components.some((c) =>
-      GITHUB_SLA_COMPONENTS.includes(c.name as any),
-    ),
-).length;
-const hasViolation = slaResults.some((r) => r.slaViolation);
-const worstComponent = slaResults.reduce((worst, curr) =>
-  curr.uptimePercentage < worst.uptimePercentage ? curr : worst,
-);
-
-// Get incidents with durations
+// Get incidents with durations for display
 const incidentsWithDurations = getIncidentsWithDurations(quarterIncidents).sort(
   (a, b) =>
     new Date(b.data.created_at).getTime() -

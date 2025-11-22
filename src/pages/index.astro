@@ -3,17 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import {
 	getRecentQuarters,
-	getQuarterLabel,
-	formatDate,
 	formatDateTime,
-	getQuarterStart,
-	getQuarterEnd,
 } from "../lib/date-utils";
 import {
-	calculateQuarterlySLA,
-	GITHUB_SLA_COMPONENTS,
+	calculateQuarterData,
 	getSLAStatusColor,
-	filterIncidentsByDateRange,
+	GITHUB_SLA_COMPONENTS,
 } from "../lib/sla-calculator";
 
 // Fetch all incidents from content collection
@@ -22,42 +17,10 @@ const allIncidents = await getCollection("incidents");
 // Get recent quarters (last 8 quarters = 2 years)
 const recentQuarters = getRecentQuarters(8);
 
-// Calculate SLA for each quarter
-const quarterlyData = recentQuarters.map((quarter) => {
-	const slaResults = calculateQuarterlySLA(
-		allIncidents,
-		quarter.year,
-		quarter.quarter,
-		[...GITHUB_SLA_COMPONENTS],
-	);
-
-	// Calculate overall average
-	const avgUptime =
-		slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) /
-		slaResults.length;
-
-	// Get total incidents for the quarter (regardless of component)
-	const startDate = getQuarterStart(quarter.year, quarter.quarter);
-	const endDate = getQuarterEnd(quarter.year, quarter.quarter);
-	const quarterIncidents = filterIncidentsByDateRange(
-		allIncidents,
-		startDate,
-		endDate,
-	);
-	const totalIncidents = quarterIncidents.length;
-
-	const hasViolation = slaResults.some((r) => r.slaViolation);
-	const hasInsufficientData = slaResults.some((r) => r.hasInsufficientData);
-
-	return {
-		quarter,
-		slaResults,
-		avgUptime,
-		totalIncidents,
-		hasViolation,
-		hasInsufficientData,
-	};
-});
+// Calculate SLA for each quarter using centralized function
+const quarterlyData = recentQuarters.map((quarter) =>
+	calculateQuarterData(allIncidents, quarter.year, quarter.quarter)
+);
 
 // Get statistics
 const totalIncidents = allIncidents.length;
@@ -140,7 +103,7 @@ const impactCounts = allIncidents.reduce(
 				{
 					quarterlyData.map(
 						({
-							quarter,
+							quarterLabel,
 							avgUptime,
 							totalIncidents,
 							hasViolation,
@@ -154,11 +117,11 @@ const impactCounts = allIncidents.reduce(
 
 							return (
 								<a
-									href={`${import.meta.env.BASE_URL}/${quarter.label}`}
+									href={`${import.meta.env.BASE_URL}/${quarterLabel}`}
 									class={`quarter-card card ${statusClass}`}
 								>
 									<div class="quarter-header">
-										<h3>{quarter.label}</h3>
+										<h3>{quarterLabel}</h3>
 										{hasInsufficientData ? (
 											<span class="badge badge-secondary">
 												Unknown

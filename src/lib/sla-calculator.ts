@@ -412,3 +412,95 @@ export const GITHUB_SLA_COMPONENTS = [
 ] as const;
 
 export type GitHubSLAComponent = typeof GITHUB_SLA_COMPONENTS[number];
+
+/**
+ * Centralized quarter data interface
+ * Contains all computed SLA metrics and incidents for a specific quarter
+ */
+export interface QuarterData {
+  year: number;
+  quarter: Quarter;
+  quarterLabel: string;
+  startDate: Date;
+  endDate: Date;
+  slaResults: SLAResult[];
+  avgUptime: number;
+  totalDowntime: number;
+  totalIncidents: number;
+  trackedIncidents: number;
+  hasViolation: boolean;
+  hasInsufficientData: boolean;
+  worstComponent: SLAResult;
+  quarterIncidents: IncidentEntry[];
+}
+
+/**
+ * Calculate all SLA data for a specific quarter
+ * This centralizes business logic previously duplicated across .astro files
+ *
+ * @param incidents - All incidents from the collection
+ * @param year - Year of the quarter
+ * @param quarter - Quarter number (1-4)
+ * @returns Complete quarter data with SLA calculations
+ */
+export function calculateQuarterData(
+  incidents: IncidentEntry[],
+  year: number,
+  quarter: Quarter
+): QuarterData {
+  const startDate = getQuarterStart(year, quarter);
+  const endDate = getQuarterEnd(year, quarter);
+  const quarterLabel = `${year}-Q${quarter}`;
+
+  // Filter incidents for this quarter
+  const quarterIncidents = filterIncidentsByDateRange(
+    incidents,
+    startDate,
+    endDate
+  );
+
+  // Calculate SLA for each component
+  const slaResults = calculateQuarterlySLA(
+    incidents,
+    year,
+    quarter,
+    [...GITHUB_SLA_COMPONENTS]
+  );
+
+  // Calculate overall metrics
+  const avgUptime = slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) / slaResults.length;
+  const totalDowntime = slaResults.reduce((sum, r) => sum + r.totalDowntimeMinutes, 0);
+  const totalIncidents = quarterIncidents.length;
+
+  // Count incidents that affect tracked components
+  const trackedIncidents = quarterIncidents.filter(incident =>
+    incident.data.components &&
+    incident.data.components.some(c => GITHUB_SLA_COMPONENTS.includes(c.name as any))
+  ).length;
+
+  // Determine violations and insufficient data
+  const hasViolation = slaResults.some(r => r.slaViolation);
+  const hasInsufficientData = slaResults.some(r => r.hasInsufficientData);
+
+  // Find worst performing component
+  const worstComponent = slaResults.reduce((worst, curr) =>
+    curr.uptimePercentage < worst.uptimePercentage ? curr : worst
+  );
+
+  return {
+    year,
+    quarter,
+    quarterLabel,
+    startDate,
+    endDate,
+    slaResults,
+    avgUptime,
+    totalDowntime,
+    totalIncidents,
+    trackedIncidents,
+    hasViolation,
+    hasInsufficientData,
+    worstComponent,
+    quarterIncidents,
+  };
+}
