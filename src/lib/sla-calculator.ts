@@ -137,7 +137,7 @@ export function filterIncidentsByDateRange(
  * This handles cases where scraping results in names like "and Pages"
  */
 export function normalizeComponentName(name: string): string {
-  return name.replace(/^and\s+/i, '').trim();
+  return name.trim().replace(/^and\s+/i, '');
 }
 
 /**

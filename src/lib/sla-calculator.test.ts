@@ -5,6 +5,8 @@ import {
   calculateComponentSLA,
   calculateQuarterlySLA,
   calculateQuarterData,
+  getIncidentEndTime,
+  normalizeComponentName,
   GITHUB_SLA_COMPONENTS,
 } from './sla-calculator';
 import { getQuarterStart, getQuarterEnd } from './date-utils';
@@ -39,9 +41,9 @@ function createMockIncident(
       updated_at: createdAt,
       started_at: createdAt,
       resolved_at: resolvedAt,
+      shortlink: `https://stspg.io/${id}`,
       incident_updates: [],
       components: componentNames.map(name => ({
-        id: name.toLowerCase().replace(/\s+/g, '-'),
         name,
         status: 'operational',
       })),
@@ -116,6 +118,115 @@ describe('Impact Multiplier Tests', () => {
       // Then: Should return 0.5 (default fallback)
       expect(multiplier).toBe(0.5);
     });
+  });
+});
+
+
+describe('Component Name Normalization Tests', () => {
+  it('WHEN name is standard THEN returns same name', () => {
+    expect(normalizeComponentName('Pages')).toBe('Pages');
+  });
+
+  it('WHEN name has "and " prefix THEN removes it', () => {
+    expect(normalizeComponentName('and Pages')).toBe('Pages');
+  });
+
+  it('WHEN name has "and " prefix with different casing THEN removes it', () => {
+    expect(normalizeComponentName('AND Pages')).toBe('Pages');
+    expect(normalizeComponentName('And Pages')).toBe('Pages');
+  });
+
+  it('WHEN name has extra whitespace THEN trims it', () => {
+    expect(normalizeComponentName('  Pages  ')).toBe('Pages');
+    expect(normalizeComponentName('  and Pages  ')).toBe('Pages');
+  });
+});
+
+describe('Incident Resolution Time Tests', () => {
+  it('WHEN resolved_at is present and valid THEN uses it', () => {
+    const incident = createMockIncident(
+      '1',
+      '2025-01-01T10:00:00Z',
+      '2025-01-01T11:00:00Z',
+      'minor'
+    );
+    expect(getIncidentEndTime(incident).toISOString()).toBe('2025-01-01T11:00:00.000Z');
+  });
+
+  it('WHEN resolved_at is missing but update says resolved THEN uses update time', () => {
+    const incident = createMockIncident(
+      '2',
+      '2025-01-01T10:00:00Z',
+      null,
+      'minor'
+    );
+    incident.data.incident_updates = [
+      {
+        id: 'u1',
+        status: 'resolved',
+        body: 'Fixed',
+        created_at: '2025-01-01T12:00:00Z',
+        display_at: null,
+      },
+    ];
+    expect(getIncidentEndTime(incident).toISOString()).toBe('2025-01-01T12:00:00.000Z');
+  });
+
+  it('WHEN resolved_at has incorrect year but update is correct THEN uses update time (Priority Fix)', () => {
+    const incident = createMockIncident(
+      '3',
+      '2022-09-06T22:56:00Z',
+      '2025-09-07T00:08:00Z', // Incorrect year (2025)
+      'minor'
+    );
+    incident.data.incident_updates = [
+      {
+        id: 'u1',
+        status: 'resolved',
+        body: 'Fixed',
+        created_at: '2022-09-07T00:08:00Z', // Correct year (2022)
+        display_at: null,
+      },
+    ];
+    expect(getIncidentEndTime(incident).toISOString()).toBe('2022-09-07T00:08:00.000Z');
+  });
+
+  it('WHEN resolved_at missing and no resolved update but status is resolved THEN uses updated_at', () => {
+    const incident = createMockIncident(
+      '4',
+      '2025-01-01T10:00:00Z',
+      null,
+      'minor'
+    );
+    incident.data.status = 'resolved';
+    incident.data.updated_at = '2025-01-01T13:00:00Z';
+    expect(getIncidentEndTime(incident).toISOString()).toBe('2025-01-01T13:00:00.000Z');
+  });
+
+  it('WHEN truly ongoing THEN uses current time', () => {
+    const incident = createMockIncident(
+      '5',
+      '2025-01-01T10:00:00Z',
+      null,
+      'minor'
+    );
+    // Mock Date to ensure consistent test
+    const mockNow = new Date('2025-01-02T10:00:00Z');
+    const originalDate = global.Date;
+
+    // @ts-ignore
+    global.Date = class extends Date {
+      constructor(date: any) {
+        super(date);
+        if (date) return new originalDate(date);
+        return mockNow;
+      }
+    };
+
+    expect(getIncidentEndTime(incident).toISOString()).toBe(mockNow.toISOString());
+
+    // Restore Date
+    global.Date = originalDate;
   });
 });
 
