@@ -51,18 +51,19 @@ export function getImpactMultiplier(impact: string): number {
  * Handles various cases where resolved_at might be missing
  */
 export function getIncidentEndTime(incident: IncidentEntry): Date {
-  // 1. Explicit resolved_at
-  if (incident.data.resolved_at) {
-    return new Date(incident.data.resolved_at);
-  }
-
-  // 2. Check updates for "resolved" status
+  // 1. Check updates for "resolved" status
   // This handles cases where the top-level status wasn't updated but a resolved update exists
+  // AND cases where resolved_at has an incorrect timestamp (e.g. wrong year)
   if (incident.data.incident_updates) {
     const resolvedUpdate = incident.data.incident_updates.find(u => u.status === 'resolved');
     if (resolvedUpdate) {
       return new Date(resolvedUpdate.created_at);
     }
+  }
+
+  // 2. Explicit resolved_at
+  if (incident.data.resolved_at) {
+    return new Date(incident.data.resolved_at);
   }
 
   // 3. Fallback: if status is resolved but no date, use updated_at
