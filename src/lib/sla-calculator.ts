@@ -141,14 +141,40 @@ export function normalizeComponentName(name: string): string {
 }
 
 /**
- * Filter incidents by component
+ * Check if a component name matches a target SLA component
+ * Uses fuzzy matching to handle combined component names like "Git Operations and Codespaces"
+ *
+ * Examples:
+ * - componentMatchesName("Git Operations", "Git Operations") -> true
+ * - componentMatchesName("Git Operations and Codespaces", "Git Operations") -> true
+ * - componentMatchesName("and Actions", "Actions") -> true
+ * - componentMatchesName("Issues and Pull Requests", "Issues") -> true
+ * - componentMatchesName("Issues and Pull Requests", "Pull Requests") -> true
+ */
+export function componentMatchesName(componentName: string, targetName: string): boolean {
+  const normalized = normalizeComponentName(componentName);
+
+  // Exact match
+  if (normalized === targetName) {
+    return true;
+  }
+
+  // Fuzzy match: check if the normalized component name contains the target name
+  // This handles cases like "Git Operations and Codespaces" matching "Git Operations"
+  // We use word boundaries to avoid partial matches (e.g., "Git Operations" shouldn't match "Non-Git Operations")
+  const pattern = new RegExp(`\\b${targetName}\\b`, 'i');
+  return pattern.test(normalized);
+}
+
+/**
+ * Filter incidents by component using fuzzy matching
  */
 export function filterIncidentsByComponent(
   incidents: IncidentEntry[],
   componentName: string
 ): IncidentEntry[] {
   return incidents.filter(incident =>
-    incident.data.components && incident.data.components.some(c => normalizeComponentName(c.name) === componentName)
+    incident.data.components && incident.data.components.some(c => componentMatchesName(c.name, componentName))
   );
 }
 
@@ -216,7 +242,7 @@ export function calculateComponentSLA(
     const incidentStart = new Date(incident.data.started_at || incident.data.created_at);
     const incidentEnd = getIncidentEndTime(incident);
 
-    const affectsComponent = incident.data.components && incident.data.components.some(c => normalizeComponentName(c.name) === componentName);
+    const affectsComponent = incident.data.components && incident.data.components.some(c => componentMatchesName(c.name, componentName));
 
     return affectsComponent && incidentStart < endDate && incidentEnd > startDate;
   });
@@ -487,10 +513,12 @@ export function calculateQuarterData(
   const totalDowntime = slaResults.reduce((sum, r) => sum + r.totalDowntimeMinutes, 0);
   const totalIncidents = quarterIncidents.length;
 
-  // Count incidents that affect tracked components
+  // Count incidents that affect tracked components (using fuzzy matching)
   const trackedIncidents = quarterIncidents.filter(incident =>
     incident.data.components &&
-    incident.data.components.some(c => GITHUB_SLA_COMPONENTS.includes(c.name as any))
+    incident.data.components.some(c =>
+      GITHUB_SLA_COMPONENTS.some(slaComponent => componentMatchesName(c.name, slaComponent))
+    )
   ).length;
 
   // Determine violations and insufficient data
