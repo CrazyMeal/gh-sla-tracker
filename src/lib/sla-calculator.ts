@@ -99,23 +99,6 @@ export function calculateIncidentDowntimeInPeriod(
 }
 
 /**
- * Get the oldest incident date from the collection
- * This tells us when incident tracking began
- * @deprecated Use hasDataCoverageForQuarter instead
- */
-export function getOldestIncidentDate(incidents: IncidentEntry[]): Date | null {
-  if (incidents.length === 0) return null;
-
-  const oldestIncident = incidents.reduce((oldest, current) => {
-    const currentDate = new Date(current.data.created_at);
-    const oldestDate = new Date(oldest.data.created_at);
-    return currentDate < oldestDate ? current : oldest;
-  });
-
-  return new Date(oldestIncident.data.created_at);
-}
-
-/**
  * Filter incidents by date range
  */
 export function filterIncidentsByDateRange(
