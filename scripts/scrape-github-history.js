@@ -212,6 +212,17 @@ function convertToAPIFormat(historyData, detailData) {
   const createdAt = updates.length > 0 ? updates[0].created_at : startedAt;
   const updatedAt = updates.length > 0 ? updates[updates.length - 1].created_at : startedAt;
 
+  // VALIDATION: Skip incidents with missing critical timestamps
+  // This prevents schema validation errors during build
+  if (createdAt === null || updatedAt === null) {
+    console.warn(`⚠️  Skipping incident ${historyData.id}: Missing required timestamps`);
+    console.warn(`   - created_at: ${createdAt}`);
+    console.warn(`   - updated_at: ${updatedAt}`);
+    console.warn(`   - Incident name: ${detailData.title || historyData.title}`);
+    console.warn(`   - This incident will not be included in the archive`);
+    return null; // Signal to skip this incident
+  }
+
   // Determine final status from last update
   const lastUpdateStatus = updates.length > 0 ? updates[updates.length - 1].status : 'unknown';
   const status = lastUpdateStatus === 'resolved' ? 'resolved' : 'investigating';
@@ -268,7 +279,7 @@ async function main() {
 
   // Parse page range (e.g., --pages 1-20 or --page 5)
   let startPage = 1;
-  let endPage = 5;
+  let endPage = 2;
 
   if (args.includes('--pages')) {
     const rangeStr = args[args.indexOf('--pages') + 1];
@@ -318,7 +329,11 @@ async function main() {
         try {
           const detailData = await scrapeIncidentDetail(page, historyData.id);
           const incident = convertToAPIFormat(historyData, detailData);
-          pageScrapedIncidents.push(incident);
+
+          // Only add incident if validation passed (not null)
+          if (incident !== null) {
+            pageScrapedIncidents.push(incident);
+          }
 
           // Rate limiting
           if (i < historyIncidents.length - 1) {

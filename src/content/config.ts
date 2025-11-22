@@ -33,8 +33,9 @@ const incidents = defineCollection({
     name: z.string(),
     status: z.enum(['investigating', 'identified', 'monitoring', 'resolved', 'postmortem']),
     impact: z.enum(['none', 'minor', 'major', 'critical', 'maintenance']),
-    created_at: z.string(),
-    updated_at: z.string(),
+    // Allow nullable as defensive measure, but scraper should ensure these are always set
+    created_at: z.string().nullable(),
+    updated_at: z.string().nullable(),
     monitoring_at: z.string().nullable().optional(),
     resolved_at: z.string().nullable(),
     impact_override: z.string().nullable().optional(),
