@@ -131,6 +131,15 @@ export function filterIncidentsByDateRange(
 }
 
 /**
+ * Normalize component name for comparison
+ * Removes leading "and " (case insensitive) and trims whitespace
+ * This handles cases where scraping results in names like "and Pages"
+ */
+export function normalizeComponentName(name: string): string {
+  return name.replace(/^and\s+/i, '').trim();
+}
+
+/**
  * Filter incidents by component
  */
 export function filterIncidentsByComponent(
@@ -138,7 +147,7 @@ export function filterIncidentsByComponent(
   componentName: string
 ): IncidentEntry[] {
   return incidents.filter(incident =>
-    incident.data.components && incident.data.components.some(c => c.name === componentName)
+    incident.data.components && incident.data.components.some(c => normalizeComponentName(c.name) === componentName)
   );
 }
 
@@ -206,7 +215,7 @@ export function calculateComponentSLA(
     const incidentStart = new Date(incident.data.started_at || incident.data.created_at);
     const incidentEnd = getIncidentEndTime(incident);
 
-    const affectsComponent = incident.data.components && incident.data.components.some(c => c.name === componentName);
+    const affectsComponent = incident.data.components && incident.data.components.some(c => normalizeComponentName(c.name) === componentName);
 
     return affectsComponent && incidentStart < endDate && incidentEnd > startDate;
   });
