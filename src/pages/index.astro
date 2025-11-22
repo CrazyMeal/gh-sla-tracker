@@ -13,15 +13,11 @@ import {
 	calculateQuarterlySLA,
 	GITHUB_SLA_COMPONENTS,
 	getSLAStatusColor,
-	getOldestIncidentDate,
 	filterIncidentsByDateRange,
 } from "../lib/sla-calculator";
 
 // Fetch all incidents from content collection
 const allIncidents = await getCollection("incidents");
-
-// Get oldest incident date to detect unknown quarters
-const oldestIncidentDate = getOldestIncidentDate(allIncidents);
 
 // Get recent quarters (last 8 quarters = 2 years)
 const recentQuarters = getRecentQuarters(8);
@@ -33,7 +29,6 @@ const quarterlyData = recentQuarters.map((quarter) => {
 		quarter.year,
 		quarter.quarter,
 		[...GITHUB_SLA_COMPONENTS],
-		oldestIncidentDate,
 	);
 
 	// Calculate overall average
@@ -104,18 +99,6 @@ const impactCounts = allIncidents.reduce(
 					rel="noopener">GitHub Status API</a
 				>.
 			</p>
-			{
-				oldestIncidentDate && (
-					<div class="tracking-info">
-						<strong>Tracking since:</strong>{" "}
-						{formatDate(oldestIncidentDate)}
-						<span class="separator">•</span>
-						<span>
-							Quarters before this date show "Unknown" status
-						</span>
-					</div>
-				)
-			}
 		</section>
 
 		<section class="stats-grid grid">

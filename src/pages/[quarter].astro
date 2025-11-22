@@ -17,7 +17,6 @@ import {
   getSLAStatusLabel,
   filterIncidentsByDateRange,
   getIncidentsWithDurations,
-  getOldestIncidentDate,
 } from "../lib/sla-calculator";
 
 // Get all static paths for quarters
@@ -47,9 +46,6 @@ const quarterInfo = getQuarterInfo(year, quarter);
 // Fetch all incidents
 const allIncidents = await getCollection("incidents");
 
-// Get oldest incident date
-const oldestIncidentDate = getOldestIncidentDate(allIncidents);
-
 // Filter incidents for this quarter
 const quarterIncidents = filterIncidentsByDateRange(
   allIncidents,
@@ -57,18 +53,16 @@ const quarterIncidents = filterIncidentsByDateRange(
   quarterInfo.endDate,
 );
 
-// Check if this quarter has insufficient data
-const hasInsufficientData =
-  oldestIncidentDate !== null && quarterInfo.startDate < oldestIncidentDate;
-
 // Calculate SLA for each component
 const slaResults = calculateQuarterlySLA(
   allIncidents,
   year,
   quarter,
   [...GITHUB_SLA_COMPONENTS],
-  oldestIncidentDate,
 );
+
+// Check if this quarter has insufficient data (from SLA results)
+const hasInsufficientData = slaResults.some((r) => r.hasInsufficientData);
 
 // Calculate overall metrics
 const avgUptime =
@@ -136,19 +130,16 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     </section>
 
     {
-      hasInsufficientData && oldestIncidentDate && (
+      hasInsufficientData && (
         <div class="insufficient-data-notice card">
           <h3>⚠️ Insufficient Data</h3>
           <p>
-            Incident tracking began on{" "}
-            <strong>{formatDate(oldestIncidentDate)}</strong>. This quarter
-            started before data collection, so SLA compliance cannot be
-            accurately calculated.
+            This quarter is before our incident tracking window. SLA compliance
+            cannot be accurately calculated.
           </p>
           <p>
-            The data shown below represents only the incidents we have recorded
-            since tracking began. It does not reflect the complete picture for
-            this quarter.
+            The data shown below represents only the incidents we have recorded.
+            It does not reflect the complete picture for this quarter.
           </p>
         </div>
       )

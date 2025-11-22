@@ -99,6 +99,7 @@ export function calculateIncidentDowntimeInPeriod(
 /**
  * Get the oldest incident date from the collection
  * This tells us when incident tracking began
+ * @deprecated Use hasDataCoverageForQuarter instead
  */
 export function getOldestIncidentDate(incidents: IncidentEntry[]): Date | null {
   if (incidents.length === 0) return null;
@@ -139,17 +140,62 @@ export function filterIncidentsByComponent(
 }
 
 /**
+ * Determine if we have sufficient data coverage for a specific quarter
+ * This replaces the global oldestIncidentDate approach with quarter-specific logic
+ *
+ * Logic:
+ * - Future quarters: No coverage
+ * - Recent quarters (within 90 days): Has coverage even if no incidents (100% uptime)
+ * - Old quarters with no incidents: Insufficient data (before tracking began)
+ */
+export function hasDataCoverageForQuarter(
+  incidents: IncidentEntry[],
+  startDate: Date,
+  endDate: Date
+): { hasCoverage: boolean; reason: string } {
+  const now = new Date();
+
+  // Future quarters don't have data yet
+  if (startDate > now) {
+    return { hasCoverage: false, reason: 'Future quarter' };
+  }
+
+  // Find incidents that overlap with this quarter
+  const incidentsInPeriod = filterIncidentsByDateRange(incidents, startDate, endDate);
+
+  // If we have incidents in this period, we definitely have data
+  if (incidentsInPeriod.length > 0) {
+    return { hasCoverage: true, reason: 'Has incidents' };
+  }
+
+  // No incidents in this quarter - need to determine if this means:
+  // a) 100% uptime (recent quarter, we're tracking) OR
+  // b) No data (historical quarter before tracking began)
+
+  // If the quarter ended within the last 90 days, we're likely tracking
+  const ninetyDaysAgo = new Date(now);
+  ninetyDaysAgo.setDate(now.getDate() - 90);
+
+  if (endDate >= ninetyDaysAgo) {
+    return { hasCoverage: true, reason: 'Recent quarter with no incidents (100% uptime)' };
+  }
+
+  // Old quarter with no incidents - probably before our tracking window
+  return { hasCoverage: false, reason: 'Historical quarter before tracking began' };
+}
+
+/**
  * Calculate SLA for a specific component in a date range
  */
 export function calculateComponentSLA(
   incidents: IncidentEntry[],
   componentName: string,
   startDate: Date,
-  endDate: Date,
-  oldestIncidentDate: Date | null = null
+  endDate: Date
 ): SLAResult {
-  // Check if we have insufficient data (quarter starts before our oldest incident)
-  const hasInsufficientData = oldestIncidentDate !== null && startDate < oldestIncidentDate;
+  // Check if we have insufficient data for this quarter
+  const { hasCoverage } = hasDataCoverageForQuarter(incidents, startDate, endDate);
+  const hasInsufficientData = !hasCoverage;
 
   // Filter incidents affecting this component that OVERLAP with the date range
   // (Start before end of period AND End after start of period)
@@ -260,14 +306,13 @@ export function calculateQuarterlySLA(
   incidents: IncidentEntry[],
   year: number,
   quarter: Quarter,
-  componentNames: string[],
-  oldestIncidentDate: Date | null = null
+  componentNames: string[]
 ): SLAResult[] {
   const startDate = getQuarterStart(year, quarter);
   const endDate = getQuarterEnd(year, quarter);
 
   return componentNames.map(componentName =>
-    calculateComponentSLA(incidents, componentName, startDate, endDate, oldestIncidentDate)
+    calculateComponentSLA(incidents, componentName, startDate, endDate)
   );
 }
 
@@ -278,11 +323,10 @@ export function calculateOverallSLA(
   incidents: IncidentEntry[],
   startDate: Date,
   endDate: Date,
-  componentNames: string[],
-  oldestIncidentDate: Date | null = null
+  componentNames: string[]
 ): SLAResult {
   const componentSLAs = componentNames.map(name =>
-    calculateComponentSLA(incidents, name, startDate, endDate, oldestIncidentDate)
+    calculateComponentSLA(incidents, name, startDate, endDate)
   );
 
   // Calculate average uptime
