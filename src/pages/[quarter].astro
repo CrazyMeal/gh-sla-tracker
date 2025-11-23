@@ -295,7 +295,12 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
               {Array.from(
                 new Set(
                   incidentsWithDurations.flatMap((i) =>
-                    (i.data.components || []).map((c) => c.name),
+                    (i.data.components || []).flatMap((c) =>
+                      c.name
+                        .replace(/^and\s+/i, "")
+                        .split(/\s+and\s+/i)
+                        .map((s) => s.trim()),
+                    ),
                   ),
                 ),
               )
