@@ -205,7 +205,7 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
         not the actual workflow success rate used in GitHub's official SLA calculations.
       </div>
 
-      <SlaTable results={actionsResults} />
+      <SlaTable results={actionsResults} hideStatusColumns={true} />
     </section>
 
     <!-- Packages - Hybrid SLA -->
@@ -227,7 +227,7 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
         not the actual metrics used in GitHub's official SLA calculations.
       </div>
 
-      <SlaTable results={packagesResults} />
+      <SlaTable results={packagesResults} hideStatusColumns={true} />
     </section>
 
     <section class="incidents-section">
