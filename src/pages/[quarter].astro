@@ -137,25 +137,6 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
 
     <section class="summary-cards grid">
       <StatsCard
-        label="SLA Status"
-        value={hasInsufficientData
-          ? "Unknown"
-          : hasViolation
-            ? "Violation"
-            : "All Pass"}
-        subtext={hasInsufficientData
-          ? "Insufficient Data"
-          : hasViolation
-            ? `${worstComponent.serviceCredit}% service credit`
-            : "All services met 99.9% uptime"}
-        valueClass={hasInsufficientData
-          ? "uptime-gray"
-          : hasViolation
-            ? "uptime-red"
-            : "uptime-green"}
-      />
-
-      <StatsCard
         label="Total Downtime"
         value={formatDuration(totalDowntime)}
         subtext="Weighted by impact"
