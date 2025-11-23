@@ -96,19 +96,25 @@ const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`
                 {/* prettier-ignore */}
                 <summary>{incident.data.incident_updates.length} update{incident.data.incident_updates.length !== 1 ? "s" : ""}</summary>
                 <div class="updates-list">
-                    {incident.data.incident_updates.map((update) => (
-                        <div class="update-item">
-                            <div class="update-header">
-                                <span class="update-status">
-                                    {update.status}
-                                </span>
-                                <time datetime={update.created_at}>
-                                    {formatDateTime(update.created_at)}
-                                </time>
+                    {[...incident.data.incident_updates]
+                        .sort(
+                            (a, b) =>
+                                new Date(b.created_at).getTime() -
+                                new Date(a.created_at).getTime(),
+                        )
+                        .map((update) => (
+                            <div class="update-item">
+                                <div class="update-header">
+                                    <span class="update-status">
+                                        {update.status}
+                                    </span>
+                                    <time datetime={update.created_at}>
+                                        {formatDateTime(update.created_at)}
+                                    </time>
+                                </div>
+                                <p class="update-body">{update.body}</p>
                             </div>
-                            <p class="update-body">{update.body}</p>
-                        </div>
-                    ))}
+                        ))}
                 </div>
             </details>
         )
