@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { getRecentQuarters, formatDateTime } from "../lib/date-utils";
-import { calculateQuarterData } from "../lib/sla-calculator";
+import { calculateQuarterData, getIncidentsWithDurations } from "../lib/sla-calculator";
 import StatsCard from "../components/dashboard/StatsCard.astro";
 import QuarterCard from "../components/dashboard/QuarterCard.astro";
 import IncidentCard from "../components/incidents/IncidentCard.astro";
@@ -24,8 +24,8 @@ const resolvedIncidents = allIncidents.filter(
 	(i) => i.data.status === "resolved",
 ).length;
 
-// Get most recent incidents
-const recentIncidents = [...allIncidents]
+// Get most recent incidents with calculated durations
+const recentIncidents = getIncidentsWithDurations(allIncidents)
 	.sort(
 		(a, b) =>
 			new Date(b.data.created_at).getTime() -
@@ -88,7 +88,7 @@ const impactCounts = allIncidents.reduce(
 			<div class="incidents-list">
 				{
 					recentIncidents.map((incident) => (
-						<IncidentCard incident={incident as any} />
+						<IncidentCard incident={incident} />
 					))
 				}
 			</div>
