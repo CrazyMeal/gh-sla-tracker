@@ -20,12 +20,14 @@ const { results, hideStatusColumns = false } = Astro.props;
                 <th>Uptime %</th>
                 <th>Downtime</th>
                 <th>Incidents</th>
-                {!hideStatusColumns && (
-                    <>
-                        <th>Status</th>
-                        <th>Service Credit</th>
-                    </>
-                )}
+                {
+                    !hideStatusColumns && (
+                        <>
+                            <th>Status</th>
+                            <th>Service Credit</th>
+                        </>
+                    )
+                }
             </tr>
         </thead>
         <tbody>
@@ -39,13 +41,7 @@ const { results, hideStatusColumns = false } = Astro.props;
                         : "success";
 
                     return (
-                        <tr
-                            class="component-row"
-                            data-component={result.componentName}
-                            data-incident-count={result.incidentCount}
-                            role="button"
-                            tabindex="0"
-                        >
+                        <tr>
                             <td>
                                 <strong>{result.componentName}</strong>
                             </td>
@@ -64,7 +60,9 @@ const { results, hideStatusColumns = false } = Astro.props;
                                 <>
                                     <td>
                                         <Badge variant={badgeVariant}>
-                                            {result.slaViolation ? "Violation" : "Pass"}
+                                            {result.slaViolation
+                                                ? "Violation"
+                                                : "Pass"}
                                         </Badge>
                                     </td>
                                     <td>
@@ -73,7 +71,9 @@ const { results, hideStatusColumns = false } = Astro.props;
                                                 {result.serviceCredit}%
                                             </span>
                                         ) : (
-                                            <span class="text-secondary">None</span>
+                                            <span class="text-secondary">
+                                                None
+                                            </span>
                                         )}
                                     </td>
                                 </>
@@ -112,10 +112,6 @@ const { results, hideStatusColumns = false } = Astro.props;
         letter-spacing: 0.05em;
     }
 
-    tr:hover {
-        background-color: var(--color-bg-tertiary);
-    }
-
     .uptime-value {
         font-weight: 600;
         font-family: var(--font-mono);
@@ -144,31 +140,5 @@ const { results, hideStatusColumns = false } = Astro.props;
 
     .text-secondary {
         color: var(--color-text-secondary);
-    }
-
-    /* Component row interactivity for filtering */
-    .component-row {
-        cursor: pointer;
-        transition:
-            background-color 0.2s,
-            border-color 0.2s;
-    }
-
-    .component-row:hover {
-        background-color: var(--color-bg-tertiary);
-    }
-
-    .component-row:focus-visible {
-        outline: 2px solid var(--color-link);
-        outline-offset: -2px;
-    }
-
-    .component-row.selected {
-        background-color: rgba(79, 140, 201, 0.1);
-        border-left: 4px solid var(--color-link);
-    }
-
-    .component-row.selected td:first-child {
-        padding-left: calc(1rem - 4px);
     }
 </style>
