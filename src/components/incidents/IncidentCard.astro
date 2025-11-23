@@ -93,10 +93,8 @@ const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`
     {
         incident.data.incident_updates.length > 0 && (
             <details class="incident-updates">
-                <summary>
-                    {incident.data.incident_updates.length} update
-                    {incident.data.incident_updates.length !== 1 ? "s" : ""}
-                </summary>
+                {/* prettier-ignore */}
+                <summary>{incident.data.incident_updates.length} update{incident.data.incident_updates.length !== 1 ? "s" : ""}</summary>
                 <div class="updates-list">
                     {incident.data.incident_updates.map((update) => (
                         <div class="update-item">
