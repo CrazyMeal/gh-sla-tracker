@@ -15,7 +15,15 @@ const {
     hasViolation,
     hasInsufficientData,
     worstComponent,
+    slaResults,
 } = quarterData;
+
+// Calculate service status summary
+const passCount = slaResults.filter(r => r.uptimePercentage >= 99.9).length;
+const violationCount = slaResults.filter(r => r.uptimePercentage < 99.9).length;
+const violatedServices = slaResults
+    .filter(r => r.uptimePercentage < 99.9)
+    .map(r => r.componentName);
 
 // Use worst component's uptime for status indication
 const worstUptime = worstComponent.uptimePercentage;
@@ -35,18 +43,23 @@ const statusClass = `status-${statusColor}`;
                 ) : null
             }
         </div>
-        <div class="quarter-uptime">
+        <div class="quarter-status">
             {
                 hasInsufficientData ? (
                     <div>
-                        <div class="uptime-value unknown">N/A</div>
-                        <div class="uptime-label">Insufficient Data</div>
+                        <div class="status-summary unknown">N/A</div>
+                        <div class="status-label">Insufficient Data</div>
                     </div>
                 ) : (
                     <div>
-                        <div class="uptime-value">{worstUptime.toFixed(3)}%</div>
-                        <div class="uptime-label">Worst Component</div>
-                        <div class="uptime-sublabel">{worstComponent.componentName}</div>
+                        <div class="status-summary">
+                            {passCount} Pass / {violationCount} Violation{violationCount !== 1 ? 's' : ''}
+                        </div>
+                        {violatedServices.length > 0 && (
+                            <div class="violated-services">
+                                {violatedServices.join(", ")}
+                            </div>
+                        )}
                     </div>
                 )
             }
@@ -60,9 +73,9 @@ const statusClass = `status-${statusColor}`;
                 {
                     hasInsufficientData
                         ? "Unknown"
-                        : worstUptime >= 99.9
-                          ? "All Pass"
-                          : `Violation (${worstUptime >= 99.0 ? "10%" : "25%"} credit)`
+                        : violationCount === 0
+                          ? "All services met SLA"
+                          : `${worstComponent.serviceCredit}% service credit`
                 }
             </div>
         </div>
@@ -125,46 +138,53 @@ const statusClass = `status-${statusColor}`;
         margin: 0;
     }
 
-    .quarter-uptime {
+    .quarter-status {
         margin-bottom: 1rem;
     }
 
-    .uptime-value {
-        font-size: 2rem;
+    .status-summary {
+        font-size: 1.5rem;
         font-weight: 700;
-        color: var(--color-link);
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
     }
 
-    .status-green .uptime-value {
+    .status-green .status-summary {
         color: var(--color-success);
     }
 
-    .status-orange .uptime-value {
-        color: var(--color-warning);
+    .status-orange .status-summary,
+    .status-red .status-summary {
+        color: var(--color-text);
     }
 
-    .status-red .uptime-value {
-        color: var(--color-danger);
-    }
-
-    .status-gray .uptime-value {
+    .status-gray .status-summary {
         color: var(--color-text-secondary);
     }
 
-    .uptime-value.unknown {
+    .status-summary.unknown {
         color: var(--color-text-secondary);
         font-size: 1.5rem;
     }
 
-    .uptime-label {
+    .status-label {
         font-size: 0.875rem;
         color: var(--color-text-secondary);
     }
 
-    .uptime-sublabel {
-        font-size: 0.75rem;
-        color: var(--color-text-tertiary);
-        margin-top: 0.25rem;
+    .violated-services {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    .status-red .violated-services {
+        color: var(--color-danger);
+    }
+
+    .status-orange .violated-services {
+        color: var(--color-warning);
     }
 
     .quarter-stats {
