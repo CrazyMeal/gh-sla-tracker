@@ -156,68 +156,126 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
       />
     </section>
 
-    <!-- Service Features - Time-based SLA -->
-    <section class="component-sla">
-      <h2>Service Features</h2>
-      <p class="section-subtitle">
-        Time-based uptime calculation for the {totalMinutes.toLocaleString()} minutes
-        in this quarter
-      </p>
-      <div class="methodology-note">
-        <strong>Calculation Method:</strong> (Total minutes - Downtime) / Total minutes
-        × 100
-        <br />
-        <strong>Downtime Definition:</strong> Minutes with &gt;5% error rate (approximated
-        from incident data)
+    <!-- SLA Tabs -->
+    <div class="sla-tabs">
+      <div class="tab-list" role="tablist" aria-label="SLA Categories">
+        <button
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-features"
+          id="tab-features"
+          tabindex="0"
+        >
+          Service Features
+        </button>
+        <button
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-actions"
+          id="tab-actions"
+          tabindex="-1"
+        >
+          Actions
+        </button>
+        <button
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-packages"
+          id="tab-packages"
+          tabindex="-1"
+        >
+          Packages
+        </button>
       </div>
 
-      <SlaTable results={serviceFeaturesResults} />
-    </section>
+      <!-- Service Features Panel -->
+      <div
+        id="panel-features"
+        role="tabpanel"
+        aria-labelledby="tab-features"
+        class="tab-panel"
+      >
+        <section class="component-sla">
+          <h2>Service Features</h2>
+          <p class="section-subtitle">
+            Time-based uptime calculation for the {
+              totalMinutes.toLocaleString()
+            } minutes in this quarter
+          </p>
+          <div class="methodology-note">
+            <strong>Calculation Method:</strong> (Total minutes - Downtime) / Total
+            minutes × 100
+            <br />
+            <strong>Downtime Definition:</strong> Minutes with &gt;5% error rate
+            (approximated from incident data)
+          </div>
 
-    <!-- Actions - Execution-based SLA -->
-    <section class="component-sla">
-      <h2>Actions</h2>
-      <p class="section-subtitle">
-        Execution-based calculation (workflow success rate)
-      </p>
-      <div class="methodology-note">
-        <strong>Official Calculation Method:</strong> (Total executions - Failed
-        executions) / Total executions × 100
-      </div>
-      <div class="data-accuracy-warning">
-        <strong>⚠️ Data Accuracy Limitation:</strong> The GitHub Status API does
-        not provide execution counts or failure rates. The uptime percentages shown
-        below are <em>approximations</em> based on incident duration and impact,
-        not the actual workflow success rate used in GitHub's official SLA calculations.
-      </div>
-
-      <SlaTable results={actionsResults} hideStatusColumns={true} />
-    </section>
-
-    <!-- Packages - Hybrid SLA -->
-    <section class="component-sla">
-      <h2>Packages</h2>
-      <p class="section-subtitle">
-        Hybrid calculation with two separate metrics
-      </p>
-      <div class="methodology-note">
-        <strong>Official Calculation Methods:</strong>
-        <br />
-        1. <strong>Package Transfers:</strong> (Total transfers - Failed transfers)
-        / Total transfers × 100
-        <br />
-        2. <strong>Package Storage:</strong> (Total minutes - Minutes with &gt;5%
-        error rate) / Total minutes × 100
-      </div>
-      <div class="data-accuracy-warning">
-        <strong>⚠️ Data Accuracy Limitation:</strong> The GitHub Status API does
-        not provide transfer counts or storage error rates. The uptime percentage
-        shown below is an <em>approximation</em> based on incident duration and impact,
-        not the actual metrics used in GitHub's official SLA calculations.
+          <SlaTable results={serviceFeaturesResults} />
+        </section>
       </div>
 
-      <SlaTable results={packagesResults} hideStatusColumns={true} />
-    </section>
+      <!-- Actions Panel -->
+      <div
+        id="panel-actions"
+        role="tabpanel"
+        aria-labelledby="tab-actions"
+        class="tab-panel"
+        hidden
+      >
+        <section class="component-sla">
+          <h2>Actions</h2>
+          <p class="section-subtitle">
+            Execution-based calculation (workflow success rate)
+          </p>
+          <div class="methodology-note">
+            <strong>Official Calculation Method:</strong> (Total executions - Failed
+            executions) / Total executions × 100
+          </div>
+          <div class="data-accuracy-warning">
+            <strong>⚠️ Data Accuracy Limitation:</strong> The GitHub Status API does
+            not provide execution counts or failure rates. The uptime percentages
+            shown below are <em>approximations</em> based on incident duration and
+            impact, not the actual workflow success rate used in GitHub's official
+            SLA calculations.
+          </div>
+
+          <SlaTable results={actionsResults} hideStatusColumns={true} />
+        </section>
+      </div>
+
+      <!-- Packages Panel -->
+      <div
+        id="panel-packages"
+        role="tabpanel"
+        aria-labelledby="tab-packages"
+        class="tab-panel"
+        hidden
+      >
+        <section class="component-sla">
+          <h2>Packages</h2>
+          <p class="section-subtitle">
+            Hybrid calculation with two separate metrics
+          </p>
+          <div class="methodology-note">
+            <strong>Official Calculation Methods:</strong>
+            <br />
+            1. <strong>Package Transfers:</strong> (Total transfers - Failed transfers)
+            / Total transfers × 100
+            <br />
+            2. <strong>Package Storage:</strong> (Total minutes - Minutes with &gt;5%
+            error rate) / Total minutes × 100
+          </div>
+          <div class="data-accuracy-warning">
+            <strong>⚠️ Data Accuracy Limitation:</strong> The GitHub Status API does
+            not provide transfer counts or storage error rates. The uptime percentage
+            shown below is an <em>approximation</em> based on incident duration and
+            impact, not the actual metrics used in GitHub's official SLA calculations.
+          </div>
+
+          <SlaTable results={packagesResults} hideStatusColumns={true} />
+        </section>
+      </div>
+    </div>
 
     <section class="incidents-section">
       <h2>Incidents in {quarterLabel}</h2>
@@ -392,8 +450,69 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     color: var(--color-text);
   }
 
-  .component-sla {
+  /* SLA Tabs */
+  .sla-tabs {
     margin-bottom: 3rem;
+  }
+
+  .tab-list {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    padding-bottom: 1px; /* Prevent border overlap */
+  }
+
+  .tab-list button[role="tab"] {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-list button[role="tab"]:hover {
+    color: var(--color-text);
+  }
+
+  .tab-list button[role="tab"][aria-selected="true"] {
+    border-bottom-color: var(--color-link);
+    color: var(--color-link);
+  }
+
+  .tab-list button[role="tab"]:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: -2px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .tab-panel {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .tab-panel[hidden] {
+    display: none;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .component-sla {
+    margin-bottom: 0; /* Remove margin as it's handled by tabs container */
   }
 
   .component-sla h2 {
@@ -484,12 +603,18 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
 
 <script>
   import { ComponentFilter } from "../scripts/component-filter";
+  import { Tabs } from "../scripts/tabs";
 
   // Initialize on page load (handles both initial load and View Transitions)
   document.addEventListener("astro:page-load", () => {
     // Check if we're on the quarter page before initializing
     if (document.querySelector(".filter-bar")) {
       new ComponentFilter();
+    }
+
+    // Initialize tabs if present
+    if (document.querySelector('[role="tablist"]')) {
+      new Tabs();
     }
   });
 </script>
