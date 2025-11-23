@@ -9,6 +9,11 @@ import { getDurationMinutes, getTotalMinutes, getQuarterStart, getQuarterEnd, ty
 // Type for incident entries from content collections
 type IncidentEntry = CollectionEntry<'incidents'>;
 
+/**
+ * SLA Calculation Methods per GitHub's official SLA document
+ */
+export type CalculationMethod = 'time-based' | 'execution-based' | 'hybrid';
+
 export interface SLAResult {
   componentName: string;
   uptimePercentage: number;
@@ -17,9 +22,17 @@ export interface SLAResult {
   slaViolation: boolean;
   serviceCredit: 0 | 10 | 25; // Percentage
   hasInsufficientData: boolean; // True if quarter is before oldest incident
+  calculationMethod: CalculationMethod;
+  hasAccurateData: boolean; // False if calculation requires data unavailable from public API
   period: {
     start: string;
     end: string;
+  };
+  // For hybrid (Packages) - show both metrics
+  secondaryMetric?: {
+    name: string;
+    uptime: number;
+    note: string;
   };
 }
 
@@ -325,6 +338,32 @@ export function calculateComponentSLA(
     serviceCredit = 10;
   }
 
+  // Determine calculation method and data accuracy based on component
+  let calculationMethod: CalculationMethod = 'time-based';
+  let hasAccurateData = true;
+  let secondaryMetric: SLAResult['secondaryMetric'] = undefined;
+
+  if (ACTIONS_SERVICES.some(c => c === componentName)) {
+    calculationMethod = 'execution-based';
+    hasAccurateData = false; // Cannot calculate execution-based metrics from public API
+  } else if (PACKAGES_SERVICES.some(c => c === componentName)) {
+    calculationMethod = 'hybrid';
+    hasAccurateData = false; // Cannot calculate either Transfers or Storage metrics from public API
+
+    // For Packages, we would ideally show two metrics:
+    // 1. Package Transfers (execution-based)
+    // 2. Package Storage (error-rate based)
+    // But we cannot calculate either from public data
+    secondaryMetric = {
+      name: 'Package Storage',
+      uptime: uptimePercentage, // Same approximation
+      note: 'Cannot calculate from public API (requires storage error rates)'
+    };
+  } else if (SERVICE_FEATURES.some(c => c === componentName)) {
+    calculationMethod = 'time-based';
+    hasAccurateData = true; // We can approximate time-based calculations reasonably well
+  }
+
   return {
     componentName,
     uptimePercentage,
@@ -333,6 +372,9 @@ export function calculateComponentSLA(
     slaViolation,
     serviceCredit,
     hasInsufficientData,
+    calculationMethod,
+    hasAccurateData,
+    secondaryMetric,
     period: {
       start: startDate.toISOString(),
       end: endDate.toISOString(),
@@ -359,6 +401,9 @@ export function calculateQuarterlySLA(
 
 /**
  * Calculate overall SLA across all components
+ * @deprecated GitHub does not define a global/aggregate SLA.
+ * Each service is measured independently per the official SLA document.
+ * This function is kept for backward compatibility but should not be used.
  */
 export function calculateOverallSLA(
   incidents: IncidentEntry[],
@@ -392,6 +437,8 @@ export function calculateOverallSLA(
     slaViolation,
     serviceCredit,
     hasInsufficientData,
+    calculationMethod: 'time-based', // Not meaningful for aggregate
+    hasAccurateData: false, // Aggregate SLA not defined by GitHub
     period: {
       start: startDate.toISOString(),
       end: endDate.toISOString(),
@@ -438,18 +485,62 @@ export function getSLAStatusColor(uptimePercentage: number, hasInsufficientData:
 }
 
 /**
- * GitHub SLA components
- * Based on the official SLA document
+ * GitHub SLA Components by Calculation Method
+ * Per official GitHub SLA document (Version: June 2021)
  */
-export const GITHUB_SLA_COMPONENTS = [
+
+/**
+ * Service Features - Time-based calculation
+ * Downtime = minutes with >5% error rate
+ * Formula: (total minutes - downtime) / total minutes × 100
+ *
+ * PUBLIC API LIMITATION: We can approximate using incident duration and impact,
+ * but cannot precisely detect ">5% error rate" threshold from incident data alone.
+ */
+export const SERVICE_FEATURES = [
   'Git Operations',
   'API Requests',
   'Issues',
   'Pull Requests',
   'Webhooks',
   'Pages',
+] as const;
+
+/**
+ * Actions - Execution-based calculation
+ * Formula: (total executions - failed executions) / total executions × 100
+ *
+ * PUBLIC API LIMITATION: Cannot calculate from public data.
+ * The API provides incident metadata but NOT execution counts or failure rates.
+ */
+export const ACTIONS_SERVICES = [
   'Actions',
+] as const;
+
+/**
+ * Packages - Hybrid calculation with TWO separate metrics
+ *
+ * 1. Package Transfers: Execution-based
+ *    Formula: (total transfers - failed transfers) / total transfers × 100
+ *
+ * 2. Package Storage: Error-rate based
+ *    Formula: (total minutes - minutes with >5% error rate) / total minutes × 100
+ *
+ * PUBLIC API LIMITATION: Cannot calculate either metric from public data.
+ * Requires transfer counts and storage error rates not exposed by the API.
+ */
+export const PACKAGES_SERVICES = [
   'Packages',
+] as const;
+
+/**
+ * Combined list for backward compatibility
+ * @deprecated Use category-specific arrays instead
+ */
+export const GITHUB_SLA_COMPONENTS = [
+  ...SERVICE_FEATURES,
+  ...ACTIONS_SERVICES,
+  ...PACKAGES_SERVICES,
 ] as const;
 
 export type GitHubSLAComponent = typeof GITHUB_SLA_COMPONENTS[number];
@@ -465,7 +556,6 @@ export interface QuarterData {
   startDate: Date;
   endDate: Date;
   slaResults: SLAResult[];
-  avgUptime: number;
   totalDowntime: number;
   totalIncidents: number;
   trackedIncidents: number;
@@ -508,8 +598,7 @@ export function calculateQuarterData(
     [...GITHUB_SLA_COMPONENTS]
   );
 
-  // Calculate overall metrics
-  const avgUptime = slaResults.reduce((sum, r) => sum + r.uptimePercentage, 0) / slaResults.length;
+  // Calculate overall metrics (no average uptime - GitHub doesn't define aggregate SLA)
   const totalDowntime = slaResults.reduce((sum, r) => sum + r.totalDowntimeMinutes, 0);
   const totalIncidents = quarterIncidents.length;
 
@@ -537,7 +626,6 @@ export function calculateQuarterData(
     startDate,
     endDate,
     slaResults,
-    avgUptime,
     totalDowntime,
     totalIncidents,
     trackedIncidents,

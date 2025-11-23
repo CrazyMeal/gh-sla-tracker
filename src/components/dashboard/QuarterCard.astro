@@ -11,13 +11,15 @@ interface Props {
 const { quarterData } = Astro.props;
 const {
     quarterLabel,
-    avgUptime,
     totalIncidents,
     hasViolation,
     hasInsufficientData,
+    worstComponent,
 } = quarterData;
 
-const statusColor = getSLAStatusColor(avgUptime, hasInsufficientData);
+// Use worst component's uptime for status indication
+const worstUptime = worstComponent.uptimePercentage;
+const statusColor = getSLAStatusColor(worstUptime, hasInsufficientData);
 const statusClass = `status-${statusColor}`;
 ---
 
@@ -42,8 +44,9 @@ const statusClass = `status-${statusColor}`;
                     </div>
                 ) : (
                     <div>
-                        <div class="uptime-value">{avgUptime.toFixed(3)}%</div>
-                        <div class="uptime-label">Average Uptime</div>
+                        <div class="uptime-value">{worstUptime.toFixed(3)}%</div>
+                        <div class="uptime-label">Worst Component</div>
+                        <div class="uptime-sublabel">{worstComponent.componentName}</div>
                     </div>
                 )
             }
@@ -57,9 +60,9 @@ const statusClass = `status-${statusColor}`;
                 {
                     hasInsufficientData
                         ? "Unknown"
-                        : avgUptime >= 99.9
-                          ? "Pass"
-                          : `Violation (${avgUptime >= 99.0 ? "10%" : "25%"} credit)`
+                        : worstUptime >= 99.9
+                          ? "All Pass"
+                          : `Violation (${worstUptime >= 99.0 ? "10%" : "25%"} credit)`
                 }
             </div>
         </div>
@@ -156,6 +159,12 @@ const statusClass = `status-${statusColor}`;
     .uptime-label {
         font-size: 0.875rem;
         color: var(--color-text-secondary);
+    }
+
+    .uptime-sublabel {
+        font-size: 0.75rem;
+        color: var(--color-text-tertiary);
+        margin-top: 0.25rem;
     }
 
     .quarter-stats {

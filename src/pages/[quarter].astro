@@ -13,6 +13,9 @@ import {
 import {
   calculateQuarterData,
   getIncidentsWithDurations,
+  SERVICE_FEATURES,
+  ACTIONS_SERVICES,
+  PACKAGES_SERVICES,
 } from "../lib/sla-calculator";
 import StatsCard from "../components/dashboard/StatsCard.astro";
 import SlaTable from "../components/sla/SlaTable.astro";
@@ -52,7 +55,6 @@ const quarterData = calculateQuarterData(allIncidents, year, quarter);
 // Destructure for easier access in template
 const {
   slaResults,
-  avgUptime,
   totalDowntime,
   totalIncidents,
   trackedIncidents,
@@ -61,6 +63,17 @@ const {
   worstComponent,
   quarterIncidents,
 } = quarterData;
+
+// Separate SLA results by service category
+const serviceFeaturesResults = slaResults.filter(r =>
+  SERVICE_FEATURES.some(s => s === r.componentName)
+);
+const actionsResults = slaResults.filter(r =>
+  ACTIONS_SERVICES.some(s => s === r.componentName)
+);
+const packagesResults = slaResults.filter(r =>
+  PACKAGES_SERVICES.some(s => s === r.componentName)
+);
 
 // Get incidents with durations for display
 const incidentsWithDurations = getIncidentsWithDurations(quarterIncidents).sort(
@@ -124,16 +137,22 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
 
     <section class="summary-cards grid">
       <StatsCard
-        label="Average Uptime"
-        value={hasInsufficientData ? "N/A" : `${avgUptime.toFixed(3)}%`}
-        subtext={hasInsufficientData ? "Insufficient Data" : "Average Uptime"}
+        label="SLA Status"
+        value={hasInsufficientData
+          ? "Unknown"
+          : hasViolation
+            ? "Violation"
+            : "All Pass"}
+        subtext={hasInsufficientData
+          ? "Insufficient Data"
+          : hasViolation
+            ? `${worstComponent.serviceCredit}% service credit`
+            : "All services met 99.9% uptime"}
         valueClass={hasInsufficientData
           ? "uptime-gray"
-          : avgUptime >= 99.9
-            ? "uptime-green"
-            : avgUptime >= 99.0
-              ? "uptime-orange"
-              : "uptime-red"}
+          : hasViolation
+            ? "uptime-red"
+            : "uptime-green"}
       />
 
       <StatsCard
@@ -156,14 +175,59 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
       />
     </section>
 
+    <!-- Service Features - Time-based SLA -->
     <section class="component-sla">
-      <h2>Component SLA Breakdown</h2>
+      <h2>Service Features</h2>
       <p class="section-subtitle">
-        Per-component uptime for the {totalMinutes.toLocaleString()} minutes in this
-        quarter
+        Time-based uptime calculation for the {totalMinutes.toLocaleString()} minutes in this quarter
       </p>
+      <div class="methodology-note">
+        <strong>Calculation Method:</strong> (Total minutes - Downtime) / Total minutes × 100
+        <br />
+        <strong>Downtime Definition:</strong> Minutes with &gt;5% error rate (approximated from incident data)
+      </div>
 
-      <SlaTable results={slaResults} />
+      <SlaTable results={serviceFeaturesResults} />
+    </section>
+
+    <!-- Actions - Execution-based SLA -->
+    <section class="component-sla">
+      <h2>Actions</h2>
+      <p class="section-subtitle">
+        Execution-based calculation (workflow success rate)
+      </p>
+      <div class="methodology-note">
+        <strong>Official Calculation Method:</strong> (Total executions - Failed executions) / Total executions × 100
+      </div>
+      <div class="data-accuracy-warning">
+        <strong>⚠️ Data Accuracy Limitation:</strong> The GitHub Status API does not provide execution counts or failure rates.
+        The uptime percentages shown below are <em>approximations</em> based on incident duration and impact,
+        not the actual workflow success rate used in GitHub's official SLA calculations.
+      </div>
+
+      <SlaTable results={actionsResults} />
+    </section>
+
+    <!-- Packages - Hybrid SLA -->
+    <section class="component-sla">
+      <h2>Packages</h2>
+      <p class="section-subtitle">
+        Hybrid calculation with two separate metrics
+      </p>
+      <div class="methodology-note">
+        <strong>Official Calculation Methods:</strong>
+        <br />
+        1. <strong>Package Transfers:</strong> (Total transfers - Failed transfers) / Total transfers × 100
+        <br />
+        2. <strong>Package Storage:</strong> (Total minutes - Minutes with &gt;5% error rate) / Total minutes × 100
+      </div>
+      <div class="data-accuracy-warning">
+        <strong>⚠️ Data Accuracy Limitation:</strong> The GitHub Status API does not provide transfer counts or storage error rates.
+        The uptime percentage shown below is an <em>approximation</em> based on incident duration and impact,
+        not the actual metrics used in GitHub's official SLA calculations.
+      </div>
+
+      <SlaTable results={packagesResults} />
     </section>
 
     <section class="incidents-section">
@@ -297,6 +361,39 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
   .section-subtitle {
     color: var(--color-text-secondary);
     margin-bottom: 1.5rem;
+  }
+
+  .methodology-note {
+    background-color: var(--color-bg-secondary);
+    border-left: 3px solid var(--color-link);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border-radius: 4px;
+  }
+
+  .methodology-note strong {
+    color: var(--color-text);
+  }
+
+  .data-accuracy-warning {
+    background-color: rgba(255, 159, 67, 0.1);
+    border-left: 3px solid var(--color-warning);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border-radius: 4px;
+  }
+
+  .data-accuracy-warning strong {
+    color: var(--color-warning);
+  }
+
+  .data-accuracy-warning em {
+    font-style: italic;
+    color: var(--color-text);
   }
 
   .component-sla {

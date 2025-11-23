@@ -18,25 +18,40 @@ A static site built with Astro 5 that tracks GitHub's Service Level Agreement (S
 Based on the official GitHub Online Services SLA (Version: June 2021):
 
 ### Uptime Guarantee
-- **Target**: 99.9% uptime per calendar quarter
-- **Calculation**: `(total minutes in quarter - Downtime) / total minutes in quarter`
+- **Target**: 99.9% uptime per calendar quarter **for each service**
+- **Important**: SLA is calculated **per-service**, not as an aggregate across all services
 
-### Service Features Covered
-1. **Issues**
-2. **Pull Requests**
-3. **Git Operations**
-4. **API Requests**
-5. **Webhooks**
-6. **Pages**
-7. **Actions**
-8. **Packages**
+### Three Calculation Methodologies
 
-### Downtime Definition
-Downtime occurs when either:
-- Error rate exceeds 5% in a given minute for any Service Feature, OR
-- Service is unavailable as determined by GitHub's internal and external monitoring systems
+GitHub uses **three different calculation methods** depending on the service:
+
+#### 1. Service Features (Time-Based)
+**Services**: Issues, Pull Requests, Git Operations, API Requests, Webhooks, Pages
+
+**Formula**: `(total minutes - downtime) / total minutes × 100`
+
+**Downtime Definition**: Minutes with >5% error rate
+
+#### 2. Actions (Execution-Based)
+**Services**: Actions
+
+**Formula**: `(total executions - failed executions) / total executions × 100`
+
+**Downtime Definition**: Failed workflow executions
+
+#### 3. Packages (Hybrid - Two Metrics)
+**Services**: Packages
+
+GitHub tracks **two separate metrics** for Packages:
+
+1. **Package Transfers** (execution-based):
+   - Formula: `(total transfers - failed transfers) / total transfers × 100`
+
+2. **Package Storage** (error-rate based):
+   - Formula: `(total minutes - minutes with >5% error rate) / total minutes × 100`
 
 ### Service Credits
+Applied **per-service** when uptime falls below 99.9%:
 - **10% refund**: Uptime ≤99.9% but >99.0%
 - **25% refund**: Uptime <99.0%
 
@@ -95,6 +110,50 @@ interface Incident {
   components: ComponentStatus[];
 }
 ```
+
+---
+
+## Data Accuracy Limitations
+
+### Critical Constraint: Public API Cannot Calculate Official SLA
+
+The GitHub Status API provides **incident metadata only** (timestamps, impact levels, affected components). It does **NOT** provide the underlying metrics required for GitHub's official SLA calculations.
+
+### What We Can Calculate Accurately
+
+✅ **Service Features** (Issues, Pull Requests, Git Operations, API Requests, Webhooks, Pages)
+- **Method**: Time-based using incident duration weighted by impact
+- **Accuracy**: Good approximation
+- **Limitation**: Cannot precisely detect ">5% error rate" threshold—we infer from incident impact levels
+
+### What We CANNOT Calculate
+
+❌ **Actions**
+- **Requires**: Total execution count + failed execution count
+- **API Provides**: Only incident timestamps and descriptions
+- **Result**: Shows approximation based on incident duration (NOT workflow success rate)
+
+❌ **Packages**
+- **Requires**:
+  1. Transfer counts (total + failed)
+  2. Storage error rates per minute
+- **API Provides**: Only incident timestamps and descriptions
+- **Result**: Shows approximation based on incident duration (NOT actual transfer/storage metrics)
+
+### Implementation Approach
+
+1. **Service Features**: Calculate time-based SLA (reasonably accurate)
+2. **Actions & Packages**: Calculate time-based approximation with **prominent disclaimers**
+3. **UI**: Three separate tables with methodology explanations
+4. **Transparency**: Clear warnings that Actions/Packages metrics are approximations only
+
+### Why We Still Show Actions/Packages
+
+Even though we cannot calculate the official metrics, we still display Actions and Packages because:
+- Provides visibility into when incidents occurred
+- Shows relative service stability over time
+- Helps users understand service patterns
+- Clearly marked as approximations (not official SLA data)
 
 ---
 
@@ -237,7 +296,15 @@ npm run preview       # Preview production build
 
 ## SLA Calculation Methodology
 
-### Quarterly Uptime Calculation
+### Overview
+
+The tracker implements **time-based calculations** for all services, with different accuracy levels:
+- **Service Features**: Accurate approximation (can measure time-based downtime)
+- **Actions & Packages**: Approximation only (cannot measure execution/transfer metrics)
+
+### Time-Based Calculation (Service Features)
+
+Used for: Issues, Pull Requests, Git Operations, API Requests, Webhooks, Pages
 
 ```typescript
 function calculateComponentSLA(
@@ -286,10 +353,25 @@ function calculateComponentSLA(
     uptimePercentage: parseFloat(uptimePercentage.toFixed(4)),
     totalDowntimeMinutes: Math.round(totalDowntimeMinutes),
     incidentCount: relevantIncidents.length,
-    slaViolation: uptimePercentage < 99.9
+    slaViolation: uptimePercentage < 99.9,
+    calculationMethod: 'time-based',
+    hasAccurateData: true  // For Service Features
   };
 }
 ```
+
+### Actions & Packages (Approximations Only)
+
+**Official Methods** (cannot be implemented from public API):
+- **Actions**: `(total executions - failed) / total executions × 100`
+- **Packages Transfers**: `(total transfers - failed) / total transfers × 100`
+- **Packages Storage**: `(total minutes - error minutes) / total minutes × 100`
+
+**Our Implementation**:
+- Uses the same time-based calculation as Service Features
+- Marked with `hasAccurateData: false`
+- Displays with prominent warning banners in UI
+- Three separate tables to visually distinguish methodologies
 
 ### Quarter Definitions
 - **Q1**: January 1 - March 31
@@ -305,6 +387,15 @@ The calculation applies impact weighting to better reflect service degradation:
 - **Critical**: 100% (complete outage)
 
 This provides a more nuanced view than binary up/down states.
+
+### No Global/Aggregate SLA
+
+**Important**: GitHub's SLA is calculated **per-service**, not as an aggregate.
+
+- Each service is measured independently against the 99.9% target
+- Service credits apply per-service
+- The tracker does **NOT** calculate an "overall" or "average" SLA
+- UI displays three separate tables grouped by calculation methodology
 
 ---
 

@@ -691,18 +691,14 @@ describe('Quarter Data Integration Tests', () => {
       expect(quarterData.startDate).toBeInstanceOf(Date);
       expect(quarterData.endDate).toBeInstanceOf(Date);
       expect(quarterData.slaResults).toHaveLength(8);
-      expect(quarterData.avgUptime).toBeGreaterThan(0);
       expect(quarterData.totalIncidents).toBe(2);
       expect(quarterData.trackedIncidents).toBe(2);
       expect(quarterData.worstComponent).toBeDefined();
       expect(quarterData.quarterIncidents).toHaveLength(2);
 
-      // And: avgUptime should be average of all component uptimes
-      const expectedAvg = quarterData.slaResults.reduce(
-        (sum, r) => sum + r.uptimePercentage,
-        0
-      ) / quarterData.slaResults.length;
-      expect(quarterData.avgUptime).toBeCloseTo(expectedAvg, 4);
+      // And: worstComponent should have the lowest uptime
+      const lowestUptime = Math.min(...quarterData.slaResults.map(r => r.uptimePercentage));
+      expect(quarterData.worstComponent.uptimePercentage).toBe(lowestUptime);
     });
   });
 });
