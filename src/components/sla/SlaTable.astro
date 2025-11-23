@@ -1,0 +1,165 @@
+---
+import Badge from "../ui/Badge.astro";
+import { getSLAStatusColor } from "../../lib/sla-calculator";
+import { formatDuration } from "../../lib/date-utils";
+import type { SLAResult } from "../../lib/sla-calculator";
+
+interface Props {
+    results: SLAResult[];
+}
+
+const { results } = Astro.props;
+---
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Uptime %</th>
+                <th>Downtime</th>
+                <th>Incidents</th>
+                <th>Status</th>
+                <th>Service Credit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {
+                results.map((result) => {
+                    const statusColor = getSLAStatusColor(
+                        result.uptimePercentage,
+                    );
+                    const badgeVariant = result.slaViolation
+                        ? "danger"
+                        : "success";
+
+                    return (
+                        <tr
+                            class="component-row"
+                            data-component={result.componentName}
+                            data-incident-count={result.incidentCount}
+                            role="button"
+                            tabindex="0"
+                        >
+                            <td>
+                                <strong>{result.componentName}</strong>
+                            </td>
+                            <td>
+                                <span
+                                    class={`uptime-value uptime-${statusColor}`}
+                                >
+                                    {result.uptimePercentage.toFixed(4)}%
+                                </span>
+                            </td>
+                            <td>
+                                {formatDuration(result.totalDowntimeMinutes)}
+                            </td>
+                            <td>{result.incidentCount}</td>
+                            <td>
+                                <Badge variant={badgeVariant}>
+                                    {result.slaViolation ? "Violation" : "Pass"}
+                                </Badge>
+                            </td>
+                            <td>
+                                {result.serviceCredit > 0 ? (
+                                    <span class="service-credit">
+                                        {result.serviceCredit}%
+                                    </span>
+                                ) : (
+                                    <span class="text-secondary">None</span>
+                                )}
+                            </td>
+                        </tr>
+                    );
+                })
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+    }
+
+    th,
+    td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    th {
+        background-color: var(--color-bg-tertiary);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    tr:hover {
+        background-color: var(--color-bg-tertiary);
+    }
+
+    .uptime-value {
+        font-weight: 600;
+        font-family: var(--font-mono);
+    }
+
+    .uptime-green {
+        color: var(--color-success);
+    }
+
+    .uptime-orange {
+        color: var(--color-warning);
+    }
+
+    .uptime-red {
+        color: var(--color-danger);
+    }
+
+    .uptime-gray {
+        color: var(--color-text-secondary);
+    }
+
+    .service-credit {
+        font-weight: 600;
+        color: var(--color-warning);
+    }
+
+    .text-secondary {
+        color: var(--color-text-secondary);
+    }
+
+    /* Component row interactivity for filtering */
+    .component-row {
+        cursor: pointer;
+        transition:
+            background-color 0.2s,
+            border-color 0.2s;
+    }
+
+    .component-row:hover {
+        background-color: var(--color-bg-tertiary);
+    }
+
+    .component-row:focus-visible {
+        outline: 2px solid var(--color-link);
+        outline-offset: -2px;
+    }
+
+    .component-row.selected {
+        background-color: rgba(79, 140, 201, 0.1);
+        border-left: 4px solid var(--color-link);
+    }
+
+    .component-row.selected td:first-child {
+        padding-left: calc(1rem - 4px);
+    }
+</style>

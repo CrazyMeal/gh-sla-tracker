@@ -1,0 +1,44 @@
+---
+import Card from "../ui/Card.astro";
+
+interface Props {
+    label: string;
+    value: string | number;
+    subtext?: string;
+    valueClass?: string;
+}
+
+const { label, value, subtext, valueClass } = Astro.props;
+---
+
+<Card class="stat-card">
+    <h3>{label}</h3>
+    <div class:list={["stat-value", valueClass]}>{value}</div>
+    {subtext && <div class="stat-label">{subtext}</div>}
+</Card>
+
+<style>
+    .stat-card h3 {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-link);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+
+    .text-sm {
+        font-size: 1.5rem;
+    }
+</style>

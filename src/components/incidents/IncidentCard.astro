@@ -1,0 +1,262 @@
+---
+import Card from "../ui/Card.astro";
+import Badge from "../ui/Badge.astro";
+import { formatDateTime, formatDuration } from "../../lib/date-utils";
+import type { IncidentWithDuration } from "../../lib/sla-calculator";
+
+interface Props {
+    incident: IncidentWithDuration;
+    class?: string;
+}
+
+const { incident, class: className } = Astro.props;
+
+const impactVariant =
+    incident.data.impact === "critical"
+        ? "danger"
+        : incident.data.impact === "major"
+          ? "warning"
+          : incident.data.impact === "minor"
+            ? "info"
+            : "secondary";
+
+const statusVariant =
+    incident.data.status === "resolved"
+        ? "success"
+        : incident.data.status === "monitoring"
+          ? "info"
+          : "warning";
+
+const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`;
+---
+
+<Card
+    class:list={["incident-card", className]}
+    data-components={incident.data.components?.map((c) => c.name).join("|") ||
+        ""}
+>
+    <div class="incident-header">
+        <h4>
+            <a
+                href={incidentUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="incident-title-link"
+            >
+                {incident.data.name}
+            </a>
+        </h4>
+        <div class="incident-badges">
+            <Badge variant={impactVariant}>{incident.data.impact}</Badge>
+            <Badge variant={statusVariant}>{incident.data.status}</Badge>
+        </div>
+    </div>
+
+    <div class="incident-meta">
+        <div class="meta-item">
+            <span class="meta-label">Created:</span>
+            <time datetime={incident.data.created_at}>
+                {formatDateTime(incident.data.created_at)}
+            </time>
+        </div>
+        {
+            incident.data.resolved_at && (
+                <div class="meta-item">
+                    <span class="meta-label">Resolved:</span>
+                    <time datetime={incident.data.resolved_at}>
+                        {formatDateTime(incident.data.resolved_at)}
+                    </time>
+                </div>
+            )
+        }
+        <div class="meta-item">
+            <span class="meta-label">Duration:</span>
+            <span>{formatDuration(incident.durationMinutes)}</span>
+        </div>
+        <div class="meta-item">
+            <span class="meta-label">Weighted Downtime:</span>
+            <span>{formatDuration(incident.weightedDowntime)}</span>
+        </div>
+    </div>
+
+    {
+        incident.data.components && incident.data.components.length > 0 && (
+            <div class="incident-components">
+                <span class="meta-label">Affected Components:</span>
+                {incident.data.components.map((comp) => (
+                    <span class="component-tag">{comp.name}</span>
+                ))}
+            </div>
+        )
+    }
+
+    {
+        incident.data.incident_updates.length > 0 && (
+            <details class="incident-updates">
+                <summary>
+                    {incident.data.incident_updates.length} update
+                    {incident.data.incident_updates.length !== 1 ? "s" : ""}
+                </summary>
+                <div class="updates-list">
+                    {incident.data.incident_updates.map((update) => (
+                        <div class="update-item">
+                            <div class="update-header">
+                                <span class="update-status">
+                                    {update.status}
+                                </span>
+                                <time datetime={update.created_at}>
+                                    {formatDateTime(update.created_at)}
+                                </time>
+                            </div>
+                            <p class="update-body">{update.body}</p>
+                        </div>
+                    ))}
+                </div>
+            </details>
+        )
+    }
+</Card>
+
+<style>
+    .incident-card {
+        transition:
+            opacity 0.3s ease-out,
+            transform 0.3s ease-out,
+            border-color 0.2s;
+    }
+
+    .incident-card:hover {
+        border-color: var(--color-text-secondary);
+    }
+
+    .incident-card[style*="display: none"] {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    .incident-title-link {
+        color: var(--color-link);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .incident-title-link:hover {
+        color: var(--color-link-hover);
+        text-decoration: underline;
+    }
+
+    .incident-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .incident-header h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        flex: 1;
+    }
+
+    .incident-badges {
+        display: flex;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .incident-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: var(--color-bg-tertiary);
+        border-radius: 4px;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .meta-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        font-weight: 600;
+    }
+
+    .incident-components {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .component-tag {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background-color: var(--color-bg-tertiary);
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .incident-updates {
+        margin-top: 1rem;
+        border-top: 1px solid var(--color-border);
+        padding-top: 1rem;
+    }
+
+    .incident-updates summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--color-link);
+        user-select: none;
+    }
+
+    .incident-updates summary:hover {
+        color: var(--color-link-hover);
+    }
+
+    .updates-list {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .update-item {
+        padding: 1rem;
+        background-color: var(--color-bg-tertiary);
+        border-radius: 4px;
+    }
+
+    .update-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .update-status {
+        font-weight: 600;
+        text-transform: capitalize;
+        color: var(--color-link);
+    }
+
+    .update-header time {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+
+    .update-body {
+        margin: 0;
+        line-height: 1.6;
+    }
+</style>

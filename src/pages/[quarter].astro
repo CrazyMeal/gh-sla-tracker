@@ -12,10 +12,12 @@ import {
 } from "../lib/date-utils";
 import {
   calculateQuarterData,
-  getSLAStatusColor,
-  getSLAStatusLabel,
   getIncidentsWithDurations,
 } from "../lib/sla-calculator";
+import StatsCard from "../components/dashboard/StatsCard.astro";
+import SlaTable from "../components/sla/SlaTable.astro";
+import IncidentCard from "../components/incidents/IncidentCard.astro";
+import Badge from "../components/ui/Badge.astro";
 
 // Get all static paths for quarters
 export async function getStaticPaths() {
@@ -94,11 +96,11 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
       <div class="header-status">
         {
           hasInsufficientData ? (
-            <span class="badge badge-secondary">Unknown</span>
+            <Badge variant="secondary">Unknown</Badge>
           ) : hasViolation ? (
-            <span class="badge badge-danger">SLA Violation</span>
+            <Badge variant="danger">SLA Violation</Badge>
           ) : (
-            <span class="badge badge-success">SLA Pass</span>
+            <Badge variant="success">SLA Pass</Badge>
           )
         }
       </div>
@@ -121,39 +123,37 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     }
 
     <section class="summary-cards grid">
-      <div class="card">
-        <h3>Average Uptime</h3>
-        <div
-          class={`stat-value uptime-${getSLAStatusColor(avgUptime, hasInsufficientData)}`}
-        >
-          {hasInsufficientData ? "N/A" : `${avgUptime.toFixed(3)}%`}
-        </div>
-        <div class="stat-label">
-          {getSLAStatusLabel(avgUptime, hasInsufficientData)}
-        </div>
-      </div>
+      <StatsCard
+        label="Average Uptime"
+        value={hasInsufficientData ? "N/A" : `${avgUptime.toFixed(3)}%`}
+        subtext={hasInsufficientData ? "Insufficient Data" : "Average Uptime"}
+        valueClass={hasInsufficientData
+          ? "uptime-gray"
+          : avgUptime >= 99.9
+            ? "uptime-green"
+            : avgUptime >= 99.0
+              ? "uptime-orange"
+              : "uptime-red"}
+      />
 
-      <div class="card">
-        <h3>Total Downtime</h3>
-        <div class="stat-value">{formatDuration(totalDowntime)}</div>
-        <div class="stat-label">Weighted by impact</div>
-      </div>
+      <StatsCard
+        label="Total Downtime"
+        value={formatDuration(totalDowntime)}
+        subtext="Weighted by impact"
+      />
 
-      <div class="card">
-        <h3>Total Incidents</h3>
-        <div class="stat-value">{totalIncidents}</div>
-        <div class="stat-label">
-          In this quarter ({trackedIncidents} tracked)
-        </div>
-      </div>
+      <StatsCard
+        label="Total Incidents"
+        value={totalIncidents}
+        subtext={`In this quarter (${trackedIncidents} tracked)`}
+      />
 
-      <div class="card">
-        <h3>Worst Component</h3>
-        <div class="stat-value text-sm">{worstComponent.componentName}</div>
-        <div class="stat-label">
-          {worstComponent.uptimePercentage.toFixed(3)}% uptime
-        </div>
-      </div>
+      <StatsCard
+        label="Worst Component"
+        value={worstComponent.componentName}
+        subtext={`${worstComponent.uptimePercentage.toFixed(3)}% uptime`}
+        valueClass="text-sm"
+      />
     </section>
 
     <section class="component-sla">
@@ -163,65 +163,7 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
         quarter
       </p>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Component</th>
-              <th>Uptime %</th>
-              <th>Downtime</th>
-              <th>Incidents</th>
-              <th>Status</th>
-              <th>Service Credit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              slaResults.map((result) => {
-                const statusColor = getSLAStatusColor(result.uptimePercentage);
-                const badgeClass = result.slaViolation
-                  ? "badge-danger"
-                  : "badge-success";
-
-                return (
-                  <tr
-                    class="component-row"
-                    data-component={result.componentName}
-                    data-incident-count={result.incidentCount}
-                    role="button"
-                    tabindex="0"
-                  >
-                    <td>
-                      <strong>{result.componentName}</strong>
-                    </td>
-                    <td>
-                      <span class={`uptime-value uptime-${statusColor}`}>
-                        {result.uptimePercentage.toFixed(4)}%
-                      </span>
-                    </td>
-                    <td>{formatDuration(result.totalDowntimeMinutes)}</td>
-                    <td>{result.incidentCount}</td>
-                    <td>
-                      <span class={`badge ${badgeClass}`}>
-                        {result.slaViolation ? "Violation" : "Pass"}
-                      </span>
-                    </td>
-                    <td>
-                      {result.serviceCredit > 0 ? (
-                        <span class="service-credit">
-                          {result.serviceCredit}%
-                        </span>
-                      ) : (
-                        <span class="text-secondary">None</span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })
-            }
-          </tbody>
-        </table>
-      </div>
+      <SlaTable results={slaResults} />
     </section>
 
     <section class="incidents-section">
@@ -257,111 +199,9 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
           </div>
         ) : (
           <div class="incidents-list">
-            {incidentsWithDurations.map((incident) => {
-              const impactClass =
-                incident.data.impact === "critical"
-                  ? "badge-danger"
-                  : incident.data.impact === "major"
-                    ? "badge-warning"
-                    : incident.data.impact === "minor"
-                      ? "badge-info"
-                      : "badge-secondary";
-
-              const statusClass =
-                incident.data.status === "resolved"
-                  ? "badge-success"
-                  : incident.data.status === "monitoring"
-                    ? "badge-info"
-                    : "badge-warning";
-
-              // Build GitHub Status incident URL (correct format)
-              const incidentUrl = `https://www.githubstatus.com/incidents/${incident.data.id}`;
-
-              return (
-                <div
-                  class="card incident-card"
-                  data-components={
-                    incident.data.components?.map((c) => c.name).join("|") || ""
-                  }
-                >
-                  <div class="incident-header">
-                    <h4>
-                      <a
-                        href={incidentUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="incident-title-link"
-                      >
-                        {incident.data.name}
-                      </a>
-                    </h4>
-                    <div class="incident-badges">
-                      <span class={`badge ${impactClass}`}>
-                        {incident.data.impact}
-                      </span>
-                      <span class={`badge ${statusClass}`}>
-                        {incident.data.status}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="incident-meta">
-                    <div class="meta-item">
-                      <span class="meta-label">Created:</span>
-                      <time datetime={incident.data.created_at}>
-                        {formatDateTime(incident.data.created_at)}
-                      </time>
-                    </div>
-                    {incident.data.resolved_at && (
-                      <div class="meta-item">
-                        <span class="meta-label">Resolved:</span>
-                        <time datetime={incident.data.resolved_at}>
-                          {formatDateTime(incident.data.resolved_at)}
-                        </time>
-                      </div>
-                    )}
-                    <div class="meta-item">
-                      <span class="meta-label">Duration:</span>
-                      <span>{formatDuration(incident.durationMinutes)}</span>
-                    </div>
-                    <div class="meta-item">
-                      <span class="meta-label">Weighted Downtime:</span>
-                      <span>{formatDuration(incident.weightedDowntime)}</span>
-                    </div>
-                  </div>
-
-                  {incident.data.components &&
-                    incident.data.components.length > 0 && (
-                      <div class="incident-components">
-                        <span class="meta-label">Affected Components:</span>
-                        {incident.data.components.map((comp) => (
-                          <span class="component-tag">{comp.name}</span>
-                        ))}
-                      </div>
-                    )}
-
-                  {incident.data.incident_updates.length > 0 && (
-                    <details class="incident-updates">
-                      {/* prettier-ignore */}
-                      <summary>{incident.data.incident_updates.length} update{incident.data.incident_updates.length !== 1 ? "s" : ""}</summary>
-                      <div class="updates-list">
-                        {incident.data.incident_updates.map((update) => (
-                          <div class="update-item">
-                            <div class="update-header">
-                              <span class="update-status">{update.status}</span>
-                              <time datetime={update.created_at}>
-                                {formatDateTime(update.created_at)}
-                              </time>
-                            </div>
-                            <p class="update-body">{update.body}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </details>
-                  )}
-                </div>
-              );
-            })}
+            {incidentsWithDurations.map((incident) => (
+              <IncidentCard incident={incident} />
+            ))}
           </div>
         )
       }
@@ -418,17 +258,6 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     margin-bottom: 0.5rem;
   }
 
-  .stat-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-link);
-    margin-bottom: 0.25rem;
-  }
-
-  .stat-value.text-sm {
-    font-size: 1.5rem;
-  }
-
   .uptime-green {
     color: var(--color-success);
   }
@@ -465,11 +294,6 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     margin-bottom: 0;
   }
 
-  .stat-label {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-  }
-
   .section-subtitle {
     color: var(--color-text-secondary);
     margin-bottom: 1.5rem;
@@ -482,24 +306,6 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
   .component-sla h2 {
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-  }
-
-  .uptime-value {
-    font-weight: 600;
-    font-family: var(--font-mono);
-  }
-
-  .service-credit {
-    font-weight: 600;
-    color: var(--color-warning);
-  }
-
-  .text-secondary {
-    color: var(--color-text-secondary);
   }
 
   .incidents-section {
@@ -521,140 +327,6 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
     display: flex;
     flex-direction: column;
     gap: 1rem;
-  }
-
-  .incident-card {
-    transition: border-color 0.2s;
-  }
-
-  .incident-card:hover {
-    border-color: var(--color-text-secondary);
-  }
-
-  .incident-title-link {
-    color: var(--color-link);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .incident-title-link:hover {
-    color: var(--color-link-hover);
-    text-decoration: underline;
-  }
-
-  .incident-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .incident-header h4 {
-    margin: 0;
-    font-size: 1.1rem;
-    flex: 1;
-  }
-
-  .incident-badges {
-    display: flex;
-    gap: 0.5rem;
-    flex-shrink: 0;
-  }
-
-  .incident-meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    padding: 0.75rem;
-    background-color: var(--color-bg-tertiary);
-    border-radius: 4px;
-  }
-
-  .meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .meta-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-secondary);
-    font-weight: 600;
-  }
-
-  .incident-components {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .component-tag {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background-color: var(--color-bg-tertiary);
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-  }
-
-  .incident-updates {
-    margin-top: 1rem;
-    border-top: 1px solid var(--color-border);
-    padding-top: 1rem;
-  }
-
-  .incident-updates summary {
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--color-link);
-    user-select: none;
-  }
-
-  .incident-updates summary:hover {
-    color: var(--color-link-hover);
-  }
-
-  .updates-list {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .update-item {
-    padding: 1rem;
-    background-color: var(--color-bg-tertiary);
-    border-radius: 4px;
-  }
-
-  .update-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .update-status {
-    font-weight: 600;
-    text-transform: capitalize;
-    color: var(--color-link);
-  }
-
-  .update-header time {
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-  }
-
-  .update-body {
-    margin: 0;
-    line-height: 1.6;
   }
 
   /* Component row interactivity for filtering */
@@ -766,115 +438,8 @@ const totalMinutes = getQuarterTotalMinutes(year, quarter);
   }
 </style>
 
-<script is:inline>
-  class ComponentFilter {
-    constructor() {
-      this.activeComponent = null;
-      this.componentRows = document.querySelectorAll(".component-row");
-      this.incidentCards = document.querySelectorAll(".incident-card");
-      this.filterBanner = document.getElementById("component-filter-banner");
-      this.filterCountElement = document.getElementById("filter-count");
-      this.filterComponentElement = document.getElementById("filter-component");
-      this.clearButton = document.getElementById("clear-filter");
-
-      this.init();
-    }
-
-    init() {
-      // Add click handlers to component rows
-      this.componentRows.forEach((row) => {
-        row.addEventListener("click", () => this.toggleFilter(row));
-        row.addEventListener("keypress", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            this.toggleFilter(row);
-          }
-        });
-      });
-
-      // Add click handler to clear button
-      this.clearButton?.addEventListener("click", () => this.clearFilter());
-    }
-
-    toggleFilter(row) {
-      const componentName = row.dataset.component;
-
-      if (this.activeComponent === componentName) {
-        // Clicking same component - clear filter
-        this.clearFilter();
-      } else {
-        // Apply new filter
-        this.applyFilter(componentName, row);
-      }
-    }
-
-    applyFilter(componentName, row) {
-      this.activeComponent = componentName;
-
-      // Update row selection state
-      this.componentRows.forEach((r) => r.classList.remove("selected"));
-      row.classList.add("selected");
-
-      // Filter incidents using fuzzy matching
-      let visibleCount = 0;
-      this.incidentCards.forEach((card) => {
-        const components = card.dataset.components;
-        const matches = this.componentMatches(components, componentName);
-
-        if (matches) {
-          card.style.display = "";
-          visibleCount++;
-        } else {
-          card.style.display = "none";
-        }
-      });
-
-      // Update filter banner
-      this.filterCountElement.textContent = visibleCount;
-      this.filterComponentElement.textContent = componentName;
-      this.filterBanner.style.display = "block";
-
-      // Scroll to incidents section smoothly
-      this.filterBanner.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-
-    componentMatches(componentsString, targetComponent) {
-      if (!componentsString) return false;
-
-      const components = componentsString.split("|");
-      return components.some((component) => {
-        // Normalize and use word boundary matching (mirrors backend logic)
-        const normalized = component.trim().replace(/^and\s+/i, "");
-        const pattern = new RegExp(
-          `\\b${this.escapeRegex(targetComponent)}\\b`,
-          "i",
-        );
-        return pattern.test(normalized);
-      });
-    }
-
-    escapeRegex(string) {
-      return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    }
-
-    clearFilter() {
-      this.activeComponent = null;
-
-      // Clear row selection
-      this.componentRows.forEach((r) => r.classList.remove("selected"));
-
-      // Show all incidents
-      this.incidentCards.forEach((card) => {
-        card.style.display = "";
-      });
-
-      // Hide filter banner
-      this.filterBanner.style.display = "none";
-    }
-  }
+<script>
+  import { ComponentFilter } from "../scripts/component-filter";
 
   // Initialize on page load (handles both initial load and View Transitions)
   document.addEventListener("astro:page-load", () => {

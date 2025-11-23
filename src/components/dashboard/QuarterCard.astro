@@ -1,0 +1,193 @@
+---
+import Card from "../ui/Card.astro";
+import Badge from "../ui/Badge.astro";
+import { getSLAStatusColor } from "../../lib/sla-calculator";
+import type { QuarterData } from "../../lib/sla-calculator";
+
+interface Props {
+    quarterData: QuarterData;
+}
+
+const { quarterData } = Astro.props;
+const {
+    quarterLabel,
+    avgUptime,
+    totalIncidents,
+    hasViolation,
+    hasInsufficientData,
+} = quarterData;
+
+const statusColor = getSLAStatusColor(avgUptime, hasInsufficientData);
+const statusClass = `status-${statusColor}`;
+---
+
+<a href={`${import.meta.env.BASE_URL}/${quarterLabel}`} class="quarter-link">
+    <Card class={`quarter-card ${statusClass}`}>
+        <div class="quarter-header">
+            <h3>{quarterLabel}</h3>
+            {
+                hasInsufficientData ? (
+                    <Badge variant="secondary">Unknown</Badge>
+                ) : hasViolation ? (
+                    <Badge variant="danger">SLA Violation</Badge>
+                ) : null
+            }
+        </div>
+        <div class="quarter-uptime">
+            {
+                hasInsufficientData ? (
+                    <div>
+                        <div class="uptime-value unknown">N/A</div>
+                        <div class="uptime-label">Insufficient Data</div>
+                    </div>
+                ) : (
+                    <div>
+                        <div class="uptime-value">{avgUptime.toFixed(3)}%</div>
+                        <div class="uptime-label">Average Uptime</div>
+                    </div>
+                )
+            }
+        </div>
+        <div class="quarter-stats">
+            <div>
+                <strong>{totalIncidents}</strong> incidents
+            </div>
+            <div>
+                <span class={`status-indicator status-${statusColor}`}></span>
+                {
+                    hasInsufficientData
+                        ? "Unknown"
+                        : avgUptime >= 99.9
+                          ? "Pass"
+                          : `Violation (${avgUptime >= 99.0 ? "10%" : "25%"} credit)`
+                }
+            </div>
+        </div>
+    </Card>
+</a>
+
+<style>
+    .quarter-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .quarter-card {
+        transition:
+            transform 0.2s,
+            border-color 0.2s;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .quarter-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background-color: var(--color-success);
+        opacity: 0.5;
+    }
+
+    .quarter-card.status-orange::before {
+        background-color: var(--color-warning);
+    }
+
+    .quarter-card.status-red::before {
+        background-color: var(--color-danger);
+    }
+
+    .quarter-card.status-gray::before {
+        background-color: var(--color-text-secondary);
+    }
+
+    .quarter-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--color-text-secondary);
+    }
+
+    .quarter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .quarter-header h3 {
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    .quarter-uptime {
+        margin-bottom: 1rem;
+    }
+
+    .uptime-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-link);
+    }
+
+    .status-green .uptime-value {
+        color: var(--color-success);
+    }
+
+    .status-orange .uptime-value {
+        color: var(--color-warning);
+    }
+
+    .status-red .uptime-value {
+        color: var(--color-danger);
+    }
+
+    .status-gray .uptime-value {
+        color: var(--color-text-secondary);
+    }
+
+    .uptime-value.unknown {
+        color: var(--color-text-secondary);
+        font-size: 1.5rem;
+    }
+
+    .uptime-label {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+
+    .quarter-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+
+    .quarter-stats strong {
+        color: var(--color-text);
+    }
+
+    .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 0.25rem;
+        background-color: var(--color-success);
+    }
+
+    .status-indicator.status-orange {
+        background-color: var(--color-warning);
+    }
+
+    .status-indicator.status-red {
+        background-color: var(--color-danger);
+    }
+
+    .status-indicator.status-gray {
+        background-color: var(--color-text-secondary);
+    }
+</style>
