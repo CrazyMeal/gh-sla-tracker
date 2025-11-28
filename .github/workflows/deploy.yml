@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          ref: main  # Explicitly checkout latest commit on main branch
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
