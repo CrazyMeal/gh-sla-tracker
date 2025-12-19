@@ -155,13 +155,13 @@
     "id": "x696x0g4t85l",
     "name": "Intermittent networking failures across GitHub-hosted Actions runners",
     "status": "resolved",
-    "created_at": "2025-12-18T16:43:57.438Z",
-    "updated_at": "2025-12-18T17:41:41.512Z",
+    "created_at": "2025-12-18T16:33:57.000Z",
+    "updated_at": "2025-12-19T14:44:20.959Z",
     "monitoring_at": null,
     "resolved_at": "2025-12-18T17:41:41.496Z",
     "impact": "major",
     "shortlink": "https://stspg.io/s5w0sdknlvy1",
-    "started_at": "2025-12-18T16:43:57.429Z",
+    "started_at": "2025-12-18T16:33:57.000Z",
     "page_id": "kctbh9vrtdwd",
     "incident_updates": [
       {
@@ -210,8 +210,8 @@
         "body": "Since approximately 8:00 UTC, we have observed intermittent failures on GitHub-hosted actions runners. The failures have been observed both during runner setup, and workflow execution. We are continuing to investigate.<br /><br />Self-hosted runners are not impacted.",
         "incident_id": "x696x0g4t85l",
         "created_at": "2025-12-18T16:45:14.244Z",
-        "updated_at": "2025-12-18T16:45:14.244Z",
-        "display_at": "2025-12-18T16:45:14.244Z",
+        "updated_at": "2025-12-19T14:44:20.953Z",
+        "display_at": "2025-12-18T16:35:14.000Z",
         "affected_components": [
           {
             "code": "br0l2tvcx85d",
@@ -230,8 +230,8 @@
         "body": "We are investigating reports of degraded performance for Actions",
         "incident_id": "x696x0g4t85l",
         "created_at": "2025-12-18T16:43:57.523Z",
-        "updated_at": "2025-12-18T16:43:57.523Z",
-        "display_at": "2025-12-18T16:43:57.523Z",
+        "updated_at": "2025-12-19T14:44:11.938Z",
+        "display_at": "2025-12-18T16:33:57.000Z",
         "affected_components": [
           {
             "code": "br0l2tvcx85d",
@@ -411,7 +411,7 @@
     "name": "Incident with Copilot Grok Code Fast 1",
     "status": "resolved",
     "created_at": "2025-12-15T14:12:49.505Z",
-    "updated_at": "2025-12-15T15:45:52.377Z",
+    "updated_at": "2025-12-19T14:26:09.816Z",
     "monitoring_at": null,
     "resolved_at": "2025-12-15T15:45:52.363Z",
     "impact": "minor",
@@ -422,10 +422,10 @@
       {
         "id": "ts116jnrrx9m",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On Dec 15th, 2025, between 14:00 UTC and 15:45 UTC the Copilot service was degraded for Grok Code Fast 1 model. On average, 4% of the requests to this model failed due to an issue with our upstream provider. No other models were impacted.<br /><br />The issue was resolved after the upstream provider fixed the problem that caused the disruption. GitHub will continue to enhance our monitoring and alerting systems to reduce the time it takes to detect and mitigate similar issues in the future.",
         "incident_id": "jcbsbbfd1x9r",
         "created_at": "2025-12-15T15:45:52.363Z",
-        "updated_at": "2025-12-15T15:45:52.363Z",
+        "updated_at": "2025-12-19T14:26:09.811Z",
         "display_at": "2025-12-15T15:45:52.363Z",
         "affected_components": [
           {
@@ -506,7 +506,7 @@
         "name": "Copilot",
         "status": "operational",
         "created_at": "2022-06-21T16:04:33.017Z",
-        "updated_at": "2025-12-15T15:45:52.337Z",
+        "updated_at": "2025-12-18T19:09:47.992Z",
         "position": 11,
         "description": null,
         "showcase": false,
@@ -1209,7 +1209,7 @@
     "name": "Some macOS Actions jobs routing to Ubuntu instead",
     "status": "resolved",
     "created_at": "2025-12-10T13:34:46.418Z",
-    "updated_at": "2025-12-10T14:52:42.634Z",
+    "updated_at": "2025-12-19T14:09:44.180Z",
     "monitoring_at": null,
     "resolved_at": "2025-12-10T14:52:42.618Z",
     "impact": "minor",
@@ -1220,10 +1220,10 @@
       {
         "id": "g4wbxzgzcmh3",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "Between December 9th, 2025 21:07 UTC and December 10th, 2025 14:52 UTC, 177 macos-14-large jobs were run on an Ubuntu larger runner VM instead of MacOS runner VMs. The impacted jobs were routed to a larger runner with incorrect metadata. We mitigated this by deleting the runner.<br /><br />The routing configuration is not something controlled externally. A manual override was done previously for internal testing, but left incorrect metadata for a large runner instance. An infrastructure migration caused this misconfigured runner to come online which started the incorrect assignments. We are removing the ability to manually override this configuration entirely, and are adding alerting to identify possible OS mismatches for hosted runner jobs.<br /><br />As a reminder, hosted runner VMs are secure and ephemeral, with every VM reimaged after every single job. All jobs impacted here were originally targeted at a GitHub-owned VM image and were run on a GitHub-owned VM image.",
         "incident_id": "17lxd87h22fj",
         "created_at": "2025-12-10T14:52:42.618Z",
-        "updated_at": "2025-12-10T14:52:42.618Z",
+        "updated_at": "2025-12-19T14:09:44.174Z",
         "display_at": "2025-12-10T14:52:42.618Z",
         "affected_components": [
           {
@@ -1284,7 +1284,7 @@
         "name": "Actions",
         "status": "operational",
         "created_at": "2019-11-13T18:02:19.432Z",
-        "updated_at": "2025-12-10T14:52:42.587Z",
+        "updated_at": "2025-12-18T17:41:41.465Z",
         "position": 7,
         "description": "Workflows, Compute and Orchestration for GitHub Actions",
         "showcase": false,
