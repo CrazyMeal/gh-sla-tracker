@@ -1,10 +1,66 @@
 [
   {
+    "id": "zltcsbhqmvqq",
+    "name": "Disruption with some GitHub services",
+    "status": "investigating",
+    "created_at": "2026-01-16T23:53:43.623Z",
+    "updated_at": "2026-01-17T00:08:38.251Z",
+    "monitoring_at": null,
+    "resolved_at": null,
+    "impact": "minor",
+    "shortlink": "https://stspg.io/m8rb572vqh4y",
+    "started_at": "2026-01-16T23:53:43.616Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "0x2dtnxq3vbt",
+        "status": "investigating",
+        "body": "Some enterprise Copilot CLI users may encounter an \"You are not authorized to use this Copilot feature\" error. We have identified the root cause and are currently deploying a fix. Expected resolution: within 2 hours.",
+        "incident_id": "zltcsbhqmvqq",
+        "created_at": "2026-01-17T00:08:38.249Z",
+        "updated_at": "2026-01-17T00:08:38.249Z",
+        "display_at": "2026-01-17T00:08:38.249Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "6rg38w12f12w",
+        "status": "investigating",
+        "body": "We received multiple reports of 403s when attempting to use the Copilot CLI. We have identified the root cause and are rolling out a fix for affected customers.",
+        "incident_id": "zltcsbhqmvqq",
+        "created_at": "2026-01-16T23:53:48.640Z",
+        "updated_at": "2026-01-16T23:53:48.640Z",
+        "display_at": "2026-01-16T23:53:48.640Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "glx8vy7j7jrl",
+        "status": "investigating",
+        "body": "We are investigating reports of impacted performance for some GitHub services.",
+        "incident_id": "zltcsbhqmvqq",
+        "created_at": "2026-01-16T23:53:43.660Z",
+        "updated_at": "2026-01-16T23:53:43.660Z",
+        "display_at": "2026-01-16T23:53:43.660Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "q987xpbqjbpl",
     "name": "Incident with Issues and Pull Requests",
     "status": "resolved",
     "created_at": "2026-01-15T16:56:44.755Z",
-    "updated_at": "2026-01-15T18:54:08.861Z",
+    "updated_at": "2026-01-16T22:20:05.866Z",
     "monitoring_at": null,
     "resolved_at": "2026-01-15T18:54:08.842Z",
     "impact": "major",
@@ -15,10 +71,10 @@
       {
         "id": "38r0sdk6c831",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On January 15, 2026,  between 16:40 UTC and 18:20 UTC, we observed increased latency and timeouts across Issues, Pull Requests, Notifications, Actions, Repositories, API, and Account Login. An average 1.8% of combined web and API requests saw failure, peaking briefly at 10% early on. The majority of impact was observed for unauthenticated users, but authenticated users were impacted as well.<br /><br />This was caused by an infrastructure update to some of our data stores. Upgrading this infrastructure to a new major version resulted in unexpected resource contention, leading to distributed impact in the form of slow queries and increased timeouts across services that depend on these datasets. We mitigated this by rolling back to the previous stable version.<br /><br />We are working to improve our validation process for these types of upgrades to catch issues that only occur under high load before full release, improve detection time, and reduce mitigation times in the future.",
         "incident_id": "q987xpbqjbpl",
         "created_at": "2026-01-15T18:54:08.842Z",
-        "updated_at": "2026-01-15T18:54:08.842Z",
+        "updated_at": "2026-01-16T22:20:05.862Z",
         "display_at": "2026-01-15T18:54:08.842Z",
         "affected_components": [
           {
@@ -737,6 +793,36 @@
         "only_show_if_degraded": false
       }
     ],
+    "reminder_intervals": null
+  },
+  {
+    "id": "sq20c7lrwjrp",
+    "name": "[Retroactive] Incident with GitHub Copilot (GPT-5 model)",
+    "status": "resolved",
+    "created_at": "2026-01-14T18:00:00.000Z",
+    "updated_at": "2026-01-16T18:56:58.679Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-01-14T18:00:00.000Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/qr2zjjks30q6",
+    "started_at": "2026-01-16T18:56:35.504Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "9yd3klc9h8ky",
+        "status": "resolved",
+        "body": "From January 14, 2026, at 18:15 UTC until January 15, 2026, at 11:30 UTC, GitHub Copilot users were unable to select the GPT-5 model for chat features in VS Code, JetBrains IDEs, and other IDE integrations. Users running GPT-5 in Auto mode experienced errors. Other models were not impacted.\n\nWe mitigated this incident by deploying a fix that corrected a misconfiguration in available models, rendering the GPT-5 model available again.\n\nWe are improving our testing processes to reduce the risk of similar incidents in the future, and refining our model availability alerting to improve detection time.\n\nWe did not status before we completed the fix, and the incident is currently resolved. We are sorry for the delayed post on githubstatus.com.",
+        "incident_id": "sq20c7lrwjrp",
+        "created_at": "2026-01-16T18:56:35.549Z",
+        "updated_at": "2026-01-16T18:56:35.549Z",
+        "display_at": "2026-01-14T18:00:00.000Z",
+        "affected_components": null,
+        "deliver_notifications": false,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
     "reminder_intervals": null
   },
   {
