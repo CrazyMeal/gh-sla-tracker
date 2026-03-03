@@ -1157,7 +1157,7 @@
     "name": "Incident with Actions",
     "status": "resolved",
     "created_at": "2026-02-23T16:17:35.130Z",
-    "updated_at": "2026-02-23T17:03:56.534Z",
+    "updated_at": "2026-03-03T17:40:47.725Z",
     "monitoring_at": null,
     "resolved_at": "2026-02-23T17:03:56.515Z",
     "impact": "minor",
@@ -1168,10 +1168,10 @@
       {
         "id": "3tmps4j9lg96",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On February 23, 2026, between 15:00 UTC and 17:00 UTC, GitHub Actions experienced degraded performance. During the time, 1.8% of Actions workflow runs experienced delayed starts with an average delay of 15 minutes. The issue was caused by a connection rebalancing event in our internal load balancing layer, which temporarily created uneven traffic distribution across sites and led to request throttling. <br /><br />To prevent recurrence, we are tuning connection rebalancing behavior to spread client reconnections more gradually during load balancer reloads. We are also evaluating improvements to site-level traffic affinity to eliminate the uneven distribution at its source. We have overprovisioned critical paths to prevent any impact if a similar event occurs before those workstreams finish. Finally, we are enhancing our monitoring to detect capacity imbalances proactively.",
         "incident_id": "59rjsk76t3rf",
         "created_at": "2026-02-23T17:03:56.515Z",
-        "updated_at": "2026-02-23T17:03:56.515Z",
+        "updated_at": "2026-03-03T17:40:47.720Z",
         "display_at": "2026-02-23T17:03:56.515Z",
         "affected_components": [
           {
@@ -1230,7 +1230,7 @@
     "name": "Incident with Copilot",
     "status": "resolved",
     "created_at": "2026-02-23T14:56:09.362Z",
-    "updated_at": "2026-02-23T16:19:33.842Z",
+    "updated_at": "2026-03-03T15:36:35.347Z",
     "monitoring_at": null,
     "resolved_at": "2026-02-23T16:19:33.814Z",
     "impact": "minor",
@@ -1241,10 +1241,10 @@
       {
         "id": "q1h17gpdz6gv",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On February 23, 2026, between 14:45 UTC and 16:19 UTC, the Copilot service was degraded for Claude Haiku 4.5 model. On average, 6% of the requests to this model failed due to an issue with an upstream provider. During this period, automated model degradation notifications directed affected users to alternative models. No other models were impacted. The upstream provider identified and resolved the issue on their end. <br />We are working to improve automatic model failover mechanisms to reduce our time to mitigation of issues like this one in the future.",
         "incident_id": "h8z3w9ycj0pm",
         "created_at": "2026-02-23T16:19:33.814Z",
-        "updated_at": "2026-02-23T16:19:33.814Z",
+        "updated_at": "2026-03-03T15:36:35.342Z",
         "display_at": "2026-02-23T16:19:33.814Z",
         "affected_components": [
           {
@@ -1365,7 +1365,7 @@
         "name": "Copilot",
         "status": "operational",
         "created_at": "2022-06-21T16:04:33.017Z",
-        "updated_at": "2026-02-23T15:59:59.713Z",
+        "updated_at": "2026-02-27T23:49:05.390Z",
         "position": 11,
         "description": null,
         "showcase": true,
@@ -1452,7 +1452,7 @@
     "name": "Incident with Copilot GPT-5.1-Codex",
     "status": "resolved",
     "created_at": "2026-02-20T10:02:19.243Z",
-    "updated_at": "2026-02-20T11:41:39.507Z",
+    "updated_at": "2026-03-03T15:33:34.812Z",
     "monitoring_at": null,
     "resolved_at": "2026-02-20T11:41:39.490Z",
     "impact": "minor",
@@ -1463,10 +1463,10 @@
       {
         "id": "2ryzxf0nw06v",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On February 20, 2026, between 07:30 UTC and 11:21 UTC, the Copilot service experienced a degradation of the GPT 5.1 Codex model. During this time period, users encountered a 4.5% error rate when using this model. No other models were impacted.<br />The issue was resolved by a mitigation put in place by the external model provider. GitHub is working with the external model provider to further improve the resiliency of the service to prevent similar incidents in the future.",
         "incident_id": "8qvx6hqk3nz0",
         "created_at": "2026-02-20T11:41:39.490Z",
-        "updated_at": "2026-02-20T11:41:39.490Z",
+        "updated_at": "2026-03-03T15:33:34.808Z",
         "display_at": "2026-02-20T11:41:39.490Z",
         "affected_components": [
           {
@@ -1567,7 +1567,7 @@
         "name": "Copilot",
         "status": "operational",
         "created_at": "2022-06-21T16:04:33.017Z",
-        "updated_at": "2026-02-20T11:41:39.457Z",
+        "updated_at": "2026-02-27T23:49:05.390Z",
         "position": 11,
         "description": null,
         "showcase": true,
