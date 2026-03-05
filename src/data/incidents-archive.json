@@ -1,5 +1,187 @@
 [
   {
+    "id": "nlmpksjb2ll7",
+    "name": "Disruption with some GitHub services",
+    "status": "resolved",
+    "created_at": "2026-03-05T01:13:44.623Z",
+    "updated_at": "2026-03-05T01:30:37.691Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-03-05T01:30:37.676Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/mmwhwllsbr9b",
+    "started_at": "2026-03-05T01:13:44.617Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "7wf9lp5xpyzw",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "nlmpksjb2ll7",
+        "created_at": "2026-03-05T01:30:37.676Z",
+        "updated_at": "2026-03-05T01:30:37.676Z",
+        "display_at": "2026-03-05T01:30:37.676Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "y8m5y4dwzhvk",
+        "status": "investigating",
+        "body": "Copilot coding agent mission control is fully restored. Tasks are now listed as expected.",
+        "incident_id": "nlmpksjb2ll7",
+        "created_at": "2026-03-05T01:30:17.228Z",
+        "updated_at": "2026-03-05T01:30:17.228Z",
+        "display_at": "2026-03-05T01:30:17.228Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "5bnfrsk0m249",
+        "status": "investigating",
+        "body": "Users were temporarily unable to see tasks listed in mission control surfaces. The ability to submit new tasks, view existing tasks via direct link, or manage tasks was unaffected throughout. A revert is currently being deployed and we are seeing recovery.",
+        "incident_id": "nlmpksjb2ll7",
+        "created_at": "2026-03-05T01:21:49.743Z",
+        "updated_at": "2026-03-05T01:21:49.743Z",
+        "display_at": "2026-03-05T01:21:49.743Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "793j4s9mr8xw",
+        "status": "investigating",
+        "body": "We are investigating reports of impacted performance for some GitHub services.",
+        "incident_id": "nlmpksjb2ll7",
+        "created_at": "2026-03-05T01:13:44.655Z",
+        "updated_at": "2026-03-05T01:13:44.655Z",
+        "display_at": "2026-03-05T01:13:44.655Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
+    "id": "t2p9yhsww5lc",
+    "name": "Some OpenAI models degraded in Copilot",
+    "status": "resolved",
+    "created_at": "2026-03-05T00:47:42.323Z",
+    "updated_at": "2026-03-05T01:13:31.675Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-03-05T01:13:31.659Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/ynz3ctryhr3g",
+    "started_at": "2026-03-05T00:47:42.313Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "jxv1t9l200m7",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "t2p9yhsww5lc",
+        "created_at": "2026-03-05T01:13:31.659Z",
+        "updated_at": "2026-03-05T01:13:31.659Z",
+        "display_at": "2026-03-05T01:13:31.659Z",
+        "affected_components": [
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "partial_outage",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "h0mbdyydxcyw",
+        "status": "investigating",
+        "body": "The issues with our upstream model provider have been resolved, and gpt-5.3-codex is once again available in Copilot Chat and across IDE integrations. We will continue monitoring to ensure stability, but mitigation is complete.",
+        "incident_id": "t2p9yhsww5lc",
+        "created_at": "2026-03-05T01:13:17.292Z",
+        "updated_at": "2026-03-05T01:13:17.292Z",
+        "display_at": "2026-03-05T01:13:17.292Z",
+        "affected_components": [
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "vvyt4j4v272q",
+        "status": "investigating",
+        "body": "We are experiencing degraded availability for the gpt-5.3-codex model in Copilot Chat, VS Code and other Copilot products. This is due to an issue with an upstream model provider. We are working with them to resolve the issue.<br />",
+        "incident_id": "t2p9yhsww5lc",
+        "created_at": "2026-03-05T00:53:28.188Z",
+        "updated_at": "2026-03-05T00:53:28.188Z",
+        "display_at": "2026-03-05T00:53:28.188Z",
+        "affected_components": [
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "ggmc92n2fcqs",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for Copilot",
+        "incident_id": "t2p9yhsww5lc",
+        "created_at": "2026-03-05T00:47:42.423Z",
+        "updated_at": "2026-03-05T00:47:42.423Z",
+        "display_at": "2026-03-05T00:47:42.423Z",
+        "affected_components": [
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "operational",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "pjmpxvq2cmr2",
+        "name": "Copilot",
+        "status": "operational",
+        "created_at": "2022-06-21T16:04:33.017Z",
+        "updated_at": "2026-03-05T01:13:31.627Z",
+        "position": 11,
+        "description": null,
+        "showcase": true,
+        "start_date": "2022-06-21",
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
     "id": "nglcmhr2kfb0",
     "name": "Claude Opus 4.6 Fast not appearing for some Copilot users",
     "status": "resolved",
@@ -1587,7 +1769,7 @@
     "name": "Delayed visibility of newly added issues on project boards",
     "status": "resolved",
     "created_at": "2026-03-02T23:10:28.140Z",
-    "updated_at": "2026-03-03T05:54:17.993Z",
+    "updated_at": "2026-03-04T20:46:37.732Z",
     "monitoring_at": null,
     "resolved_at": "2026-03-03T05:54:17.975Z",
     "impact": "minor",
@@ -1598,10 +1780,10 @@
       {
         "id": "hp7tj4151mgv",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "Between March 2, 21:42 UTC and March 3, 05:54 UTC project board updates, including adding new issues, PRs, and draft items to boards, were delayed from 30 minutes to over 2 hours, as a large backlog of messages accumulated in the Projects data denormalization pipeline.<br /><br />The incident was caused by an anomalously large event that required longer processing time than expected. Processing this message exceeded the Kafka consumer heartbeat timeout, triggering repeated consumer group rebalances. As a result, the consumer group was unable to make forward progress, creating head-of-line blocking that delayed processing of subsequent project board updates.<br /><br />We mitigated the issue by deploying a targeted fix that safely bypassed the offending message and allowed normal message consumption to resume. Consumer group stability recovered at 04:10 UTC, after which the backlog began draining. All queued messages were fully processed by 05:53 UTC, returning project board updates to normal processing latency.<br /><br />We have identified several follow-up improvements to reduce the likelihood and impact of similar incidents in the future, including improved monitoring and alerting, as well as introducing limits for unusually large project events.",
         "incident_id": "0yjbtp1d2cpc",
         "created_at": "2026-03-03T05:54:17.975Z",
-        "updated_at": "2026-03-03T05:54:17.975Z",
+        "updated_at": "2026-03-04T20:46:37.727Z",
         "display_at": "2026-03-03T05:54:17.975Z",
         "affected_components": [
           {
@@ -1855,7 +2037,7 @@
         "name": "Issues",
         "status": "operational",
         "created_at": "2017-01-31T20:01:46.638Z",
-        "updated_at": "2026-03-03T05:54:17.942Z",
+        "updated_at": "2026-03-03T19:27:22.966Z",
         "position": 5,
         "description": "Requests for Issues on GitHub.com",
         "showcase": true,
@@ -1873,7 +2055,7 @@
     "name": "Incident with Pull Requests /pulls",
     "status": "resolved",
     "created_at": "2026-03-02T19:11:22.749Z",
-    "updated_at": "2026-03-02T22:04:27.502Z",
+    "updated_at": "2026-03-05T00:04:22.697Z",
     "monitoring_at": null,
     "resolved_at": "2026-03-02T22:04:27.487Z",
     "impact": "minor",
@@ -1884,10 +2066,10 @@
       {
         "id": "ssb4gylw79qs",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On March 2nd, 2026, between 7:10 UTC and 22:04 UTC the pull requests service was degraded. Users navigating between tabs on the pull requests dashboard were met with 404 errors or blank pages.<br /><br />This was due to a configuration change deployed on February 27th at 11:03 PM UTC. We mitigated the incident by reverting the change.<br /><br />We’re working to improve monitoring for the page to automatically detect and alert us to routing failures.",
         "incident_id": "vhpmx9vc93m0",
         "created_at": "2026-03-02T22:04:27.487Z",
-        "updated_at": "2026-03-02T22:04:27.487Z",
+        "updated_at": "2026-03-05T00:04:22.693Z",
         "display_at": "2026-03-02T22:04:27.487Z",
         "affected_components": [
           {
@@ -2008,7 +2190,7 @@
         "name": "Pull Requests",
         "status": "operational",
         "created_at": "2020-09-02T15:39:06.329Z",
-        "updated_at": "2026-03-02T22:04:27.456Z",
+        "updated_at": "2026-03-03T19:31:41.878Z",
         "position": 6,
         "description": "Requests for Pull Requests on GitHub.com",
         "showcase": true,
