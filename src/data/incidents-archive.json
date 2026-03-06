@@ -1,17 +1,242 @@
 [
   {
+    "id": "g9j4tmfqdd09",
+    "name": "Actions is experiencing degraded availability",
+    "status": "resolved",
+    "created_at": "2026-03-05T22:53:42.829Z",
+    "updated_at": "2026-03-05T23:55:20.084Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-03-05T23:55:20.066Z",
+    "impact": "major",
+    "shortlink": "https://stspg.io/293glf6p6rh8",
+    "started_at": "2026-03-05T22:53:42.821Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "m6zysnbs7hpd",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T23:55:20.066Z",
+        "updated_at": "2026-03-05T23:55:20.066Z",
+        "display_at": "2026-03-05T23:55:20.066Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "partial_outage",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "21jrb2vgpw2y",
+        "status": "investigating",
+        "body": "We are close to full recovery. Actions and dependent services should be functioning normally now.",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T23:40:20.842Z",
+        "updated_at": "2026-03-05T23:40:20.842Z",
+        "display_at": "2026-03-05T23:40:20.842Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "h2djkjsjmxhq",
+        "status": "investigating",
+        "body": "Actions is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T23:37:57.054Z",
+        "updated_at": "2026-03-05T23:37:57.054Z",
+        "display_at": "2026-03-05T23:37:57.054Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "major_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "zdgrvs89b576",
+        "status": "investigating",
+        "body": "Actions and dependent services, including Pages, are recovering.",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T23:15:20.866Z",
+        "updated_at": "2026-03-05T23:15:20.866Z",
+        "display_at": "2026-03-05T23:15:20.866Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "major_outage",
+            "new_status": "major_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "m7t85z84k6mg",
+        "status": "investigating",
+        "body": "We applied a mitigation and we should see a recovery soon.",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T23:00:55.946Z",
+        "updated_at": "2026-03-05T23:00:55.946Z",
+        "display_at": "2026-03-05T23:00:55.946Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "major_outage",
+            "new_status": "major_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "v2q6gy1myzsr",
+        "status": "investigating",
+        "body": "Actions is experiencing degraded availability. We are continuing to investigate.",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T22:54:35.815Z",
+        "updated_at": "2026-03-05T22:54:35.815Z",
+        "display_at": "2026-03-05T22:54:35.815Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "partial_outage",
+            "new_status": "major_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "dqyy3g3xpk18",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for Actions",
+        "incident_id": "g9j4tmfqdd09",
+        "created_at": "2026-03-05T22:53:42.906Z",
+        "updated_at": "2026-03-05T22:53:42.906Z",
+        "display_at": "2026-03-05T22:53:42.906Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "br0l2tvcx85d",
+        "name": "Actions",
+        "status": "operational",
+        "created_at": "2019-11-13T18:02:19.432Z",
+        "updated_at": "2026-03-05T23:55:20.033Z",
+        "position": 7,
+        "description": "Workflows, Compute and Orchestration for GitHub Actions",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
     "id": "g5gnt5l5hf56",
     "name": "Multiple services are affected, service degradation",
-    "status": "investigating",
+    "status": "resolved",
     "created_at": "2026-03-05T16:35:32.421Z",
-    "updated_at": "2026-03-05T19:05:24.225Z",
+    "updated_at": "2026-03-05T19:30:54.909Z",
     "monitoring_at": null,
-    "resolved_at": null,
+    "resolved_at": "2026-03-05T19:30:54.893Z",
     "impact": "major",
     "shortlink": "https://stspg.io/7b52c82jrq42",
     "started_at": "2026-03-05T16:35:32.412Z",
     "page_id": "kctbh9vrtdwd",
     "incident_updates": [
+      {
+        "id": "mq2fw7l2pk6b",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "g5gnt5l5hf56",
+        "created_at": "2026-03-05T19:30:54.893Z",
+        "updated_at": "2026-03-05T19:30:54.893Z",
+        "display_at": "2026-03-05T19:30:54.893Z",
+        "affected_components": [
+          {
+            "code": "4230lsnqdsld",
+            "name": "Webhooks",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "nwjbfklqj32y",
+        "status": "investigating",
+        "body": "Webhooks is operating normally.",
+        "incident_id": "g5gnt5l5hf56",
+        "created_at": "2026-03-05T19:17:48.096Z",
+        "updated_at": "2026-03-05T19:17:48.096Z",
+        "display_at": "2026-03-05T19:17:48.096Z",
+        "affected_components": [
+          {
+            "code": "4230lsnqdsld",
+            "name": "Webhooks",
+            "old_status": "major_outage",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
       {
         "id": "my7rb7l2k8fm",
         "status": "investigating",
@@ -239,9 +464,9 @@
       {
         "id": "4230lsnqdsld",
         "name": "Webhooks",
-        "status": "major_outage",
+        "status": "operational",
         "created_at": "2019-11-13T18:00:24.256Z",
-        "updated_at": "2026-03-05T16:47:11.178Z",
+        "updated_at": "2026-03-05T19:17:48.066Z",
         "position": 2,
         "description": "Real time HTTP callbacks of user-generated and system events",
         "showcase": true,
@@ -256,7 +481,7 @@
         "name": "Actions",
         "status": "operational",
         "created_at": "2019-11-13T18:02:19.432Z",
-        "updated_at": "2026-03-05T19:05:24.188Z",
+        "updated_at": "2026-03-05T23:55:20.033Z",
         "position": 7,
         "description": "Workflows, Compute and Orchestration for GitHub Actions",
         "showcase": true,
@@ -549,7 +774,7 @@
     "name": "Incident with all GitHub services",
     "status": "resolved",
     "created_at": "2026-03-03T18:59:49.439Z",
-    "updated_at": "2026-03-04T11:31:54.205Z",
+    "updated_at": "2026-03-06T00:31:53.818Z",
     "monitoring_at": null,
     "resolved_at": "2026-03-03T20:09:16.863Z",
     "impact": "major",
@@ -560,10 +785,10 @@
       {
         "id": "4tpmb29bfbv5",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On March 3, 2026, between 18:46 UTC and 20:09 UTC, GitHub experienced a period of degraded availability impacting GitHub.com, the GitHub API, GitHub Actions, Git operations, GitHub Copilot, and other dependent services. At the peak of the incident, GitHub.com request failures reached approximately 40%. During the same period, approximately 43% of GitHub API requests failed. Git operations over HTTP had an error rate of approximately 6%, while SSH was not impacted. GitHub Copilot requests had an error rate of approximately 21%. GitHub Actions experienced less than 1% impact.  <br /><br />This incident shared the same underlying cause as an incident in early February where we saw a large volume of writes to the user settings caching mechanism. While deploying a change to reduce the burden of these writes, a bug caused every user’s cache to expire, get recalculated, and get rewritten. The increased load caused replication delays that cascaded down to all affected services. We mitigated this issue by immediately rolling back the faulty deployment. <br /><br />We understand these incidents disrupted the workflows of developers. While we have made substantial, long-term investments in how GitHub is built and operated to improve resilience, we acknowledge we have more work to do. Getting there requires deep architectural work that is already underway, as well as urgent, targeted improvements. We are taking the following immediate steps: <br /><br />- We have added a killswitch and improved monitoring to the caching mechanism to ensure we are notified before there is user impact and can respond swiftly. <br />- We are moving the cache mechanism to a dedicated host, ensuring that any future issues will solely affect services that rely on it.",
         "incident_id": "n07yy1bk6kc4",
         "created_at": "2026-03-03T20:09:16.863Z",
-        "updated_at": "2026-03-03T20:09:16.863Z",
+        "updated_at": "2026-03-06T00:31:53.812Z",
         "display_at": "2026-03-03T20:09:16.863Z",
         "affected_components": [
           {
@@ -1931,7 +2156,7 @@
         "name": "Webhooks",
         "status": "operational",
         "created_at": "2019-11-13T18:00:24.256Z",
-        "updated_at": "2026-03-03T19:25:21.587Z",
+        "updated_at": "2026-03-05T19:17:48.066Z",
         "position": 2,
         "description": "Real time HTTP callbacks of user-generated and system events",
         "showcase": true,
@@ -1991,7 +2216,7 @@
         "name": "Actions",
         "status": "operational",
         "created_at": "2019-11-13T18:02:19.432Z",
-        "updated_at": "2026-03-03T19:55:04.563Z",
+        "updated_at": "2026-03-05T23:55:20.033Z",
         "position": 7,
         "description": "Workflows, Compute and Orchestration for GitHub Actions",
         "showcase": true,
@@ -2021,7 +2246,7 @@
         "name": "Copilot",
         "status": "operational",
         "created_at": "2022-06-21T16:04:33.017Z",
-        "updated_at": "2026-03-03T21:11:30.885Z",
+        "updated_at": "2026-03-05T01:13:31.627Z",
         "position": 11,
         "description": null,
         "showcase": true,
@@ -2706,7 +2931,7 @@
     "name": "High latency on webhook API requests",
     "status": "resolved",
     "created_at": "2026-02-27T00:01:45.135Z",
-    "updated_at": "2026-02-27T00:04:01.046Z",
+    "updated_at": "2026-03-05T21:17:06.202Z",
     "monitoring_at": null,
     "resolved_at": "2026-02-27T00:04:01.026Z",
     "impact": "minor",
@@ -2717,10 +2942,10 @@
       {
         "id": "112jvvkgc60p",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "Between February 26, 2026 UTC and February 27, 2026 UTC, customers hitting the webhooks delivery API may have experienced higher latency or failed requests. During the impact window, 0.82% of requests took longer than 3s and 0.004% resulted in a 500 error response.<br /><br />Our monitors caught the impact on the individual backing data source, and we were able to attribute the degradation to a noisy neighbor effect due requests to a specific webhook generating excessive load on the API. The incident was mitigated once traffic from the specific hook decreased.<br /><br />We have since added a rate limiter for this webhooks API to prevent similar spikes in usage impacting others and will further refine the rate limits for other webhook API routes to help prevent similar occurrences in the future.",
         "incident_id": "vd3xqfq36rgm",
         "created_at": "2026-02-27T00:04:01.026Z",
-        "updated_at": "2026-02-27T00:04:01.026Z",
+        "updated_at": "2026-03-05T21:17:06.198Z",
         "display_at": "2026-02-27T00:04:01.026Z",
         "affected_components": [
           {
@@ -2774,7 +2999,7 @@
         "name": "Webhooks",
         "status": "operational",
         "created_at": "2019-11-13T18:00:24.256Z",
-        "updated_at": "2026-02-27T00:04:00.988Z",
+        "updated_at": "2026-03-05T19:17:48.066Z",
         "position": 2,
         "description": "Real time HTTP callbacks of user-generated and system events",
         "showcase": true,
