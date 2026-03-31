@@ -1,5 +1,286 @@
 [
   {
+    "id": "ml7wplmxbt5l",
+    "name": "Incident with Pull Requests: High percentage of 500s",
+    "status": "investigating",
+    "created_at": "2026-03-31T15:05:39.330Z",
+    "updated_at": "2026-03-31T18:42:04.967Z",
+    "monitoring_at": null,
+    "resolved_at": null,
+    "impact": "minor",
+    "shortlink": "https://stspg.io/lvkqg4h1rntp",
+    "started_at": "2026-03-31T15:05:39.322Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "xmrkfn1kbggh",
+        "status": "investigating",
+        "body": "We continue to experience elevated error rates affecting Pull Requests. An earlier fix resolved one component of the issue, but some users may still encounter intermittent timeouts when viewing or interacting with pull requests. Our teams are actively investigating the remaining causes.",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T18:42:04.963Z",
+        "updated_at": "2026-03-31T18:42:04.963Z",
+        "display_at": "2026-03-31T18:42:04.963Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "3gwn0zk0qfxp",
+        "status": "investigating",
+        "body": "We identified an issue causing increased errors when accessing Pull Requests. The mitigation is being applied across our infrastructure and we will continue to provide updates as the mitigation rolls out.",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T17:16:32.971Z",
+        "updated_at": "2026-03-31T17:16:32.971Z",
+        "display_at": "2026-03-31T17:16:32.971Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "r5wljgn8s1fl",
+        "status": "investigating",
+        "body": "We are seeing recovery in latency and timeouts of requests related to pull requests, even though 500s are still elevated. While we are continuing to investigate, we are applying a mitigation and expect further recovery after it is applied.",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T16:35:22.206Z",
+        "updated_at": "2026-03-31T16:35:22.206Z",
+        "display_at": "2026-03-31T16:35:22.206Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "ndjz3x8zqcfs",
+        "status": "investigating",
+        "body": "We are continuing to investigate increased 500 errors affecting GitHub services. You may experience intermittent failures when using Pull Requests and other features. We are actively working to identify and resolve the underlying cause.",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T16:15:37.558Z",
+        "updated_at": "2026-03-31T16:15:37.558Z",
+        "display_at": "2026-03-31T16:15:37.558Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "clw0hk60c7xq",
+        "status": "investigating",
+        "body": "We are investigating increased 500 errors affecting GitHub services. You may experience intermittent failures when using Pull Requests and other features. We are actively working to identify and resolve the underlying cause.",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T15:39:48.631Z",
+        "updated_at": "2026-03-31T15:39:48.631Z",
+        "display_at": "2026-03-31T15:39:48.631Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "rdd0q45c16sc",
+        "status": "investigating",
+        "body": "We are seeing a higher than average number of 500s due to timeouts across GitHub services. We have a potential mitigation in flight and are continuing to investigate.",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T15:06:48.012Z",
+        "updated_at": "2026-03-31T15:06:48.012Z",
+        "display_at": "2026-03-31T15:06:48.012Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "zmyz2f63rm5l",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for Pull Requests",
+        "incident_id": "ml7wplmxbt5l",
+        "created_at": "2026-03-31T15:05:39.448Z",
+        "updated_at": "2026-03-31T15:05:39.448Z",
+        "display_at": "2026-03-31T15:05:39.448Z",
+        "affected_components": [
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "hhtssxt0f5v2",
+        "name": "Pull Requests",
+        "status": "partial_outage",
+        "created_at": "2020-09-02T15:39:06.329Z",
+        "updated_at": "2026-03-31T15:05:39.370Z",
+        "position": 6,
+        "description": "Requests for Pull Requests on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
+    "id": "2yb2tvwny50l",
+    "name": "Issues with metered billing report generation",
+    "status": "resolved",
+    "created_at": "2026-03-31T13:47:46.091Z",
+    "updated_at": "2026-03-31T15:10:22.167Z",
+    "monitoring_at": "2026-03-31T15:01:43.931Z",
+    "resolved_at": "2026-03-31T15:10:22.152Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/4pyzfm2phb3b",
+    "started_at": "2026-03-31T13:47:46.083Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "k4p6jgypqlcl",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T15:10:22.152Z",
+        "updated_at": "2026-03-31T15:10:22.152Z",
+        "display_at": "2026-03-31T15:10:22.152Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "y1q1ymgy8bz1",
+        "status": "monitoring",
+        "body": "The degradation has been mitigated. We are monitoring to ensure stability.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T15:01:43.931Z",
+        "updated_at": "2026-03-31T15:01:43.931Z",
+        "display_at": "2026-03-31T15:01:43.931Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "n2s72jfgjhz7",
+        "status": "investigating",
+        "body": "We have applied mitigations to a data store related to billing reports, and are seeing partial recovery to billing report generation. We continue to monitor for full recovery.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T14:59:06.066Z",
+        "updated_at": "2026-03-31T14:59:06.066Z",
+        "display_at": "2026-03-31T14:59:06.066Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "6k1qx136hdrd",
+        "status": "investigating",
+        "body": "We are seeing a high number of 500s due to timeouts across GitHub services. We are redeploying some of our core services and we expect that this allow us to recover.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T14:56:22.695Z",
+        "updated_at": "2026-03-31T14:56:22.695Z",
+        "display_at": "2026-03-31T14:56:22.695Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "z8938n1xwg41",
+        "status": "investigating",
+        "body": "We're continuing to see high failure rates on billing report generation, and are working on mitigations for a data store related to billing reports.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T14:39:15.197Z",
+        "updated_at": "2026-03-31T14:39:15.197Z",
+        "display_at": "2026-03-31T14:39:15.197Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "d46hydhg38qc",
+        "status": "investigating",
+        "body": "We're seeing issues related to metered billing reports, intermittently affecting metered usage graphs and reports on the billing page. We have identified an issue with a data store, and are working on mitigations.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T13:56:41.715Z",
+        "updated_at": "2026-03-31T13:56:41.715Z",
+        "display_at": "2026-03-31T13:56:41.715Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "5cywdg5ng2fs",
+        "status": "investigating",
+        "body": "We are investigating reports of impacted performance for some GitHub services.",
+        "incident_id": "2yb2tvwny50l",
+        "created_at": "2026-03-31T13:47:46.135Z",
+        "updated_at": "2026-03-31T13:47:46.135Z",
+        "display_at": "2026-03-31T13:47:46.135Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "c3ctbhdcvcc8",
     "name": "Elevated delays in Actions workflow runs and Pull Request status updates",
     "status": "resolved",
@@ -456,7 +737,7 @@
     "name": "Teams Github Notifications App is down",
     "status": "resolved",
     "created_at": "2026-03-24T16:59:27.656Z",
-    "updated_at": "2026-03-24T19:51:16.142Z",
+    "updated_at": "2026-03-31T18:23:31.970Z",
     "monitoring_at": null,
     "resolved_at": "2026-03-24T19:51:16.124Z",
     "impact": "major",
@@ -467,10 +748,10 @@
       {
         "id": "dnzzvz2pcbn8",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On March 24, 2026, between 15:57 UTC and 19:51 UTC, the Microsoft Teams Integration and Teams Copilot Integration services were degraded and unable to deliver GitHub event notifications to Microsoft Teams. On average, the error rate was 37.4% and peaked at 90.1% of requests to the service -- approximately 19% of all integration installs failed to receive GitHub-to-Teams notifications in this time period.<br /><br />This was due to an outage at one of our upstream dependencies, which caused HTTP 500 errors and connection resets for our Teams integration.<br /><br />We coordinated with the relevant service teams, and the issue was resolved at 19:51 UTC when the upstream incident was mitigated.<br /><br />We are working to update observability and runbooks to reduce time to mitigation for issues like this in the future.",
         "incident_id": "z7gsp4wd05c5",
         "created_at": "2026-03-24T19:51:16.124Z",
-        "updated_at": "2026-03-24T19:51:16.124Z",
+        "updated_at": "2026-03-31T18:23:31.964Z",
         "display_at": "2026-03-24T19:51:16.124Z",
         "affected_components": null,
         "deliver_notifications": true,
@@ -663,7 +944,7 @@
     "name": "Git operations for users in the west coast are experiencing an increase in latency",
     "status": "resolved",
     "created_at": "2026-03-19T16:25:04.692Z",
-    "updated_at": "2026-03-20T00:05:15.588Z",
+    "updated_at": "2026-03-31T17:01:09.320Z",
     "monitoring_at": null,
     "resolved_at": "2026-03-20T00:05:15.572Z",
     "impact": "minor",
@@ -674,10 +955,10 @@
       {
         "id": "y8bmghzdtbd3",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On March 19, 2026 between 16:10 UTC and 00:05 UTC (March 20), Git operations (clone, fetch, push) from the US west coast experienced elevated latency and degraded throughput. Users reported clone speeds dropping from typical speeds to under 1 MiB/s in extreme cases. The root cause was network transport link saturation at our Seattle edge site, where a fiber cut affecting our backbone transport resulted in saturation and packet loss. We had a planned scale-up in progress for the site that was accelerated to resolve the backbone capacity pressure. We also brought online additional edge capacity in a cloud region and redirected some users there. Current scale with the upgraded network capacity is sufficient to prevent reoccurrence, as we upgraded from 800Gbps to 3.2Tbps total capacity on this path. We will continue to monitor network health and respond to any further issues.",
         "incident_id": "p08cncy05m4k",
         "created_at": "2026-03-20T00:05:15.572Z",
-        "updated_at": "2026-03-20T00:05:15.572Z",
+        "updated_at": "2026-03-31T17:01:09.314Z",
         "display_at": "2026-03-20T00:05:15.572Z",
         "affected_components": [
           {
