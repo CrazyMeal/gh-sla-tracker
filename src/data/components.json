@@ -77,9 +77,9 @@
   {
     "id": "hhtssxt0f5v2",
     "name": "Pull Requests",
-    "status": "partial_outage",
+    "status": "operational",
     "created_at": "2020-09-02T15:39:06.329Z",
-    "updated_at": "2026-03-31T15:05:39.370Z",
+    "updated_at": "2026-03-31T21:16:01.674Z",
     "position": 6,
     "description": "Requests for Pull Requests on GitHub.com",
     "showcase": true,
