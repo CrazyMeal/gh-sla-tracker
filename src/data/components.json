@@ -124,7 +124,7 @@
     "name": "Pages",
     "status": "operational",
     "created_at": "2017-01-31T20:04:33.923Z",
-    "updated_at": "2026-02-14T00:17:26.709Z",
+    "updated_at": "2026-04-13T20:30:10.916Z",
     "position": 9,
     "description": "Frontend application and API servers for Pages builds",
     "showcase": true,
