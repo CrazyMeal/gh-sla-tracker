@@ -146,7 +146,7 @@
     "name": "Incident with Pull Requests",
     "status": "resolved",
     "created_at": "2026-05-06T15:25:23.789Z",
-    "updated_at": "2026-05-06T19:04:36.050Z",
+    "updated_at": "2026-05-12T13:39:55.428Z",
     "monitoring_at": null,
     "resolved_at": "2026-05-06T19:04:36.034Z",
     "impact": "critical",
@@ -157,10 +157,10 @@
       {
         "id": "dp56j5yr25dy",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On May 6, 2026 between 15:12 and 19:02 UTC creation of new pull request review threads on GitHub.com failed.  This included new line comments and file comments on pull requests.  Existing PRs and previously created comments were unaffected.  <br /><br />This incident was caused by a 32-bit integer key reaching its maximum value in a Vitess lookup table used during PR thread creation. The primary table had been migrated to a 64-bit integer key but the Vitesse lookup table remained 32-bit. Once the values in the primary table passed the available 32-bit ID space in the lookup table, attempts to create new review threads began failing, resulting in near 100% failure rate for new thread creation requests. We mitigated the issue by updating the impacted lookup table definitions across all shards to use 64-bit integer column types, increasing the available ID range and restoring normal operation.  Service was fully restored once the schema changes competed globally. <br /><br />To help prevent similar incidents, we are expanding existing monitoring of database columns to include Vitess lookup tables to notify in advance of any tables that is approaching a column size limit. This work is intended to provide earlier detection of columns approaching size limits before customer impact occurs.",
         "incident_id": "f5pb5d5mr9yh",
         "created_at": "2026-05-06T19:04:36.034Z",
-        "updated_at": "2026-05-06T19:04:36.034Z",
+        "updated_at": "2026-05-12T13:39:55.423Z",
         "display_at": "2026-05-06T19:04:36.034Z",
         "affected_components": [
           {
