@@ -921,6 +921,36 @@
     "reminder_intervals": null
   },
   {
+    "id": "ykb44v068g8v",
+    "name": "Incident with Copilot",
+    "status": "resolved",
+    "created_at": "2026-05-19T05:30:00.000Z",
+    "updated_at": "2026-05-28T14:40:17.458Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-05-19T05:30:00.000Z",
+    "impact": "none",
+    "shortlink": "https://stspg.io/933s0plq1vyv",
+    "started_at": "2026-05-19T05:30:00.000Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "xqwbtxj104zs",
+        "status": "resolved",
+        "body": "On May 19, 2026, between 05:30 UTC and 14:50 UTC, some Copilot users experienced failures when using code completions, chat sessions, and cloud agent sessions. At peak impact, approximately 13% of Copilot API requests failed, and approximately 24% of remote sessions failed to initialize. A partial mitigation at 08:16 UTC reduced the Copilot API error rate to approximately 0.3%, but intermittent failures persisted until a full fix was deployed at 14:15 UTC and recovery was verified by 14:50 UTC.\n\nThe incident was caused by rate limits being exceeded on a shared infrastructure component. A recently enabled feature increased call volume to this component, and the combined load exceeded capacity limits as traffic increased during business hours.\n\nWe mitigated the incident by deploying a caching layer to reduce load on shared infrastructure. To prevent recurrence, we are separating rate limit scopes between services, adding monitoring for internal dependency rate limiting, and reducing redundant calls.",
+        "incident_id": "ykb44v068g8v",
+        "created_at": "2026-05-28T12:40:00.317Z",
+        "updated_at": "2026-05-28T14:40:17.400Z",
+        "display_at": "2026-05-19T05:30:00.000Z",
+        "affected_components": null,
+        "deliver_notifications": false,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "ctf7nxpq5jzn",
     "name": "Actions is experiencing degraded availability",
     "status": "resolved",
