@@ -1,5 +1,87 @@
 [
   {
+    "id": "5wdgxw2rvbt3",
+    "name": "Delays with Code Scanning and Billing",
+    "status": "investigating",
+    "created_at": "2026-06-01T15:17:09.709Z",
+    "updated_at": "2026-06-01T17:28:20.216Z",
+    "monitoring_at": null,
+    "resolved_at": null,
+    "impact": "minor",
+    "shortlink": "https://stspg.io/ct11xsjs29k7",
+    "started_at": "2026-06-01T15:17:09.698Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "3t8hxjbz0gvb",
+        "status": "investigating",
+        "body": "We are continuing to investigate delayed billing updates, on GitHub.com.   We have applied multiple mitigations and are seeing some signs of improvement, and are continuing to work to improve the processing rate.  We will continue to keep users updated on progress towards mitigation.<br /><br />GitHub Enterprise Cloud with Data Residency is not impacted.",
+        "incident_id": "5wdgxw2rvbt3",
+        "created_at": "2026-06-01T17:28:20.209Z",
+        "updated_at": "2026-06-01T17:28:20.209Z",
+        "display_at": "2026-06-01T17:28:20.209Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "95k9vnbmhy4x",
+        "status": "investigating",
+        "body": "We are investigating reports of delayed billing updates, on GitHub.com. We are continuing to investigate delays in our job processing architecture. We are attempting to mitigate at the infrastructure level.  Code scanning runs and notifications have recovered.  We will continue to keep users updated on progress towards mitigation.<br /><br />GitHub Enterprise Cloud with Data Residency is not impacted.",
+        "incident_id": "5wdgxw2rvbt3",
+        "created_at": "2026-06-01T16:42:27.992Z",
+        "updated_at": "2026-06-01T16:42:27.992Z",
+        "display_at": "2026-06-01T16:42:27.992Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "v3p4z53244qx",
+        "status": "investigating",
+        "body": "We are investigating reports of delayed code scanning runs, billing updates, email and mobile push notifications. We are investigating delays in our job processing architecture. We will continue to keep users updated on progress towards mitigation.",
+        "incident_id": "5wdgxw2rvbt3",
+        "created_at": "2026-06-01T15:43:07.499Z",
+        "updated_at": "2026-06-01T15:43:07.499Z",
+        "display_at": "2026-06-01T15:43:07.499Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "qhkdbjgw4n21",
+        "status": "investigating",
+        "body": "We are investigating reports of delayed code scanning runs and delayed billing updates.  We will continue to keep users updated on progress towards mitigation.",
+        "incident_id": "5wdgxw2rvbt3",
+        "created_at": "2026-06-01T15:17:27.994Z",
+        "updated_at": "2026-06-01T15:17:27.994Z",
+        "display_at": "2026-06-01T15:17:27.994Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "9cqjry0g0m7k",
+        "status": "investigating",
+        "body": "We are investigating reports of impacted performance for some GitHub services.",
+        "incident_id": "5wdgxw2rvbt3",
+        "created_at": "2026-06-01T15:17:09.775Z",
+        "updated_at": "2026-06-01T15:17:09.775Z",
+        "display_at": "2026-06-01T15:17:09.775Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "11n51rf8tf27",
     "name": "Elevated error rates across multiple services",
     "status": "resolved",
@@ -445,7 +527,7 @@
     "name": "Disruption with some GitHub services",
     "status": "resolved",
     "created_at": "2026-05-26T15:44:22.358Z",
-    "updated_at": "2026-05-26T16:35:57.781Z",
+    "updated_at": "2026-06-01T14:41:51.225Z",
     "monitoring_at": "2026-05-26T16:24:11.858Z",
     "resolved_at": "2026-05-26T16:35:57.736Z",
     "impact": "minor",
@@ -456,10 +538,10 @@
       {
         "id": "ggms04td2n7w",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On May 26, 2026, between 15:10 UTC and 16:35 UTC the Copilot service was degraded and many models were no longer available for use. On average, the error rate was ~5% and peaked at 11% of requests to the service. This was due to a change that introduced a configuration mismatch in HMAC signing credentials which caused the list of available models to be truncated. This was mitigated by rolling back the change. This rollback was complete by 15:34 UTC though users continued to see impact until cache TTLs expired. <br /><br />We are working to improve our monitoring and error handling to reduce time to detection and better experience for issues like this in the future.",
         "incident_id": "xflkh26pm7vv",
         "created_at": "2026-05-26T16:35:57.736Z",
-        "updated_at": "2026-05-26T16:35:57.736Z",
+        "updated_at": "2026-06-01T14:41:51.218Z",
         "display_at": "2026-05-26T16:35:57.736Z",
         "affected_components": [
           {
@@ -533,7 +615,7 @@
         "name": "Copilot",
         "status": "operational",
         "created_at": "2022-06-21T16:04:33.017Z",
-        "updated_at": "2026-05-26T16:24:11.786Z",
+        "updated_at": "2026-05-28T20:41:58.539Z",
         "position": 10,
         "description": null,
         "showcase": true,
