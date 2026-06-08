@@ -1,5 +1,382 @@
 [
   {
+    "id": "71hv2q6tk693",
+    "name": "Disruption with Claude Opus 4.7",
+    "status": "resolved",
+    "created_at": "2026-06-08T09:05:44.338Z",
+    "updated_at": "2026-06-08T10:03:32.723Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-06-08T10:03:32.680Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/6g6hjsmx2f2w",
+    "started_at": "2026-06-08T09:05:44.322Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "0rwfmm15v67f",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "71hv2q6tk693",
+        "created_at": "2026-06-08T10:03:32.680Z",
+        "updated_at": "2026-06-08T10:03:32.680Z",
+        "display_at": "2026-06-08T10:03:32.680Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "ngbxsj7qhm8n",
+        "status": "investigating",
+        "body": "We are experiencing degraded availability for the Claude Opus 4.7 model in Copilot Chat, VS Code and other Copilot products. This is due to an issue with an upstream model provider. We are working with them to resolve the issue, and starting to see recovery.<br />",
+        "incident_id": "71hv2q6tk693",
+        "created_at": "2026-06-08T09:49:32.476Z",
+        "updated_at": "2026-06-08T09:49:32.476Z",
+        "display_at": "2026-06-08T09:49:32.476Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "r0fv7w022g35",
+        "status": "investigating",
+        "body": "We are experiencing degraded availability for the Claude Opus 4.7 model in Copilot products and IDE surfaces. This is due to an issue with an upstream model provider. While we work with them to resolve the issue, we recommend choosing another model or selecting 'Auto' to continue using Copilot.",
+        "incident_id": "71hv2q6tk693",
+        "created_at": "2026-06-08T09:08:58.648Z",
+        "updated_at": "2026-06-08T09:08:58.648Z",
+        "display_at": "2026-06-08T09:08:58.648Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "tf8yjhpmh896",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for Copilot AI Model Providers",
+        "incident_id": "71hv2q6tk693",
+        "created_at": "2026-06-08T09:05:44.475Z",
+        "updated_at": "2026-06-08T09:05:44.475Z",
+        "display_at": "2026-06-08T09:05:44.475Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "cnnb39dkkk82",
+        "name": "Copilot AI Model Providers",
+        "status": "operational",
+        "created_at": "2026-04-17T12:33:08.827Z",
+        "updated_at": "2026-06-08T10:03:32.596Z",
+        "position": 12,
+        "description": null,
+        "showcase": true,
+        "start_date": "2026-04-17",
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
+    "id": "m7n7sm0sr1pz",
+    "name": "Pull Requests and Issues unavailable for signed-out users",
+    "status": "resolved",
+    "created_at": "2026-06-08T07:11:37.583Z",
+    "updated_at": "2026-06-08T08:36:22.661Z",
+    "monitoring_at": "2026-06-08T08:35:21.138Z",
+    "resolved_at": "2026-06-08T08:36:22.611Z",
+    "impact": "critical",
+    "shortlink": "https://stspg.io/hvhc1m3z7sf9",
+    "started_at": "2026-06-08T07:11:37.569Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "8d19qwplkdb8",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T08:36:22.611Z",
+        "updated_at": "2026-06-08T08:36:22.611Z",
+        "display_at": "2026-06-08T08:36:22.611Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "dtbmgy86fpt5",
+        "status": "monitoring",
+        "body": "The degradation affecting Actions, Issues and Pull Requests has been mitigated. We are monitoring to ensure stability.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T08:35:21.138Z",
+        "updated_at": "2026-06-08T08:35:21.138Z",
+        "display_at": "2026-06-08T08:35:21.138Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "q9h3wssx25fj",
+        "status": "investigating",
+        "body": "Actions is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T08:27:48.817Z",
+        "updated_at": "2026-06-08T08:27:48.817Z",
+        "display_at": "2026-06-08T08:27:48.817Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "1gmts1yw4yfz",
+        "status": "investigating",
+        "body": "Following investigation, we are seeing that impact is limited to unauthenticated users when accessing Pull Requests, Issues, or Actions. Our team continues to work towards mitigation with more updates to follow as we have them.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T08:13:25.865Z",
+        "updated_at": "2026-06-08T08:27:58.775Z",
+        "display_at": "2026-06-08T08:13:25.865Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "d8ck4kmblxch",
+        "status": "investigating",
+        "body": "Pull Requests is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T07:32:28.125Z",
+        "updated_at": "2026-06-08T07:32:28.125Z",
+        "display_at": "2026-06-08T07:32:28.125Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "9wlyflx6tnj6",
+        "status": "investigating",
+        "body": "Issues is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T07:31:22.575Z",
+        "updated_at": "2026-06-08T07:31:22.575Z",
+        "display_at": "2026-06-08T07:31:22.575Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "major_outage",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "73yp706r87st",
+        "status": "investigating",
+        "body": "Issues is experiencing degraded availability. We are continuing to investigate.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T07:14:01.045Z",
+        "updated_at": "2026-06-08T07:14:01.045Z",
+        "display_at": "2026-06-08T07:14:01.045Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "major_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "rt7p2t65wt38",
+        "status": "investigating",
+        "body": "We are investigating reports of impacted performance for some GitHub services.",
+        "incident_id": "m7n7sm0sr1pz",
+        "created_at": "2026-06-08T07:11:37.648Z",
+        "updated_at": "2026-06-08T07:11:37.648Z",
+        "display_at": "2026-06-08T07:11:37.648Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "kr09ddfgbfsf",
+        "name": "Issues",
+        "status": "operational",
+        "created_at": "2017-01-31T20:01:46.638Z",
+        "updated_at": "2026-06-08T08:35:21.008Z",
+        "position": 5,
+        "description": "Requests for Issues on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "hhtssxt0f5v2",
+        "name": "Pull Requests",
+        "status": "operational",
+        "created_at": "2020-09-02T15:39:06.329Z",
+        "updated_at": "2026-06-08T08:35:21.047Z",
+        "position": 6,
+        "description": "Requests for Pull Requests on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "br0l2tvcx85d",
+        "name": "Actions",
+        "status": "operational",
+        "created_at": "2019-11-13T18:02:19.432Z",
+        "updated_at": "2026-06-08T08:35:21.083Z",
+        "position": 7,
+        "description": "Workflows, Compute and Orchestration for GitHub Actions",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
     "id": "b0plzff6yl6f",
     "name": "Disruption with some GitHub services in the EU region",
     "status": "resolved",
