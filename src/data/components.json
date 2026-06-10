@@ -47,9 +47,9 @@
   {
     "id": "brv1bkgrwx7q",
     "name": "API Requests",
-    "status": "operational",
+    "status": "major_outage",
     "created_at": "2017-01-31T20:01:46.621Z",
-    "updated_at": "2026-05-27T13:16:53.945Z",
+    "updated_at": "2026-06-10T15:23:58.680Z",
     "position": 4,
     "description": "Requests for GitHub APIs",
     "showcase": true,
@@ -62,9 +62,9 @@
   {
     "id": "kr09ddfgbfsf",
     "name": "Issues",
-    "status": "operational",
+    "status": "degraded_performance",
     "created_at": "2017-01-31T20:01:46.638Z",
-    "updated_at": "2026-06-08T08:35:21.008Z",
+    "updated_at": "2026-06-10T15:27:00.352Z",
     "position": 5,
     "description": "Requests for Issues on GitHub.com",
     "showcase": true,
