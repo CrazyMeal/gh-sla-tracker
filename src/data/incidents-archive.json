@@ -1,5 +1,87 @@
 [
   {
+    "id": "5t81zk0vrk3z",
+    "name": "Disruption with Copilot next edit suggestions",
+    "status": "resolved",
+    "created_at": "2026-06-17T17:57:49.168Z",
+    "updated_at": "2026-06-17T19:28:16.691Z",
+    "monitoring_at": "2026-06-17T19:14:46.327Z",
+    "resolved_at": "2026-06-17T19:28:16.628Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/7tn8k5v6kzjj",
+    "started_at": "2026-06-17T17:57:49.155Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "1jjks4czhmn8",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "5t81zk0vrk3z",
+        "created_at": "2026-06-17T19:28:16.628Z",
+        "updated_at": "2026-06-17T19:28:16.628Z",
+        "display_at": "2026-06-17T19:28:16.628Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "rzm08y6chxv8",
+        "status": "monitoring",
+        "body": "The degradation has been mitigated. We are monitoring to ensure stability.",
+        "incident_id": "5t81zk0vrk3z",
+        "created_at": "2026-06-17T19:14:46.327Z",
+        "updated_at": "2026-06-17T19:14:46.327Z",
+        "display_at": "2026-06-17T19:14:46.327Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "4qgjh755c2fx",
+        "status": "investigating",
+        "body": "We have applied mitigation and are seeing recovery",
+        "incident_id": "5t81zk0vrk3z",
+        "created_at": "2026-06-17T19:09:47.843Z",
+        "updated_at": "2026-06-17T19:09:47.843Z",
+        "display_at": "2026-06-17T19:09:47.843Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "2y6908r4g1x3",
+        "status": "investigating",
+        "body": "We have identified a likely cause and are applying a mitigation",
+        "incident_id": "5t81zk0vrk3z",
+        "created_at": "2026-06-17T18:40:25.321Z",
+        "updated_at": "2026-06-17T18:40:25.321Z",
+        "display_at": "2026-06-17T18:40:25.321Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "brjnjky2kcns",
+        "status": "investigating",
+        "body": "We are investigating reports of impacted performance for some GitHub services.",
+        "incident_id": "5t81zk0vrk3z",
+        "created_at": "2026-06-17T17:57:49.252Z",
+        "updated_at": "2026-06-17T17:57:49.252Z",
+        "display_at": "2026-06-17T17:57:49.252Z",
+        "affected_components": null,
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "rfmjwng33vjf",
     "name": "Incident with Copilot Availability",
     "status": "resolved",
