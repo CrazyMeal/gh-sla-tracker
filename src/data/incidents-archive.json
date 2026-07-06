@@ -117,7 +117,7 @@
     "name": "Delays in copilot budget limits resets for some users",
     "status": "resolved",
     "created_at": "2026-07-01T10:51:33.331Z",
-    "updated_at": "2026-07-01T13:26:06.762Z",
+    "updated_at": "2026-07-06T18:56:24.630Z",
     "monitoring_at": "2026-07-01T13:04:56.607Z",
     "resolved_at": "2026-07-01T13:26:06.678Z",
     "impact": "minor",
@@ -128,10 +128,10 @@
       {
         "id": "4qhxm1rtz317",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On July 1, 2026, between approximately 00:00 UTC and 13:04 UTC, some GitHub Copilot customers whose budget was exhausted before the monthly reset remained incorrectly blocked from paid Copilot usage after the new billing month began, even though their budgets had reset. Some budget changes also took longer than usual to apply. Only customers with an exhausted budget were affected, which limited the impact.<br /><br />This was caused by a caching issue at the monthly reset: for some users, a pre-reset \"budget exhausted\" status was re-saved and served even though their budget had reset, so they stayed blocked. We had built a safeguard ahead of the reset to prevent this, but it did not take effect because an internal configuration service did not load its settings correctly. We resolved the incident by deploying a change that discards the outdated status and recomputes access from current budget data independently of that configuration, and by working through the backlog of budget updates.<br /><br />To prevent recurrence, we are ensuring pre-reset status cannot survive the monthly budget reset, adding alerting for this failure mode, and increasing capacity to absorb the monthly surge of budget updates.",
         "incident_id": "rl7f90w0n0gq",
         "created_at": "2026-07-01T13:26:06.678Z",
-        "updated_at": "2026-07-01T13:26:06.678Z",
+        "updated_at": "2026-07-06T18:56:24.620Z",
         "display_at": "2026-07-01T13:26:06.678Z",
         "affected_components": [
           {
@@ -270,7 +270,7 @@
     "name": "Disruption with some GitHub services - Signup Flow",
     "status": "resolved",
     "created_at": "2026-06-30T15:38:48.952Z",
-    "updated_at": "2026-06-30T15:49:18.420Z",
+    "updated_at": "2026-07-06T16:50:18.278Z",
     "monitoring_at": null,
     "resolved_at": "2026-06-30T15:49:18.386Z",
     "impact": "minor",
@@ -281,10 +281,10 @@
       {
         "id": "t6wlmddj0mlp",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "Between 15:19 UTC and 15:49 UTC on June 30, 2026, users were unable to complete the signup flow for GitHub.com/signup. Approximately 62% of new user signups failed for about 30 minutes during this window.<br /><br />This was caused by a configuration change to the signup flow that unintentionally blocked users from completing signup.<br /><br />We mitigated the incident by reverting the change, which restored successful signups. To reduce the likelihood and impact of similar issues, we are adopting staged, incremental rollouts for changes on the signup path, improving our ability to test these changes before they reach production, and adding checks to verify signup health before and during any change that affects this flow.",
         "incident_id": "mc4yx9f8x1hk",
         "created_at": "2026-06-30T15:49:18.386Z",
-        "updated_at": "2026-06-30T15:49:18.386Z",
+        "updated_at": "2026-07-06T16:50:18.263Z",
         "display_at": "2026-06-30T15:49:18.386Z",
         "affected_components": null,
         "deliver_notifications": true,
