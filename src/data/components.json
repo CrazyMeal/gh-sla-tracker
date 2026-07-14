@@ -19,7 +19,7 @@
     "name": "Webhooks",
     "status": "operational",
     "created_at": "2019-11-13T18:00:24.256Z",
-    "updated_at": "2026-06-25T18:07:44.455Z",
+    "updated_at": "2026-07-14T17:55:50.549Z",
     "position": 2,
     "description": "Real time HTTP callbacks of user-generated and system events",
     "showcase": true,
