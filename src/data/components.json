@@ -47,9 +47,9 @@
   {
     "id": "brv1bkgrwx7q",
     "name": "API Requests",
-    "status": "degraded_performance",
+    "status": "operational",
     "created_at": "2017-01-31T20:01:46.621Z",
-    "updated_at": "2026-07-20T02:23:53.864Z",
+    "updated_at": "2026-07-20T03:03:45.955Z",
     "position": 4,
     "description": "Requests for GitHub APIs",
     "showcase": true,
@@ -92,9 +92,9 @@
   {
     "id": "br0l2tvcx85d",
     "name": "Actions",
-    "status": "partial_outage",
+    "status": "operational",
     "created_at": "2019-11-13T18:02:19.432Z",
-    "updated_at": "2026-07-20T00:49:33.589Z",
+    "updated_at": "2026-07-20T03:34:48.498Z",
     "position": 7,
     "description": "Workflows, Compute and Orchestration for GitHub Actions",
     "showcase": true,
