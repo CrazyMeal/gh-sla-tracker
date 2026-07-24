@@ -1,5 +1,671 @@
 [
   {
+    "id": "yjysg0xrl67m",
+    "name": "Disruption with some GitHub services",
+    "status": "resolved",
+    "created_at": "2026-07-24T16:17:31.499Z",
+    "updated_at": "2026-07-24T17:36:51.011Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-07-24T17:36:50.993Z",
+    "impact": "major",
+    "shortlink": "https://stspg.io/j5c80shxqm53",
+    "started_at": "2026-07-24T16:17:31.492Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "1d87ylhsd6wd",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T17:36:50.993Z",
+        "updated_at": "2026-07-24T17:36:50.993Z",
+        "display_at": "2026-07-24T17:36:50.993Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "p48gb0cqfhld",
+        "status": "investigating",
+        "body": "We are seeing recovery across all services",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T17:24:27.324Z",
+        "updated_at": "2026-07-24T17:24:27.324Z",
+        "display_at": "2026-07-24T17:24:27.324Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "vwg4mw6tzsp6",
+        "status": "investigating",
+        "body": "The degradation affecting API Requests, Actions, Copilot, Issues, Pages and Pull Requests has been mitigated. We are monitoring to ensure stability.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T17:16:44.181Z",
+        "updated_at": "2026-07-24T17:16:44.181Z",
+        "display_at": "2026-07-24T17:16:44.181Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "0rp3bgc6fvbl",
+        "status": "investigating",
+        "body": "Actions is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:41:59.232Z",
+        "updated_at": "2026-07-24T16:41:59.232Z",
+        "display_at": "2026-07-24T16:41:59.232Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "partial_outage",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "xhvwpnn2kn4q",
+        "status": "investigating",
+        "body": "We have applied a mitigation and are monitoring for recovery",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:40:27.946Z",
+        "updated_at": "2026-07-24T16:40:27.946Z",
+        "display_at": "2026-07-24T16:40:27.946Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "m44s2b9rbgsl",
+        "status": "investigating",
+        "body": "Actions is experiencing degraded availability. We are continuing to investigate.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:28:37.283Z",
+        "updated_at": "2026-07-24T16:28:37.283Z",
+        "display_at": "2026-07-24T16:28:37.283Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "partial_outage"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "nzw67ssqpl52",
+        "status": "investigating",
+        "body": "Pages is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:27:51.934Z",
+        "updated_at": "2026-07-24T16:27:51.934Z",
+        "display_at": "2026-07-24T16:27:51.934Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "vg70hn9s2tyj",
+            "name": "Pages",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "pql6vmkx1s4g",
+        "status": "investigating",
+        "body": "Copilot is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:26:47.181Z",
+        "updated_at": "2026-07-24T16:26:47.181Z",
+        "display_at": "2026-07-24T16:26:47.181Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "pjmpxvq2cmr2",
+            "name": "Copilot",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "p0nvls36ccdc",
+        "status": "investigating",
+        "body": "We are investigating timeouts to some GitHub services",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:22:37.945Z",
+        "updated_at": "2026-07-24T16:22:37.945Z",
+        "display_at": "2026-07-24T16:22:37.945Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "hscgqnl2q5jl",
+        "status": "investigating",
+        "body": "Pull Requests is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:20:10.002Z",
+        "updated_at": "2026-07-24T16:20:10.002Z",
+        "display_at": "2026-07-24T16:20:10.002Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "q82xjpf22hzj",
+        "status": "investigating",
+        "body": "Actions is experiencing degraded performance. We are continuing to investigate.",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:19:39.348Z",
+        "updated_at": "2026-07-24T16:19:39.348Z",
+        "display_at": "2026-07-24T16:19:39.348Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "g34kbbs9k26c",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for API Requests and Issues",
+        "incident_id": "yjysg0xrl67m",
+        "created_at": "2026-07-24T16:17:31.584Z",
+        "updated_at": "2026-07-24T16:17:31.584Z",
+        "display_at": "2026-07-24T16:17:31.584Z",
+        "affected_components": [
+          {
+            "code": "brv1bkgrwx7q",
+            "name": "API Requests",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "brv1bkgrwx7q",
+        "name": "API Requests",
+        "status": "operational",
+        "created_at": "2017-01-31T20:01:46.621Z",
+        "updated_at": "2026-07-24T17:16:44.046Z",
+        "position": 4,
+        "description": "Requests for GitHub APIs",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "kr09ddfgbfsf",
+        "name": "Issues",
+        "status": "operational",
+        "created_at": "2017-01-31T20:01:46.638Z",
+        "updated_at": "2026-07-24T17:16:44.061Z",
+        "position": 5,
+        "description": "Requests for Issues on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "hhtssxt0f5v2",
+        "name": "Pull Requests",
+        "status": "operational",
+        "created_at": "2020-09-02T15:39:06.329Z",
+        "updated_at": "2026-07-24T17:16:44.077Z",
+        "position": 6,
+        "description": "Requests for Pull Requests on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "br0l2tvcx85d",
+        "name": "Actions",
+        "status": "operational",
+        "created_at": "2019-11-13T18:02:19.432Z",
+        "updated_at": "2026-07-24T17:16:44.094Z",
+        "position": 7,
+        "description": "Workflows, Compute and Orchestration for GitHub Actions",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "vg70hn9s2tyj",
+        "name": "Pages",
+        "status": "operational",
+        "created_at": "2017-01-31T20:04:33.923Z",
+        "updated_at": "2026-07-24T17:16:44.114Z",
+        "position": 9,
+        "description": "Frontend application and API servers for Pages builds",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "pjmpxvq2cmr2",
+        "name": "Copilot",
+        "status": "operational",
+        "created_at": "2022-06-21T16:04:33.017Z",
+        "updated_at": "2026-07-24T17:16:44.135Z",
+        "position": 10,
+        "description": null,
+        "showcase": true,
+        "start_date": "2022-06-21",
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
+    "id": "594m87r8sw13",
+    "name": "Incident With Blocked GitHub.com Traffic",
+    "status": "resolved",
+    "created_at": "2026-07-24T11:00:00.000Z",
+    "updated_at": "2026-07-24T15:56:48.891Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-07-24T11:00:00.000Z",
+    "impact": "none",
+    "shortlink": "https://stspg.io/dd1j7wg77hn9",
+    "started_at": "2026-07-24T15:56:48.829Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "4vz29my0d0gw",
+        "status": "resolved",
+        "body": "Between July 23, 2026 at 18:45 UTC and July 24, 2026 at 11:19 UTC, an abuse mitigation update caused some legitimate customers whose traffic was routed through our Central Europe and South America edge locations to be incorrectly blocked from GitHub.com. We estimate that approximately 0.25% of GitHub.com requests were affected during this period.\n\nThis was caused by an abuse mitigation configuration that incorrectly classified legitimate traffic. We mitigated the incident by reverting the update. We are adding validation and safeguards to prevent similar incorrect blocking in the future.",
+        "incident_id": "594m87r8sw13",
+        "created_at": "2026-07-24T15:56:48.881Z",
+        "updated_at": "2026-07-24T15:56:48.881Z",
+        "display_at": "2026-07-24T11:00:00.000Z",
+        "affected_components": null,
+        "deliver_notifications": false,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "zq3c1jst2vkq",
     "name": "Latency issues across a number of services",
     "status": "resolved",
