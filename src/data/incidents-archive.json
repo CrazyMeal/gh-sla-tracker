@@ -1,5 +1,183 @@
 [
   {
+    "id": "76t89hbfb09h",
+    "name": "Incident with Pull Requests and Issues",
+    "status": "resolved",
+    "created_at": "2026-08-12T16:16:18.003Z",
+    "updated_at": "2026-08-12T16:41:18.786Z",
+    "monitoring_at": "2026-08-12T16:35:40.052Z",
+    "resolved_at": "2026-08-12T16:41:18.768Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/ssd9z8l2g46v",
+    "started_at": "2026-08-12T16:16:17.994Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "7xm3qnfwmw42",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "76t89hbfb09h",
+        "created_at": "2026-08-12T16:41:18.768Z",
+        "updated_at": "2026-08-12T16:41:18.768Z",
+        "display_at": "2026-08-12T16:41:18.768Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "8j3lvjyw8nwr",
+        "status": "monitoring",
+        "body": "We identified the source of errors affecting Pull Requests, Issues, and Search on GitHub.com and have applied a mitigation. A database index hint was referencing an index that had been removed by a recent migration, causing query failures for some users. We disabled the problematic configuration and are seeing recovery across affected services. We are continuing to monitor to confirm full resolution.",
+        "incident_id": "76t89hbfb09h",
+        "created_at": "2026-08-12T16:38:38.345Z",
+        "updated_at": "2026-08-12T16:38:38.345Z",
+        "display_at": "2026-08-12T16:38:38.345Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "ylfmpf85g5vc",
+        "status": "monitoring",
+        "body": "The degradation affecting Issues and Pull Requests has been mitigated. We are monitoring to ensure stability.",
+        "incident_id": "76t89hbfb09h",
+        "created_at": "2026-08-12T16:35:40.052Z",
+        "updated_at": "2026-08-12T16:35:40.052Z",
+        "display_at": "2026-08-12T16:35:40.052Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "w3gj6z2ds19t",
+        "status": "investigating",
+        "body": "We are investigating reports of errors affecting Pull Requests and Issues on GitHub.com. Some users may encounter 500 errors when loading pull request and issue pages. Our engineering teams are actively investigating the root cause, which appears to be related to a database infrastructure issue. We will provide an update as soon as we have more information.",
+        "incident_id": "76t89hbfb09h",
+        "created_at": "2026-08-12T16:24:30.991Z",
+        "updated_at": "2026-08-12T16:24:30.991Z",
+        "display_at": "2026-08-12T16:24:30.991Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "cwlpjmhw2nk8",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for Issues and Pull Requests",
+        "incident_id": "76t89hbfb09h",
+        "created_at": "2026-08-12T16:16:18.105Z",
+        "updated_at": "2026-08-12T16:16:18.105Z",
+        "display_at": "2026-08-12T16:16:18.105Z",
+        "affected_components": [
+          {
+            "code": "kr09ddfgbfsf",
+            "name": "Issues",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          },
+          {
+            "code": "hhtssxt0f5v2",
+            "name": "Pull Requests",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "kr09ddfgbfsf",
+        "name": "Issues",
+        "status": "operational",
+        "created_at": "2017-01-31T20:01:46.638Z",
+        "updated_at": "2026-08-12T16:35:40.003Z",
+        "position": 5,
+        "description": "Requests for Issues on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      },
+      {
+        "id": "hhtssxt0f5v2",
+        "name": "Pull Requests",
+        "status": "operational",
+        "created_at": "2020-09-02T15:39:06.329Z",
+        "updated_at": "2026-08-12T16:35:40.021Z",
+        "position": 6,
+        "description": "Requests for Pull Requests on GitHub.com",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
     "id": "vm1w8zq95wkt",
     "name": "Incident with GraphQL API Requests",
     "status": "resolved",
@@ -1150,7 +1328,7 @@
     "name": "Incident with Copilot",
     "status": "resolved",
     "created_at": "2026-08-03T09:53:27.172Z",
-    "updated_at": "2026-08-03T11:25:12.388Z",
+    "updated_at": "2026-08-12T15:00:05.157Z",
     "monitoring_at": "2026-08-03T11:19:04.001Z",
     "resolved_at": "2026-08-03T11:25:12.371Z",
     "impact": "minor",
@@ -1161,10 +1339,10 @@
       {
         "id": "mpkkftmykc6h",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On 2026-08-03, between 06:52 and 11:25 UTC, some GitHub Copilot users experienced errors when using chat and agent features. Requests to list the available models failed, and because every chat or agent interaction begins by retrieving the list of models, affected users saw their requests fail. On average about 3% of these model-listing requests failed during the incident (roughly 97% succeeded), but failures were significantly higher during peak-traffic periods, at times approaching 100% for the affected internal lookups. Approximately 4,066 users were affected in a single 60-minute window, concentrated among IDE-based clients. The underlying AI models themselves remained healthy throughout.<br /><br />The incident was caused by an increase in how often clients requested the model list, which pushed an internal user-authorization lookup past a rate limit; the rate-limited responses were surfaced to users as errors. We mitigated the impact by increasing how long Copilot caches that authorization lookup, which reduced load on the internal service, and we have additional capacity and rate-limit changes in progress. To prevent recurrence we are improving monitoring for this class of failure, adjusting cache and rate-limit settings, and coordinating with client teams on request patterns.",
         "incident_id": "7s119p1yxttr",
         "created_at": "2026-08-03T11:25:12.371Z",
-        "updated_at": "2026-08-03T11:25:12.371Z",
+        "updated_at": "2026-08-12T15:00:05.151Z",
         "display_at": "2026-08-03T11:25:12.371Z",
         "affected_components": [
           {
@@ -1283,7 +1461,7 @@
     "name": "Incident with Copilot AI Model Providers",
     "status": "resolved",
     "created_at": "2026-08-01T18:03:05.539Z",
-    "updated_at": "2026-08-01T18:44:28.748Z",
+    "updated_at": "2026-08-12T16:18:09.791Z",
     "monitoring_at": "2026-08-01T18:20:48.941Z",
     "resolved_at": "2026-08-01T18:44:28.733Z",
     "impact": "minor",
@@ -1294,10 +1472,10 @@
       {
         "id": "zfj67r3cm6rq",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On August 1, 2026, between 17:47 UTC and 18:20 UTC, users of the Fable 5 model in GitHub Copilot experienced increased request failures and latency. The average failure rate across all Copilot requests was 0.007%, while failures for Fable 5 peaked at 5.6%. Other models remained available. This was caused by degradation of an upstream model provider.<br /><br />The affected endpoint recovered, and we monitored the service until error rates and latency returned to normal levels. We are working to add endpoint redundancy to mitigate similar provider issues in the future.",
         "incident_id": "sj1tzyrx599x",
         "created_at": "2026-08-01T18:44:28.733Z",
-        "updated_at": "2026-08-01T18:44:28.733Z",
+        "updated_at": "2026-08-12T16:18:09.786Z",
         "display_at": "2026-08-01T18:44:28.733Z",
         "affected_components": [
           {
@@ -1682,7 +1860,7 @@
     "name": "Incident with Copilot AI Model Providers",
     "status": "resolved",
     "created_at": "2026-07-29T20:07:07.951Z",
-    "updated_at": "2026-07-29T21:51:26.821Z",
+    "updated_at": "2026-08-12T17:25:01.834Z",
     "monitoring_at": null,
     "resolved_at": "2026-07-29T21:51:26.803Z",
     "impact": "minor",
@@ -1693,10 +1871,10 @@
       {
         "id": "f403shx7v547",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On July 29, 2026, between 19:45 UTC and 21:51 UTC, users of the Fable 5 model in GitHub Copilot experienced increased request failures and latency. The average failure rate across all Copilot requests was 0.006%, while failures for Fable 5 peaked at 21%. Other models remained available. This was caused by degradation of an upstream model provider.<br /><br />The affected endpoint recovered, and we monitored the service until error rates and latency returned to normal levels. We are working to add endpoint redundancy to mitigate similar provider issues in the future.",
         "incident_id": "dsrfymph7my0",
         "created_at": "2026-07-29T21:51:26.803Z",
-        "updated_at": "2026-07-29T21:51:26.803Z",
+        "updated_at": "2026-08-12T17:25:01.830Z",
         "display_at": "2026-07-29T21:51:26.803Z",
         "affected_components": [
           {
@@ -1837,7 +2015,7 @@
         "name": "Copilot AI Model Providers",
         "status": "operational",
         "created_at": "2026-04-17T12:33:08.827Z",
-        "updated_at": "2026-07-29T21:51:26.770Z",
+        "updated_at": "2026-08-01T18:20:48.917Z",
         "position": 12,
         "description": null,
         "showcase": true,
