@@ -1,5 +1,128 @@
 [
   {
+    "id": "wt3hjqcrczfg",
+    "name": "Elevated errors on Fable 5 due to upstream provider",
+    "status": "resolved",
+    "created_at": "2026-08-24T07:12:05.373Z",
+    "updated_at": "2026-08-24T07:58:41.653Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-08-24T07:58:41.636Z",
+    "impact": "major",
+    "shortlink": "https://stspg.io/4dz9rv14dz14",
+    "started_at": "2026-08-24T07:12:05.367Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "h3vttprpg6xd",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "wt3hjqcrczfg",
+        "created_at": "2026-08-24T07:58:41.636Z",
+        "updated_at": "2026-08-24T07:58:41.636Z",
+        "display_at": "2026-08-24T07:58:41.636Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "partial_outage",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "tlg6g9v8x3rv",
+        "status": "investigating",
+        "body": "We are experiencing degraded availability for the Fable model in Copilot products and IDE surfaces. This is due to an issue with the upstream model provider. While we work with them to resolve the issue, we recommend choosing another model or selecting 'Auto' to continue using Copilot.",
+        "incident_id": "wt3hjqcrczfg",
+        "created_at": "2026-08-24T07:12:33.362Z",
+        "updated_at": "2026-08-24T07:12:33.362Z",
+        "display_at": "2026-08-24T07:12:33.362Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "partial_outage",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "9xmrbn3fgcqt",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded availability for Copilot AI Model Providers",
+        "incident_id": "wt3hjqcrczfg",
+        "created_at": "2026-08-24T07:12:05.431Z",
+        "updated_at": "2026-08-24T07:12:05.431Z",
+        "display_at": "2026-08-24T07:12:05.431Z",
+        "affected_components": [
+          {
+            "code": "cnnb39dkkk82",
+            "name": "Copilot AI Model Providers",
+            "old_status": "operational",
+            "new_status": "partial_outage"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "cnnb39dkkk82",
+        "name": "Copilot AI Model Providers",
+        "status": "operational",
+        "created_at": "2026-04-17T12:33:08.827Z",
+        "updated_at": "2026-08-24T07:58:41.598Z",
+        "position": 12,
+        "description": null,
+        "showcase": true,
+        "start_date": "2026-04-17",
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
+    "id": "wms44hv62t3p",
+    "name": "Degraded Git Operations over SSH",
+    "status": "resolved",
+    "created_at": "2026-08-21T14:00:00.000Z",
+    "updated_at": "2026-08-24T07:19:23.053Z",
+    "monitoring_at": null,
+    "resolved_at": "2026-08-21T14:00:00.000Z",
+    "impact": "none",
+    "shortlink": "https://stspg.io/9nls6g9ln8p4",
+    "started_at": "2026-08-24T07:19:22.991Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "jhq44wgl2nff",
+        "status": "resolved",
+        "body": "On August 21, 2026, between 14:00 and 14:07 UTC, dotcom Git operations over SSH were degraded. Successful Git operations over SSH fell by more than 95% for during the peak impact window, making clone, fetch, or push over SSH effectively unavailable to most users for approximately four minutes. Git operations over HTTPS were not affected.  \n\nThe incident was caused by a software defect in our load-balancing infrastructure that was triggered by a configuration change. The defect only occurred when connections passed through multiple layers of load balancers running the new configuration, which meant it was not detected during canary testing. \n\nWe mitigated the incident by rolling back the configuration change.  \n\nWe are adding regression coverage for multi-layer load-balancer configurations and improving monitoring and alerting for Git operations over SSH to reduce our time to detection and mitigation of similar issues in the future.",
+        "incident_id": "wms44hv62t3p",
+        "created_at": "2026-08-24T07:19:23.042Z",
+        "updated_at": "2026-08-24T07:19:23.042Z",
+        "display_at": "2026-08-21T14:00:00.000Z",
+        "affected_components": null,
+        "deliver_notifications": false,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [],
+    "reminder_intervals": null
+  },
+  {
     "id": "bhbcjn4n3jzp",
     "name": "Intermittent failures creating agent tasks",
     "status": "resolved",
