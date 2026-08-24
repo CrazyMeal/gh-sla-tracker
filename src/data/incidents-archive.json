@@ -1,5 +1,118 @@
 [
   {
+    "id": "lyppgxbq1nyk",
+    "name": "Actions delays in starting runs",
+    "status": "resolved",
+    "created_at": "2026-08-24T13:56:54.972Z",
+    "updated_at": "2026-08-24T14:34:42.464Z",
+    "monitoring_at": "2026-08-24T14:26:11.194Z",
+    "resolved_at": "2026-08-24T14:34:42.451Z",
+    "impact": "minor",
+    "shortlink": "https://stspg.io/v6ysclb9vcbd",
+    "started_at": "2026-08-24T13:56:54.964Z",
+    "page_id": "kctbh9vrtdwd",
+    "incident_updates": [
+      {
+        "id": "y31pmpmx3ky1",
+        "status": "resolved",
+        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "incident_id": "lyppgxbq1nyk",
+        "created_at": "2026-08-24T14:34:42.451Z",
+        "updated_at": "2026-08-24T14:34:42.451Z",
+        "display_at": "2026-08-24T14:34:42.451Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "flljjvhj3sd6",
+        "status": "monitoring",
+        "body": "The degradation affecting Actions has been mitigated. We are monitoring to ensure stability.",
+        "incident_id": "lyppgxbq1nyk",
+        "created_at": "2026-08-24T14:26:11.194Z",
+        "updated_at": "2026-08-24T14:26:11.194Z",
+        "display_at": "2026-08-24T14:26:11.194Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "operational"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "f8gwybkwy999",
+        "status": "investigating",
+        "body": "Failures while queuing and running Actions jobs for a subset of customers are now resolving. We are monitoring for full recovery.",
+        "incident_id": "lyppgxbq1nyk",
+        "created_at": "2026-08-24T14:22:59.979Z",
+        "updated_at": "2026-08-24T14:22:59.979Z",
+        "display_at": "2026-08-24T14:22:59.979Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "degraded_performance",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      },
+      {
+        "id": "w5w6fkyqdsky",
+        "status": "investigating",
+        "body": "We are investigating reports of degraded performance for Actions",
+        "incident_id": "lyppgxbq1nyk",
+        "created_at": "2026-08-24T13:56:55.051Z",
+        "updated_at": "2026-08-24T13:56:55.051Z",
+        "display_at": "2026-08-24T13:56:55.051Z",
+        "affected_components": [
+          {
+            "code": "br0l2tvcx85d",
+            "name": "Actions",
+            "old_status": "operational",
+            "new_status": "degraded_performance"
+          }
+        ],
+        "deliver_notifications": true,
+        "custom_tweet": null,
+        "tweet_id": null
+      }
+    ],
+    "components": [
+      {
+        "id": "br0l2tvcx85d",
+        "name": "Actions",
+        "status": "operational",
+        "created_at": "2019-11-13T18:02:19.432Z",
+        "updated_at": "2026-08-24T14:26:11.168Z",
+        "position": 7,
+        "description": "Workflows, Compute and Orchestration for GitHub Actions",
+        "showcase": true,
+        "start_date": null,
+        "group_id": null,
+        "page_id": "kctbh9vrtdwd",
+        "group": false,
+        "only_show_if_degraded": false
+      }
+    ],
+    "reminder_intervals": null
+  },
+  {
     "id": "wt3hjqcrczfg",
     "name": "Elevated errors on Fable 5 due to upstream provider",
     "status": "resolved",
@@ -2428,7 +2541,7 @@
     "name": "Disruption with GHEC Team Sync",
     "status": "resolved",
     "created_at": "2026-08-13T16:21:33.104Z",
-    "updated_at": "2026-08-13T18:27:54.674Z",
+    "updated_at": "2026-08-24T17:29:11.788Z",
     "monitoring_at": null,
     "resolved_at": "2026-08-13T18:27:54.660Z",
     "impact": "minor",
@@ -2439,10 +2552,10 @@
       {
         "id": "wm4b8gg2nk3q",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "On August 13, 2026, from 15:31:21 UTC to 18:27:55 UTC, GitHub Enterprise Cloud team synchronization was degraded for enterprises using personal accounts. Organization teams experienced delays of up to 3 to 13 hours (median 8 hours) when syncing with IdP groups, resulting in delayed access grants or removals for enterprise users across 2.8% of teams. <br /><br />A temporary change introduced to address a previous issue due to increased usage of this feature remained active after it was intended to be removed, causing synchronization delays during periods of high volume. We removed the temporary change and provisioned additional resources to handle the increased volume.",
         "incident_id": "pf25whpq58hh",
         "created_at": "2026-08-13T18:27:54.660Z",
-        "updated_at": "2026-08-13T18:27:54.660Z",
+        "updated_at": "2026-08-24T17:29:11.781Z",
         "display_at": "2026-08-13T18:27:54.660Z",
         "affected_components": null,
         "deliver_notifications": true,
