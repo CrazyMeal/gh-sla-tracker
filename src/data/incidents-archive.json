@@ -250,7 +250,7 @@
     "name": "Elevated rate of errors for OpenAI models provided by Copilot",
     "status": "resolved",
     "created_at": "2026-08-31T09:15:48.908Z",
-    "updated_at": "2026-08-31T09:58:14.174Z",
+    "updated_at": "2026-09-03T21:39:35.639Z",
     "monitoring_at": "2026-08-31T09:51:13.994Z",
     "resolved_at": "2026-08-31T09:58:14.157Z",
     "impact": "minor",
@@ -261,10 +261,10 @@
       {
         "id": "f9d7wrsxvn18",
         "status": "resolved",
-        "body": "This incident has been resolved. Thank you for your patience and understanding as we addressed this issue. A detailed root cause analysis will be shared as soon as it is available.",
+        "body": "Between 08:37 and 09:41 UTC on August 31, 2026, GitHub Copilot experienced degradation affecting several GPT models, including gpt-5.2, gpt-5.3-codex, gpt-5.4, gpt-5.4-mini, gpt-5.4-nano, and the gpt-5.6 family (Luna, Sol, and Terra). Users encountered elevated error rates and interrupted streaming responses. Other models were not affected.<br /><br />The degradation was caused by an issue with an upstream model provider. GitHub engineers detected the issue through automated monitoring, displayed in-product warnings for the affected models, and coordinated with the provider. Service returned to normal after the provider implemented a mitigation.",
         "incident_id": "7fxts6gmq5gr",
         "created_at": "2026-08-31T09:58:14.157Z",
-        "updated_at": "2026-08-31T09:58:14.157Z",
+        "updated_at": "2026-09-03T21:39:35.633Z",
         "display_at": "2026-08-31T09:58:14.157Z",
         "affected_components": [
           {
@@ -385,7 +385,7 @@
         "name": "Copilot AI Model Providers",
         "status": "operational",
         "created_at": "2026-04-17T12:33:08.827Z",
-        "updated_at": "2026-08-31T09:51:13.953Z",
+        "updated_at": "2026-09-03T17:11:47.826Z",
         "position": 12,
         "description": null,
         "showcase": true,
